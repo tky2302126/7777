@@ -1,35 +1,33 @@
-# scripts/insert_comment.py
-import os
 import sys
 import datetime
 from git import Repo
 from pathlib import Path
 
 REPO = Repo(".")
-USERNAME = os.getenv("GITHUB_ACTOR", "unknown-user")
 DATE_STR = datetime.datetime.now().strftime("%Y-%m-%d")
 LAST_COMMIT_MSG = REPO.head.commit.message.strip().replace('\n', ' ')
-HISTORY_LINE = f"// @history : {DATE_STR} {LAST_COMMIT_MSG}\n"
+HISTORY_LINE_TEMPLATE = "// @history : {} {}\n"
 
-def insert_or_update_comment(file_path: Path):
+def insert_or_update_comment(file_path: Path, username: str):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
     updated = False
+    history_line = HISTORY_LINE_TEMPLATE.format(DATE_STR, LAST_COMMIT_MSG)
 
     # すでにコメントがある場合は @history のみ更新
     if any("@author" in line for line in lines):
         for i, line in enumerate(lines):
             if "@history" in line:
-                lines[i] = HISTORY_LINE
+                lines[i] = history_line
                 updated = True
                 break
     else:
         # 新規ファイル（ヘッダを挿入）
         header = [
-            f"// @author : {USERNAME}\n",
+            f"// @author : {username}\n",
             f"// @date : {DATE_STR}\n",
-            HISTORY_LINE,
+            history_line,
             "\n"
         ]
         lines = header + lines
@@ -40,18 +38,20 @@ def insert_or_update_comment(file_path: Path):
             f.writelines(lines)
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python insert_comment.py <changed_files.txt>")
+    if len(sys.argv) < 3:
+        print("Usage: python insert_comment.py <changed_files.txt> <username>")
         sys.exit(1)
 
     changed_files_path = sys.argv[1]
+    username = sys.argv[2]
+
     with open(changed_files_path, 'r', encoding='utf-8') as f:
         files = [line.strip() for line in f.readlines()]
 
     for file in files:
         path = Path(file)
         if path.suffix in ['.cpp', '.h'] and path.exists():
-            insert_or_update_comment(path)
+            insert_or_update_comment(path, username)
 
 if __name__ == "__main__":
     main()
