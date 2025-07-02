@@ -176,5 +176,93 @@ void SceneTitle::SelectInput()
 	SetKeyInputString("", inputHandle);
 }
 
+void SceneTitle::ServerInit()
+{
+	int portNum = 7777;
+	PreparationListenNetWork(portNum);
+	for(auto N: NetWorkHandles)
+	{
+		N = -1;
+	}
+	
+}
+
+void SceneTitle::ServerUpdate()
+{
+	int ConnectedNum = 0;
+	for(int NetHandle : NetWorkHandles)
+	{
+		if (NetHandle > 0) ConnectedNum++;
+	}
+
+	// 接続
+	if(ConnectedNum >=3)
+	{
+		StopListenNetWork();
+	}
+	else
+	{
+		Connect();
+	}
+
+	// 受信
+	if(ConnectedNum >0)
+	{
+		DisConnect();
+		RecieveNetData();
+	}
+}
+
+void SceneTitle::Connect()
+{
+	int portNum = 7777;
+	PreparationListenNetWork(portNum);
+	for(int NetHandle : NetWorkHandles)
+	{
+		if (NetHandle != -1) continue;
+		NetHandle = GetNewAcceptNetWork();
+	}
+}
+
+void SceneTitle::DisConnect()
+{
+	int LostHandle = 0;
+	LostHandle = GetLostNetWork();
+
+	for(auto NetHandle: NetWorkHandles)
+	{
+		if(NetHandle == LostHandle)
+		{
+			NetHandle = -1;
+		}
+	}
+
+
+}
+
+void SceneTitle::RecieveNetData()
+{
+	for(auto NetHandle : NetWorkHandles)
+	{
+		if (NetHandle == -1) continue; // NetHandle が登録されていないとき、スキップ
+		IPDATA Ip;            // 接続先ＩＰアドレスデータ
+		// 接続してきたマシンのＩＰアドレスを得る
+		GetNetWorkIP(NetHandle, &Ip);
+	
+		// 取得していない受信データ量が０のときは終了
+		if (GetNetWorkDataLength(NetHandle) == 0) continue;
+
+		int DataLength;
+		char StrBuf[256];
+
+		// データ受信
+		DataLength = GetNetWorkDataLength(NetHandle);    // データの量を取得
+		NetWorkRecv(NetHandle, StrBuf, DataLength);    // データをバッファに取得
+		// バッファをスタックに追加
+		recvStack.push(StrBuf);
+	}
+
+}
+
 
 

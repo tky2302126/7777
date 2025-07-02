@@ -9,6 +9,7 @@
 #include "MovieManager.h"
 #include "UIManager.h"
 #include "Cursor.h"
+#include <stack>
 
 
 /**
@@ -71,7 +72,11 @@ private:
 	int inputHandle;
 	//! 未入力の項目を判別するために、一度intを経由してからIPDATA型に変換する
 	int ipBuffer[4];
-
+	//! サーバーで使うクライアントのネットワークハンドル
+	int NetWorkHandles[3];
+	//! サーバーで使う受信データ
+	std::stack<char[256]> recvStack;
+	
 
 	/**
 	 * @brief       決定キーを押した際の処理
@@ -79,4 +84,40 @@ private:
 	 * @date        24/11/20
 	 */
 	void SelectInput();
+
+	/**
+	* @brief		サーバー側のイニシャライズ
+	* @author		Suzuki h
+	* @date			25/7/2
+	*/
+	void ServerInit();
+
+	/**
+	* @brief		サーバー側の処理
+	* @author		Suzuki h
+	* @date			25/7/2
+	*/
+	void ServerUpdate();
+
+	/**
+	* @brief		接続待機処理
+	* @author		Suzuki h
+	* @date			25/7/2
+	*/
+	void Connect();
+
+	/**
+	* @brief		切断処理
+	* @author		Suzuki h
+	* @date			25/7/2
+	*/
+	void DisConnect();
+
+	/**
+	* @brief		受信待機処理
+	* @author		Suzuki h
+	* @date			25/7/2
+	*/
+	void RecieveNetData();
+
 };
