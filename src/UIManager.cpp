@@ -3,12 +3,12 @@
 /**
 * @author   Suzuki N
 * @date     24/01/29
-* @note		UIManager‚ÌÀ‘•ƒtƒ@ƒCƒ‹
+* @note		UIManagerã®å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 
 //
-// Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
+// é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°ã®åˆæœŸåŒ–
 //
 
 int UIManager::fadeGraphHandle = -1;
@@ -52,19 +52,19 @@ void UIManager::FadeOut(int _speed)
 
 void UIManager::ManualInitialize()
 {
-	// ƒtƒF[ƒhƒCƒ“AƒtƒF[ƒhƒAƒEƒg—p‚Ì‰æ‘œ
+	// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã€ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆç”¨ã®ç”»åƒ
 	{
 		fadeGraphHandle = LoadGraph("Assets/UI/Fade.png");
 		isFade = false;
 	}
-	// ƒ[ƒh’†‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚É•K—v‚È‚à‚Ì
+	// ãƒ­ãƒ¼ãƒ‰ä¸­ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«å¿…è¦ãªã‚‚ã®
 	{
 		loadingGraphHandle = LoadGraph("Assets/UI/Loading.png");
 		menuFont = CreateFontToHandle(NULL, 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8);
 	}
 }
 
-UIManager::~UIManager()
+UIManager::â€¾UIManager()
 {
 }
 
@@ -76,12 +76,12 @@ void UIManager::Awake()
 void UIManager::ManualLateUpdate()
 {
 	//
-	// ƒtƒF[ƒhƒCƒ“AƒtƒF[ƒhƒAƒEƒg’†‚Ìˆ—
+	// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã€ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆä¸­ã®å‡¦ç†
 	//
 	if (isFade)
 	{
-		// ‰æ‘œ‚ÌƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh‚Å•`‰æ
-		// ( •`‰æ‚µ‚½ŒãƒuƒŒƒ“ƒhƒ‚[ƒh‚ğŒ³‚É–ß‚· )
+		// ç”»åƒã®ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰ã§æç”»
+		// ( æç”»ã—ãŸå¾Œãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã‚’å…ƒã«æˆ»ã™ )
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawGraph(0, 0, fadeGraphHandle, FALSE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -93,10 +93,10 @@ void UIManager::ManualLateUpdate()
 
 void UIManager::LoadingAnimation()
 {
-	//! ‰ñ“]”
+	//! å›è»¢æ•°
 	static float rot = 0.0f;
 
-	// ‰ñ“]”‚Ì‰ÁZ
+	// å›è»¢æ•°ã®åŠ ç®—
 	rot += 0.08f;
 
 	DrawRotaGraph3(200, 850 + 50 / 2,

@@ -3,7 +3,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneManager‚ÌÀ‘•ƒtƒ@ƒCƒ‹
+* @note		SceneManagerã®å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 
@@ -11,9 +11,9 @@ InputSystem* SceneBase::input = nullptr;
 
 SceneManager::SceneManager()
 {
-	// ƒGƒ‰[’l‚ğ“ü‚ê‚Ä‚¨‚­
+	// ã‚¨ãƒ©ãƒ¼å€¤ã‚’å…¥ã‚Œã¦ãŠã
 	crrSceneTag = SceneTag::NotFound;
-	// ƒ[ƒhƒXƒe[ƒ^ƒX‚Ì‰Šú‰»
+	// ãƒ­ãƒ¼ãƒ‰ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®åˆæœŸåŒ–
 	atomicLoadState = SceneLoadState::Wait;
 
 	crrScene = nullptr;
@@ -24,31 +24,31 @@ void SceneManager::Update()
 {
 	crrScene->Update();
 
-	// ”ñ“¯Šú‚Ì“Ç‚İ‚İ‚ªŠ®—¹‚µ‚½
+	// éåŒæœŸã®èª­ã¿è¾¼ã¿ãŒå®Œäº†ã—ãŸ
 	if (atomicLoadState.load() == SceneLoadState::Completed)
 	{
-		// ƒV[ƒ“‚ğã‘‚«
+		// ã‚·ãƒ¼ãƒ³ã‚’ä¸Šæ›¸ã
 		std::swap(crrScene, loadScene);
-		// ƒ^ƒO‚à•ÏX
+		// ã‚¿ã‚°ã‚‚å¤‰æ›´
 		crrSceneTag = crrScene->sceneTag;
 		crrScene->nextSceneTagAsync = SceneTag::NotFound;
-		//@“Ç‚İ‚İƒf[ƒ^‚ğíœ
+		//ã€€èª­ã¿è¾¼ã¿ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤
 		delete loadScene;
-		// ƒXƒŒƒbƒh‚ğŠJ•ú
+		// ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’é–‹æ”¾
 		sceneLoadThread.detach();
-		// “Ç‚İ‚İƒXƒe[ƒ^ƒX‚ğ•ÏX
+		// èª­ã¿è¾¼ã¿ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å¤‰æ›´
 		atomicLoadState.store(SceneLoadState::Wait);
 
-		// “Ç‚İ‚İŠ®—¹‚Ìƒƒ\ƒbƒh‚ÌÀs
+		// èª­ã¿è¾¼ã¿å®Œäº†æ™‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè¡Œ
 		crrScene->LoadComplete();
 	}
 
-	// ƒV[ƒ““à‚Å‘JˆÚw¦‚ª—ˆ‚½ê‡
+	// ã‚·ãƒ¼ãƒ³å†…ã§é·ç§»æŒ‡ç¤ºãŒæ¥ãŸå ´åˆ
 	if (!(crrScene->nextSceneTag == SceneTag::NotFound ||
 		crrScene->nextSceneTag == crrSceneTag))
 		SceneChangeSync(crrScene->nextSceneTag);
 
-	// ƒV[ƒ““à‚Å”ñ“¯Šú‚Ås‚¤‘JˆÚw¦‚ª—ˆ‚½ê‡
+	// ã‚·ãƒ¼ãƒ³å†…ã§éåŒæœŸã§è¡Œã†é·ç§»æŒ‡ç¤ºãŒæ¥ãŸå ´åˆ
 	if (!(crrScene->nextSceneTagAsync == SceneTag::NotFound ||
 		crrScene->nextSceneTagAsync == crrSceneTag))
 		SceneChangeAsync(crrScene->nextSceneTagAsync);
@@ -62,18 +62,18 @@ void SceneManager::LateUpdate()
 
 void SceneManager::SceneChangeSync(const SceneTag& _nextSceneTag)
 {
-	// ‘JˆÚw¦‚Ì—ˆ‚½ƒ^ƒO‚ªÀs’†‚ÌƒV[ƒ“‚Æ“¯‚¶‚©ANotFound‚¾‚Á‚½ê‡‚Í‚»‚Ì‚Ü‚ÜI—¹
+	// é·ç§»æŒ‡ç¤ºã®æ¥ãŸã‚¿ã‚°ãŒå®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã¨åŒã˜ã‹ã€NotFoundã ã£ãŸå ´åˆã¯ãã®ã¾ã¾çµ‚äº†
 	if (_nextSceneTag == crrSceneTag || _nextSceneTag == SceneTag::NotFound)
 		return;
 
-	// ! ‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO‚ğ‹L‰¯‚µ‚Ä‚¨‚­(QÆŒ^‚Å‚Á‚Ä‚¢‚é‚½‚ß)
+	// ! é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°ã‚’è¨˜æ†¶ã—ã¦ãŠã(å‚ç…§å‹ã§æŒã£ã¦ã„ã‚‹ãŸã‚)
 	const SceneTag nextSceneTag = _nextSceneTag;
 
-	// Às’†‚ÌƒV[ƒ“‚ğíœ
+	// å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚’å‰Šé™¤
 	if(crrScene != nullptr)
 		delete(crrScene);
 
-	// ƒ^ƒO‚É‚æ‚Á‚Ä‘JˆÚæ‚ÌƒV[ƒ“‚ğ•ÏX‚·‚é
+	// ã‚¿ã‚°ã«ã‚ˆã£ã¦é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
 	switch (nextSceneTag)
 	{
 
@@ -98,43 +98,43 @@ void SceneManager::SceneChangeSync(const SceneTag& _nextSceneTag)
 		break;
 
 		/*
-		// Scene‚ğ‘‚â‚·Û‚ÍA‚±‚±‚ÆSceneBase.h‚É‚ ‚éSceneTag‚É’Ç‰Á‚Å‹Lq‚·‚é
+		// Sceneã‚’å¢—ã‚„ã™éš›ã¯ã€ã“ã“ã¨SceneBase.hã«ã‚ã‚‹SceneTagã«è¿½åŠ ã§è¨˜è¿°ã™ã‚‹
 
 	case SceneTag:: :
-		crrScene = new ’Ç‰ÁƒV[ƒ“();
+		crrScene = new è¿½åŠ ã‚·ãƒ¼ãƒ³();
 		break;
 		*/
 	}
 
-	// ƒV[ƒ“ƒ^ƒO‚ğXV
+	// ã‚·ãƒ¼ãƒ³ã‚¿ã‚°ã‚’æ›´æ–°
 	crrSceneTag = nextSceneTag;
 
-	// “Ç‚İ‚İŠ®—¹‚Ìƒƒ\ƒbƒh‚ÌÀs
+	// èª­ã¿è¾¼ã¿å®Œäº†æ™‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè¡Œ
 	crrScene->LoadComplete();
 }
 
 
 void SceneManager::SceneChangeAsync(const SceneTag& _nextSceneTag)
 {
-	// ƒV[ƒ““Ç‚İ‚İ’†‚Ìê‡Aw¦‚ğ–³Œø
+	// ã‚·ãƒ¼ãƒ³èª­ã¿è¾¼ã¿ä¸­ã®å ´åˆã€æŒ‡ç¤ºã‚’ç„¡åŠ¹
 	if (sceneLoadThread.joinable() || atomicLoadState.load() != SceneLoadState::Wait) return;
-	// ‘JˆÚw¦‚Ì—ˆ‚½ƒ^ƒO‚ªÀs’†‚ÌƒV[ƒ“‚Æ“¯‚¶‚©ANotFound‚¾‚Á‚½ê‡‚Í‚»‚Ì‚Ü‚ÜI—¹
+	// é·ç§»æŒ‡ç¤ºã®æ¥ãŸã‚¿ã‚°ãŒå®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã¨åŒã˜ã‹ã€NotFoundã ã£ãŸå ´åˆã¯ãã®ã¾ã¾çµ‚äº†
 	if (_nextSceneTag == crrSceneTag || _nextSceneTag == SceneTag::NotFound) return;
 
-	// ƒV[ƒ““Ç‚İ‚İŠJn
+	// ã‚·ãƒ¼ãƒ³èª­ã¿è¾¼ã¿é–‹å§‹
 	sceneLoadThread = std::thread(&SceneManager::SceneLoad, this, _nextSceneTag);
 }
 
 
 void SceneManager::SceneLoad(const SceneTag& _nextSceneTag)
 {
-	// ƒV[ƒ““Ç‚İ‚İŠ®—¹‚Ìƒtƒ‰ƒO‚ğÜ‚Á‚Ä‚¨‚­
+	// ã‚·ãƒ¼ãƒ³èª­ã¿è¾¼ã¿å®Œäº†ã®ãƒ•ãƒ©ã‚°ã‚’æŠ˜ã£ã¦ãŠã
 	atomicLoadState.store(SceneLoadState::Loading);
 
-	//! ‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO‚ğ‹L‰¯‚µ‚Ä‚¨‚­(QÆŒ^‚Å‚Á‚Ä‚¢‚é‚½‚ß)
+	//! é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°ã‚’è¨˜æ†¶ã—ã¦ãŠã(å‚ç…§å‹ã§æŒã£ã¦ã„ã‚‹ãŸã‚)
 	const SceneTag nextSceneTag = _nextSceneTag;
 
-	// ƒ^ƒO‚É‚æ‚Á‚Ä‘JˆÚæ‚ÌƒV[ƒ“‚ğ•ÏX‚·‚é
+	// ã‚¿ã‚°ã«ã‚ˆã£ã¦é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
 	switch (nextSceneTag)
 	{
 	case SceneTag::Title:
@@ -160,7 +160,7 @@ void SceneManager::SceneLoad(const SceneTag& _nextSceneTag)
 
 	loadScene->AsyncAwake();
 
-	// “Ç‚İ‚İŠ®—¹
+	// èª­ã¿è¾¼ã¿å®Œäº†
 	atomicLoadState.store(SceneLoadState::Completed);
 }
 
