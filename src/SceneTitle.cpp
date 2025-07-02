@@ -1,9 +1,9 @@
-#include "SceneTitle.h"
+ï»¿#include "SceneTitle.h"
 
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitle‚ÌÀ‘•ƒtƒ@ƒCƒ‹
+* @note		SceneTitleã®å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 
@@ -11,16 +11,16 @@ SceneTitle::SceneTitle()
 	: selectIndex(0), isSelect(false), inputHandle(-1), 
 	ipBuffer{ -1, -1, -1, -1 }
 {
-	// Às’†‚ÌƒV[ƒ“ƒ^ƒO
+	// å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
 	sceneTag = SceneTag::Title;
 
-	// ”wŒiF‚ğ•ÏX
+	// èƒŒæ™¯è‰²ã‚’å¤‰æ›´
 	SetBackgroundColor(255, 255, 255);
 
-	// ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN‚ğ“o˜^
+	// ã‚­ãƒ¼å…¥åŠ›ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’ç™»éŒ²
 	callBackId = input->AddCallBack("cursor", std::bind(&SceneTitle::KeyInputCallback, this, std::placeholders::_1));
 
-	// ˆÃ“]‰ğœ
+	// æš—è»¢è§£é™¤
 	HWDotween::DoDelay(15)->OnComplete([&]
 		{
 			UIManager::FadeOut(20);
@@ -36,7 +36,7 @@ SceneTitle::SceneTitle()
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
-		); // ƒJƒ‰[‚ğİ’è
+		); // ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
 }
 
 SceneTitle::~SceneTitle()
@@ -54,7 +54,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		if (it->inputState != InputState::Started)
 			continue;
 
-		// Œˆ’èƒL[‰Ÿ‰º‚Ìˆ—
+		// æ±ºå®šã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã®å‡¦ç†
 		if (it->keyCode == KEY_INPUT_Z)
 		{
 			SelectInput();
@@ -62,7 +62,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 		if (isSelect) continue;
 
-		// ƒJ[ƒ\ƒ‹ˆÚ“®‚ÆQÆ€–ÚˆÚ“®‚Ìˆ—
+		// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•ã¨å‚ç…§é …ç›®ç§»å‹•ã®å‡¦ç†
 		if (it->keyCode == PAD_INPUT_UP)
 		{
 			if (selectIndex == 0)	selectIndex = 1;
@@ -88,9 +88,9 @@ void SceneTitle::LateUpdate()
 {
 	cursor.ManualUpdate();
 
-	std::string text = "ƒXƒ^[ƒg";
+	std::string text = "ã‚¹ã‚¿ãƒ¼ãƒˆ";
 
-	// ƒeƒLƒXƒg•\¦À•W
+	// ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤ºåº§æ¨™
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
@@ -103,16 +103,16 @@ void SceneTitle::LateUpdate()
 
 	DrawFormatString(300, 300 - GetFontSize() / 2, 
 		GetColor(0, 0, 0),
-		"€–Ú1");
+		"é …ç›®1");
 
 	DrawFormatString(300, 400 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"€–Ú2");
+		"é …ç›®2");
 
 
 	if (isSelect)
 	{
-		// “ü—Í’†‚ÌƒOƒ‹[ƒv‚ğİ’è
+		// å…¥åŠ›ä¸­ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’è¨­å®š
 		int inputIndex = 0;
 		for (int i = 0; i < 4; ++i)
 		{
@@ -132,11 +132,11 @@ void SceneTitle::LateUpdate()
 
 		if (CheckKeyInput(inputHandle))
 		{
-			// “ü—Í‚³‚ê‚½•¶š—ñ‚ğ”—ñ‚É•ÏŠ·
+			// å…¥åŠ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’æ•°åˆ—ã«å¤‰æ›
 			int num = GetKeyInputNumber(inputHandle);
 			ipBuffer[inputIndex] = num;
 
-			// “ü—Í‚ªŠ®—¹‚µ‚½ê‡
+			// å…¥åŠ›ãŒå®Œäº†ã—ãŸå ´åˆ
 			if (ipBuffer[3] != -1)
 			{
 				IPDATA ip;
@@ -195,7 +195,7 @@ void SceneTitle::ServerUpdate()
 		if (NetHandle > 0) ConnectedNum++;
 	}
 
-	// Ú‘±
+	// æ¥ç¶š
 	if(ConnectedNum >=3)
 	{
 		StopListenNetWork();
@@ -205,7 +205,7 @@ void SceneTitle::ServerUpdate()
 		Connect();
 	}
 
-	// óM
+	// å—ä¿¡
 	if(ConnectedNum >0)
 	{
 		DisConnect();
@@ -244,21 +244,21 @@ void SceneTitle::RecieveNetData()
 {
 	for(auto NetHandle : NetWorkHandles)
 	{
-		if (NetHandle == -1) continue; // NetHandle ‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«AƒXƒLƒbƒv
-		IPDATA Ip;            // Ú‘±æ‚h‚oƒAƒhƒŒƒXƒf[ƒ^
-		// Ú‘±‚µ‚Ä‚«‚½ƒ}ƒVƒ“‚Ì‚h‚oƒAƒhƒŒƒX‚ğ“¾‚é
+		if (NetHandle == -1) continue; // NetHandle ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„ã¨ãã€ã‚¹ã‚­ãƒƒãƒ—
+		IPDATA Ip;            // æ¥ç¶šå…ˆï¼©ï¼°ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒ‡ãƒ¼ã‚¿
+		// æ¥ç¶šã—ã¦ããŸãƒã‚·ãƒ³ã®ï¼©ï¼°ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
 		GetNetWorkIP(NetHandle, &Ip);
 	
-		// æ“¾‚µ‚Ä‚¢‚È‚¢óMƒf[ƒ^—Ê‚ª‚O‚Ì‚Æ‚«‚ÍI—¹
+		// å–å¾—ã—ã¦ã„ãªã„å—ä¿¡ãƒ‡ãƒ¼ã‚¿é‡ãŒï¼ã®ã¨ãã¯çµ‚äº†
 		if (GetNetWorkDataLength(NetHandle) == 0) continue;
 
 		int DataLength;
 		char StrBuf[256];
 
-		// ƒf[ƒ^óM
-		DataLength = GetNetWorkDataLength(NetHandle);    // ƒf[ƒ^‚Ì—Ê‚ğæ“¾
-		NetWorkRecv(NetHandle, StrBuf, DataLength);    // ƒf[ƒ^‚ğƒoƒbƒtƒ@‚Éæ“¾
-		// ƒoƒbƒtƒ@‚ğƒXƒ^ƒbƒN‚É’Ç‰Á
+		// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+		DataLength = GetNetWorkDataLength(NetHandle);    // ãƒ‡ãƒ¼ã‚¿ã®é‡ã‚’å–å¾—
+		NetWorkRecv(NetHandle, StrBuf, DataLength);    // ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ•ã‚¡ã«å–å¾—
+		// ãƒãƒƒãƒ•ã‚¡ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«è¿½åŠ 
 		recvStack.push(StrBuf);
 	}
 
