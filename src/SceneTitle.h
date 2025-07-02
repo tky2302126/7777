@@ -67,6 +67,10 @@ private:
 	int selectIndex;
 	//! 項目を選択中
 	bool isSelect;
+	//! 入力ハンドル(ip/ポート番号)
+	int inputHandle;
+	//! 未入力の項目を判別するために、一度intを経由してからIPDATA型に変換する
+	int ipBuffer[4];
 
 
 	/**
