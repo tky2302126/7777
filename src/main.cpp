@@ -90,8 +90,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		sceneManager.Update();
 
 
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "Escape key to exit");
-
 		DrawCapsule3D(
 			pos, pos + VGet(0,400,0), 50.0f * scale.x,
 			12, 

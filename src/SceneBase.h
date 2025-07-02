@@ -124,7 +124,7 @@ protected:
 
 		input = new InputSystem();
 		input->AddKeyCode("cursor", { PAD_INPUT_DOWN,PAD_INPUT_UP,PAD_INPUT_2 }, InputType::Key_Pad1);
-		input->AddKeyCode("cursor", { KEY_INPUT_W,KEY_INPUT_S,KEY_INPUT_RETURN }, InputType::Key);
+		input->AddKeyCode("cursor", { KEY_INPUT_W,KEY_INPUT_S,KEY_INPUT_Z }, InputType::Key);
 	}
 
 	/**
