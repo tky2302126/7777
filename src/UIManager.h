@@ -17,37 +17,8 @@ class CharacterBase;
   */
 class UIManager : public HWComponent
 {
-	//
-	// メンバ変数
-	//
-
 public:
 	
- 
-private:
-
-	//! フェードイン、フェードアウト用画像
-	static int fadeGraphHandle;
-	//! フェードイン、フェードアウト中
-	static bool isFade;
-	//! 画像のα値
-	static int alpha;
-	//! α値の加算値
-	static int add;
-	static int loadingGraphHandle;
-	static int 	menuFont;
-
-
-	//
-	// メソッド
-	//
-
-private:
-
-
-
-public:
-
 	/**
 	 * @brief		デストラクタ
 	 */
@@ -85,5 +56,19 @@ public:
 	 * @brief		ロード中の処理
 	 */
 	static void LoadingAnimation();
+
+
+private:
+
+	//! フェードイン、フェードアウト用画像
+	static int fadeGraphHandle;
+	//! フェードイン、フェードアウト中
+	static bool isFade;
+	//! 画像のα値
+	static int alpha;
+	//! α値の加算値
+	static int add;
+	static int loadingGraphHandle;
+	static int 	menuFont;
 };
 

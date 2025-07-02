@@ -16,26 +16,11 @@
  */
 class SceneManager
 {
-private:
-	// メンバ変数
-
-	//! 実行中のシーンタグ
-	SceneTag crrSceneTag;
-	//! 実行中のシーンのインスタンス
-	SceneBase* crrScene;
-	//! 非同期でシーンの読み込みを行うスレッド
-	std::thread sceneLoadThread;
-	//! 非同期で読み込んだシーンのインスタンス
-	SceneBase* loadScene;
-	//! ロード中に再生する動画のハンドル
-	int loadMovieHandle;
-
 public:
+
 	//! シーンロードが完了しているか
 	std::atomic<SceneLoadState> atomicLoadState;
 
-public:
-	// メンバ関数
 
 	/**
 	 * @brief       シングルトンインスタンスを取得する
@@ -93,7 +78,20 @@ public:
 	 */
 	void SceneChangeAsync(const SceneTag& _nextSceneTag);
 
+
 private:
+
+	//! 実行中のシーンタグ
+	SceneTag crrSceneTag;
+	//! 実行中のシーンのインスタンス
+	SceneBase* crrScene;
+	//! 非同期でシーンの読み込みを行うスレッド
+	std::thread sceneLoadThread;
+	//! 非同期で読み込んだシーンのインスタンス
+	SceneBase* loadScene;
+	//! ロード中に再生する動画のハンドル
+	int loadMovieHandle;
+
 
 	/**
 	 * @brief       シーン読み込み
@@ -102,7 +100,6 @@ private:
 	 * @date        24/11/20
 	 */
 	void SceneLoad(const SceneTag& _nextSceneTag);
-
 
 	// コンストラクタは明示的に削除
 	SceneManager();

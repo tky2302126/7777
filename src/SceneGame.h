@@ -16,13 +16,6 @@
  */
 class SceneGame : public SceneBase
 {
-private:
-	// メンバ変数
-
-	//! テキストのフォント
-	int menuFont;
-
-
 public:
 	// メソッド
 
@@ -64,4 +57,10 @@ public:
 	 * @date        24/11/20
 	 */
 	void LateUpdate() override;
+
+
+private:
+
+	//! テキストのフォント
+	int menuFont;
 };

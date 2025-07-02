@@ -29,15 +29,6 @@ enum class PlayStatus
  */
 class VideoPlayer
 {
-	//
-	// メンバ変数
-	//
-
-private:
-
-	//! 透過処理を行う際に使用するスクリーンハンドル
-	int screenHandle = -1;
-
 public:
 
 	//! 動画のハンドル
@@ -55,12 +46,6 @@ public:
 	//! 表示座標
 	VECTOR position;
 
-
-	//
-	// メソッド
-	//
-
-public:
 
 	/**
 	 * @brief       コンストラクタ
@@ -152,4 +137,10 @@ public:
 			SeekMovieToGraph(movieHandle, 0);
 		playStatus = PlayStatus::Stop;
 	}
+
+
+private:
+
+	//! 透過処理を行う際に使用するスクリーンハンドル
+	int screenHandle = -1;
 };

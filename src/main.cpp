@@ -50,8 +50,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	sceneManager.SceneChangeSync(SceneTag::Title);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
-		sceneManager.SceneChangeAsync(SceneTag::Game);
-		UIManager::FadeIn(20, 0, false);
+		//sceneManager.SceneChangeAsync(SceneTag::Game);
+		//UIManager::FadeIn(20, 0, false);
 		});
 
 	//! オブジェクトの生成(unityでいうところのGameObjectの生成)
@@ -104,7 +104,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 非同期でシーンを読み込んでいる最中
 		if (sceneManager.atomicLoadState.load() == SceneLoadState::Loading)
 			UIManager::LoadingAnimation();
-
 
 		ScreenFlip();
 	}

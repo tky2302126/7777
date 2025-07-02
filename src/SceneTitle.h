@@ -8,6 +8,7 @@
 #include "SceneBase.h"
 #include "MovieManager.h"
 #include "UIManager.h"
+#include "Cursor.h"
 
 
 /**
@@ -16,15 +17,7 @@
  */
 class SceneTitle : public SceneBase
 {
-private:
-	// メンバ変数
-
-	//! テキストのフォント
-	int menuFont;
-
-
 public:
-	// メソッド
 
 	/**
 	 * @brief       コンストラクタ
@@ -64,4 +57,22 @@ public:
 	 * @date        24/11/20
 	 */
 	void LateUpdate() override;
+
+
+private:
+
+	//! カーソル
+	Cursor cursor;
+	//! 選択項目
+	int selectIndex;
+	//! 項目を選択中
+	bool isSelect;
+
+
+	/**
+	 * @brief       決定キーを押した際の処理
+	 * @author      Suzuki N
+	 * @date        24/11/20
+	 */
+	void SelectInput();
 };
