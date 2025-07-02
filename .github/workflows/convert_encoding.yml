@@ -1,8 +1,10 @@
 name: Convert Encoding to UTF-8
+
 on:
   push:
     branches:
-      - 'master'  # masterにpushする時に起動
+      - 'master'  # master に push されたときに実行
+
 jobs:
   convert-encoding:
     runs-on: ubuntu-latest
@@ -12,8 +14,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up iconv
-        run: sudo apt-get install -y libc-bin
+      - name: Install uchardet and iconv
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y uchardet
 
       - name: Find and convert .cpp and .h files to UTF-8
         id: convert
@@ -23,11 +27,24 @@ jobs:
           > "$report_file"
 
           find . -type f \( -name "*.cpp" -o -name "*.h" \) | while read file; do
-            encoding=$(file -bi "$file" | sed -n 's/.*charset=//p')
-            if [ "$encoding" != "utf-8" ]; then
+            encoding=$(uchardet "$file")
+
+            # uchardet が失敗して空文字を返すことがある
+            if [ -z "$encoding" ]; then
+              echo "エンコード判定失敗: $file"
+              continue
+            fi
+
+            if [ "$encoding" != "UTF-8" ]; then
               echo "Converting $file from $encoding to UTF-8"
-              iconv -f "$encoding" -t utf-8 "$file" -o "$file.utf8" && mv "$file.utf8" "$file"
-              echo "$file" >> "$report_file"
+
+              if iconv -f "$encoding" -t utf-8 "$file" -o "$file.utf8"; then
+                mv "$file.utf8" "$file"
+                echo "$file" >> "$report_file"
+              else
+                echo "変換失敗: $file ($encoding)"
+                rm -f "$file.utf8"
+              fi
             fi
           done
 
