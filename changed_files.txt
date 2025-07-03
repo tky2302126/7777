@@ -1,1 +1,3 @@
-src/SceneManager.cpp
+Log.txt
+src/SceneTitle.cpp
+src/SceneTitle.h
