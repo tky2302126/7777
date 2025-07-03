@@ -5,37 +5,37 @@
 /**
 * @author   NZ
 * @date     24/09/15
-* @note		çƒä½“å‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		‹…‘ÌŒ^‚ÌƒRƒ‰ƒCƒ_[ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @class	HWSphereCollider
- * @brief	çƒä½“å‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+ * @brief	‹…‘ÌŒ^‚ÌƒRƒ‰ƒCƒ_[ƒRƒ“ƒ|[ƒlƒ“ƒg
  */
 class HWSphereCollider : public HWCollider
 {
-	// ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ä»¥å¤–ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’é˜²ããŸã‚ã®ãƒ•ãƒ¬ãƒ³ãƒ‰å®£è¨€
+	// “Á’è‚ÌƒNƒ‰ƒXˆÈŠO‚©‚ç‚ÌƒAƒNƒZƒX‚ğ–h‚®‚½‚ß‚ÌƒtƒŒƒ“ƒhéŒ¾
 	friend class HWGameObject;
 	friend class CollisionWaltan;
 
 public:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
 	/**
 	 * @brief
-	 * @History		24/09/16 ä½œæˆ(NZ)
+	 * @History		24/09/16 ì¬(NZ)
 	 */
 
 
 
-	 /*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+	 /*     ƒƒ\ƒbƒh     */
 
 public:
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/09/16
 	 */

@@ -10,70 +10,70 @@
 
 enum class LoadParameter
 {
-	// å¾…æ©Ÿä¸­
+	// ‘Ò‹@’†
 	None,
-	// èª­ã¿è¾¼ã¿ä¸­
+	// “Ç‚İ‚İ’†
 	Loading,
-	// èª­ã¿è¾¼ã¿å®Œäº†
+	// “Ç‚İ‚İŠ®—¹
 	complete,
 };
 
 
 class HWSceneManager
 {
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 
 private:
 
-	//! å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³
+	//! Às’†‚ÌƒV[ƒ“
 	static HWSceneBase* crrScene;
-	//! éåŒæœŸã§èª­ã¿è¾¼ã‚“ã ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	//! ”ñ“¯Šú‚Å“Ç‚İ‚ñ‚¾ƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	static HWSceneBase* loadScene;
-	//! ã‚·ãƒ¼ãƒ³ãƒ­ãƒ¼ãƒ‰ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰
+	//! ƒV[ƒ“ƒ[ƒh—p‚ÌƒXƒŒƒbƒh
 	static std::thread loadThread;
 
 public:
 
-	//! ã‚·ãƒ¼ãƒ³ãƒ­ãƒ¼ãƒ‰ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	//! ƒV[ƒ“ƒ[ƒh‚Ìƒpƒ‰ƒ[ƒ^
 	static std::atomic<LoadParameter> loadParam;
-	//! ãƒ­ãƒ¼ãƒ‰ä¸­ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•å¤‰æ•°
+	//! ƒ[ƒh’†‚ÌƒXƒŒƒbƒhƒZ[ƒt•Ï”
 	static std::mutex loadMutex;
 
 
-	// ãƒ¡ã‚½ãƒƒãƒ‰
+	// ƒƒ\ƒbƒh
 
 private:
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã™ã‚‹
-	 * @return		ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @brief		“o˜^‚³‚ê‚Ä‚¢‚éƒV[ƒ“ƒIƒuƒWƒFƒNƒg‚ğæ“¾‚·‚é
+	 * @return		“o˜^‚³‚ê‚Ä‚¢‚éƒV[ƒ“ƒIƒuƒWƒFƒNƒg
 	 */
 	static std::unordered_map <std::string, std::function<HWSceneBase*()>>& GetRegistry();
 
 public:
 
 	/**
-	 * @brief		ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã™ã‚‹
-	 * @detail		ãƒã‚¯ãƒ­ã«ã‚ˆã£ã¦ç™»éŒ²ã•ã‚Œã‚‹ãŸã‚ã€æ‰‹å‹•ã§å‘¼ã¶å¿…è¦ã¯ãªã„
-	 * @param[in]	ã‚·ãƒ¼ãƒ³å : ã‚·ãƒ¼ãƒ³ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã™ã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+	 * @brief		ƒV[ƒ“ƒIƒuƒWƒFƒNƒg‚ğ“o˜^‚·‚é
+	 * @detail		ƒ}ƒNƒ‚É‚æ‚Á‚Ä“o˜^‚³‚ê‚é‚½‚ßAè“®‚ÅŒÄ‚Ô•K—v‚Í‚È‚¢
+	 * @param[in]	ƒV[ƒ“–¼ : ƒV[ƒ“‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚·‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
 	 */
 	static void RegisterScene(const std::string& name, std::function<HWSceneBase*()> factory);
 
 	/**
-	 * @brief		æ›´æ–°å‡¦ç†
+	 * @brief		XVˆ—
 	 */
 	static void Update();
 
 	/**
-	 * @brief		ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹(åŒæœŸèª­ã¿è¾¼ã¿)
-	 * @param[in]	é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³å
-	 * @return		é·ç§»å¾Œã®ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	 * @brief		ƒV[ƒ“‚ğ•ÏX‚·‚é(“¯Šú“Ç‚İ‚İ)
+	 * @param[in]	‘JˆÚæ‚ÌƒV[ƒ“–¼
+	 * @return		‘JˆÚŒã‚ÌƒV[ƒ“ƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	 */
 	static HWSceneBase* SceneChangeSync(const std::string& name);
 
 	/**
-	 * @brief		ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹(éåŒæœŸèª­ã¿è¾¼ã¿)
-	 * @param[in]	é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³å
+	 * @brief		ƒV[ƒ“‚ğ•ÏX‚·‚é(”ñ“¯Šú“Ç‚İ‚İ)
+	 * @param[in]	‘JˆÚæ‚ÌƒV[ƒ“–¼
 	 */
 	static void SceneChangeAsync(const std::string& name);
 };

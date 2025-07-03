@@ -1,7 +1,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneManagerã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+* @note		SceneManager‚Ì’è‹`ƒtƒ@ƒCƒ‹
 */
 
 #pragma once
@@ -11,20 +11,20 @@
 
 /**
  * @class	SceneManager
- * @brief   ã‚·ãƒ¼ãƒ³ã®å®Ÿè¡Œã€é·ç§»ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹
- * @detail	ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã§è¨­è¨ˆã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã§ãã¾ã›ã‚“
+ * @brief   ƒV[ƒ“‚ÌÀsA‘JˆÚ‚ğs‚¤ƒNƒ‰ƒX
+ * @detail	ƒVƒ“ƒOƒ‹ƒgƒ“‚ÅİŒv‚³‚ê‚Ä‚¢‚é‚½‚ßAƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚Å‚«‚Ü‚¹‚ñ
  */
 class SceneManager
 {
 public:
 
-	//! ã‚·ãƒ¼ãƒ³ãƒ­ãƒ¼ãƒ‰ãŒå®Œäº†ã—ã¦ã„ã‚‹ã‹
+	//! ƒV[ƒ“ƒ[ƒh‚ªŠ®—¹‚µ‚Ä‚¢‚é‚©
 	std::atomic<SceneLoadState> atomicLoadState;
 
 
 	/**
-	 * @brief       ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
-	 * @detail		ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæœªç”Ÿæˆã®å ´åˆã€æ–°ãŸã«ä½œæˆã™ã‚‹
+	 * @brief       ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é
+	 * @detail		ƒCƒ“ƒXƒ^ƒ“ƒX‚ª–¢¶¬‚Ìê‡AV‚½‚Éì¬‚·‚é
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -35,44 +35,44 @@ public:
 	}
 
 	/**
-	 * @brief       å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°ã‚’å–å¾—ã™ã‚‹
+	 * @brief       Às’†‚ÌƒV[ƒ“ƒ^ƒO‚ğæ“¾‚·‚é
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	const SceneTag& GetCrrSceneTag()const { return crrSceneTag; }
 
 	/**
-	 * @brief       å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚’å–å¾—ã™ã‚‹
+	 * @brief       Às’†‚ÌƒV[ƒ“‚ğæ“¾‚·‚é
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	const SceneBase& GetCrrScene()const { return *crrScene; }
 
 	/**
-	 * @brief       æ˜ç¤ºçš„ã«å‘¼ã³å‡ºã™å¿…è¦ã®ã‚ã‚‹Updateå‡¦ç†
+	 * @brief       –¾¦“I‚ÉŒÄ‚Ño‚·•K—v‚Ì‚ ‚éUpdateˆ—
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void Update();
 
 	/**
-	 * @brief       æ˜ç¤ºçš„ã«å‘¼ã³å‡ºã™å¿…è¦ã®ã‚ã‚‹Updateå‡¦ç†
+	 * @brief       –¾¦“I‚ÉŒÄ‚Ño‚·•K—v‚Ì‚ ‚éUpdateˆ—
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void LateUpdate();
 
 	/**
-	 * @brief       åŒæœŸå‡¦ç†ã§ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
-	 * @param[in]	const SceneTag& é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	 * @brief       “¯Šúˆ—‚ÅƒV[ƒ“‚ğ•ÏX‚·‚é
+	 * @param[in]	const SceneTag& ‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void SceneChangeSync(const SceneTag& _nextSceneTag);
 
 	/**
-	 * @brief       éåŒæœŸå‡¦ç†ã§ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
-	 * @param[in]	const SceneTag& é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	 * @brief       ”ñ“¯Šúˆ—‚ÅƒV[ƒ“‚ğ•ÏX‚·‚é
+	 * @param[in]	const SceneTag& ‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -81,27 +81,27 @@ public:
 
 private:
 
-	//! å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	//! Às’†‚ÌƒV[ƒ“ƒ^ƒO
 	SceneTag crrSceneTag;
-	//! å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	//! Às’†‚ÌƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	SceneBase* crrScene;
-	//! éåŒæœŸã§ã‚·ãƒ¼ãƒ³ã®èª­ã¿è¾¼ã¿ã‚’è¡Œã†ã‚¹ãƒ¬ãƒƒãƒ‰
+	//! ”ñ“¯Šú‚ÅƒV[ƒ“‚Ì“Ç‚İ‚İ‚ğs‚¤ƒXƒŒƒbƒh
 	std::thread sceneLoadThread;
-	//! éåŒæœŸã§èª­ã¿è¾¼ã‚“ã ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	//! ”ñ“¯Šú‚Å“Ç‚İ‚ñ‚¾ƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	SceneBase* loadScene;
-	//! ãƒ­ãƒ¼ãƒ‰ä¸­ã«å†ç”Ÿã™ã‚‹å‹•ç”»ã®ãƒãƒ³ãƒ‰ãƒ«
+	//! ƒ[ƒh’†‚ÉÄ¶‚·‚é“®‰æ‚Ìƒnƒ“ƒhƒ‹
 	int loadMovieHandle;
 
 
 	/**
-	 * @brief       ã‚·ãƒ¼ãƒ³èª­ã¿è¾¼ã¿
-	 * @param[in]	const SceneTag& é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	 * @brief       ƒV[ƒ““Ç‚İ‚İ
+	 * @param[in]	const SceneTag& ‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void SceneLoad(const SceneTag& _nextSceneTag);
 
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯æ˜ç¤ºçš„ã«å‰Šé™¤
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í–¾¦“I‚Éíœ
 	SceneManager();
 };
 

@@ -1,6 +1,6 @@
 /**
  * @file	MovieManager.h
- * @brief	å‹•ç”»å†ç”Ÿé–¢ä¿‚
+ * @brief	“®‰æÄ¶ŠÖŒW
  * @author	NS
  * @date	2024/1/29
  */
@@ -12,7 +12,7 @@
 
  /**
   * @class	MovieManager
-  * @brief	å‹•ç”»å†ç”Ÿ
+  * @brief	“®‰æÄ¶
   */
 
 class MovieManager : public HWComponent
@@ -20,83 +20,83 @@ class MovieManager : public HWComponent
 public:
 
 	/**
-	 * @brief		åˆæœŸåŒ–å‡¦ç†
+	 * @brief		‰Šú‰»ˆ—
 	 */
 	void Awake()override;
 
 	/**
-	 * @brief		æ›´æ–°å‡¦ç†
+	 * @brief		XVˆ—
 	 */
 	void LateUpdate()override;
 
 	/**
-	 * @brief		è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™
-	 * @return		è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å‚ç…§
+	 * @brief		©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·
+	 * @return		©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ÌQÆ
 	 */
 	static MovieManager& Instance();
 
 	/**
-	 * @brief		å‹•ç”»å†ç”Ÿ
-	 * @param[in]	ã‚­ãƒ¼
-	 * @param[in]	å†ç”Ÿä¸­ã®å ´åˆã€å†ç”Ÿã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‹
+	 * @brief		“®‰æÄ¶
+	 * @param[in]	ƒL[
+	 * @param[in]	Ä¶’†‚Ìê‡AÄ¶‚ğƒŠƒZƒbƒg‚·‚é‚©
 	 */
 	void Play(const std::string& _key, bool _isReset = false);
 
 	/**
-	 * @brief		å‹•ç”»å†ç”Ÿ
-	 * @param[in]	ã‚­ãƒ¼
-	 * @param[in]	å†ç”Ÿä¸­ã®å ´åˆã€å†ç”Ÿã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‹
+	 * @brief		“®‰æÄ¶
+	 * @param[in]	ƒL[
+	 * @param[in]	Ä¶’†‚Ìê‡AÄ¶‚ğƒŠƒZƒbƒg‚·‚é‚©
 	 */
 	void Play(const std::string& _key, SceneTag _tag, bool _isReset = false);
 
 	/**
-	 * @brief		å†ç”Ÿåœæ­¢
-	 * @param[in]	ã‚­ãƒ¼
-	 * @param[in]	å†ç”Ÿä¸­ã®å ´åˆã€å†ç”Ÿã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‹
+	 * @brief		Ä¶’â~
+	 * @param[in]	ƒL[
+	 * @param[in]	Ä¶’†‚Ìê‡AÄ¶‚ğƒŠƒZƒbƒg‚·‚é‚©
 	 */
 	void Stop(const std::string& _key, bool _isReset = false);
 
 	/**
-	 * @brief		å†ç”Ÿåœæ­¢
-	 * @param[in]	ã‚­ãƒ¼
-	 * @param[in]	å†ç”Ÿä¸­ã®å ´åˆã€å†ç”Ÿã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‹
+	 * @brief		Ä¶’â~
+	 * @param[in]	ƒL[
+	 * @param[in]	Ä¶’†‚Ìê‡AÄ¶‚ğƒŠƒZƒbƒg‚·‚é‚©
 	 */
 	void Stop(const std::string& _key, SceneTag _tag, bool _isReset = false);
 
 	/**
-	 * @brief		å‹•ç”»ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™
-	 * @param[in]	ã‚­ãƒ¼
-	 * @return		å‹•ç”»ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	 * @brief		“®‰æ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·
+	 * @param[in]	ƒL[
+	 * @return		“®‰æ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	 */
 	std::unique_ptr<VideoPlayer>& GetMovie(const std::string& _key);
 
 	/**
-	* @brief		å‹•ç”»ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
-	* @param[in]	ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	* @brief		“®‰æƒf[ƒ^‚Ì“Ç‚İ‚İ
+	* @param[in]	ƒV[ƒ“ƒ^ƒO
 	*/
 	void LoadMovie(SceneTag _sceneTag);
 
 
 private:
 
-	//! è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	//! ©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
 	static MovieManager* instance;
 
-	//! ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³
+	//! Œ»İ‚ÌƒV[ƒ“
 	SceneTag crrSceneTag;
 
-	//! Titleã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹å‹•ç”»
+	//! TitleƒV[ƒ“‚Åg—p‚·‚é“®‰æ
 	std::unordered_map <std::string, std::unique_ptr<VideoPlayer>> movie_title;
-	//! MainMenuã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹å‹•ç”»
+	//! MainMenuƒV[ƒ“‚Åg—p‚·‚é“®‰æ
 	std::unordered_map <std::string, std::unique_ptr<VideoPlayer>> movie_MainMenu;
-	//! Gameã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹å‹•ç”»
+	//! GameƒV[ƒ“‚Åg—p‚·‚é“®‰æ
 	std::unordered_map <std::string, std::unique_ptr<VideoPlayer>> movie_game;
 
 
 	/**
-	 * @brief		CSVãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
-	 * @param[in]	èª­ã¿è¾¼ã‚€CSVãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
-	 * @param[out]	èª­ã¿ã“ã‚“ã ãƒ‡ãƒ¼ã‚¿ã®ã‚¢ã‚¦ãƒˆãƒ—ãƒƒãƒˆå…ˆ
+	 * @brief		CSVƒtƒ@ƒCƒ‹‚©‚çƒf[ƒ^‚Ì“Ç‚İ‚İ
+	 * @param[in]	“Ç‚İ‚ŞCSVƒtƒ@ƒCƒ‹‚ÌƒpƒX
+	 * @param[out]	“Ç‚İ‚±‚ñ‚¾ƒf[ƒ^‚ÌƒAƒEƒgƒvƒbƒgæ
 	 */
 	void LoadCSV(const std::string& _path, std::unordered_map <std::string, std::unique_ptr<VideoPlayer>>& _output);
 };

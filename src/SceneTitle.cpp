@@ -3,7 +3,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitleã®å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
+* @note		SceneTitle‚ÌÀ‘•ƒtƒ@ƒCƒ‹
 */
 
 
@@ -11,16 +11,16 @@ SceneTitle::SceneTitle()
 	: selectIndex(0), isSelect(false), inputHandle(-1), 
 	ipBuffer{ -1, -1, -1, -1 }
 {
-	// å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	// Às’†‚ÌƒV[ƒ“ƒ^ƒO
 	sceneTag = SceneTag::Title;
 
-	// èƒŒæ™¯è‰²ã‚’å¤‰æ›´
+	// ”wŒiF‚ğ•ÏX
 	SetBackgroundColor(255, 255, 255);
 
-	// ã‚­ãƒ¼å…¥åŠ›ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’ç™»éŒ²
+	// ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN‚ğ“o˜^
 	callBackId = input->AddCallBack("cursor", std::bind(&SceneTitle::KeyInputCallback, this, std::placeholders::_1));
 
-	// æš—è»¢è§£é™¤
+	// ˆÃ“]‰ğœ
 	HWDotween::DoDelay(15)->OnComplete([&]
 		{
 			UIManager::FadeOut(20);
@@ -36,10 +36,10 @@ SceneTitle::SceneTitle()
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
-		); // ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
+		); // ƒJƒ‰[‚ğİ’è
 }
 
-SceneTitle::â€¾SceneTitle()
+SceneTitle::~SceneTitle()
 {
 }
 
@@ -54,7 +54,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		if (it->inputState != InputState::Started)
 			continue;
 
-		// æ±ºå®šã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã®å‡¦ç†
+		// Œˆ’èƒL[‰Ÿ‰º‚Ìˆ—
 		if (it->keyCode == KEY_INPUT_Z)
 		{
 			SelectInput();
@@ -62,7 +62,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 		if (isSelect) continue;
 
-		// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•ã¨å‚ç…§é …ç›®ç§»å‹•ã®å‡¦ç†
+		// ƒJ[ƒ\ƒ‹ˆÚ“®‚ÆQÆ€–ÚˆÚ“®‚Ìˆ—
 		if (it->keyCode == PAD_INPUT_UP)
 		{
 			if (selectIndex == 0)	selectIndex = 1;
@@ -88,9 +88,9 @@ void SceneTitle::LateUpdate()
 {
 	cursor.ManualUpdate();
 
-	std::string text = "ã‚¹ã‚¿ãƒ¼ãƒˆ";
+	std::string text = "ƒXƒ^[ƒg";
 
-	// ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤ºåº§æ¨™
+	// ƒeƒLƒXƒg•\¦À•W
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
@@ -103,16 +103,16 @@ void SceneTitle::LateUpdate()
 
 	DrawFormatString(300, 300 - GetFontSize() / 2, 
 		GetColor(0, 0, 0),
-		"é …ç›®1");
+		"€–Ú1");
 
 	DrawFormatString(300, 400 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"é …ç›®2");
+		"€–Ú2");
 
 
 	if (isSelect)
 	{
-		// å…¥åŠ›ä¸­ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’è¨­å®š
+		// “ü—Í’†‚ÌƒOƒ‹[ƒv‚ğİ’è
 		int inputIndex = 0;
 		for (int i = 0; i < 4; ++i)
 		{
@@ -132,11 +132,11 @@ void SceneTitle::LateUpdate()
 
 		if (CheckKeyInput(inputHandle))
 		{
-			// å…¥åŠ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’æ•°åˆ—ã«å¤‰æ›
+			// “ü—Í‚³‚ê‚½•¶š—ñ‚ğ”—ñ‚É•ÏŠ·
 			int num = GetKeyInputNumber(inputHandle);
 			ipBuffer[inputIndex] = num;
 
-			// å…¥åŠ›ãŒå®Œäº†ã—ãŸå ´åˆ
+			// “ü—Í‚ªŠ®—¹‚µ‚½ê‡
 			if (ipBuffer[3] != -1)
 			{
 				IPDATA ip;

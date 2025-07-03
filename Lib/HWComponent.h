@@ -5,64 +5,64 @@
 /**
 * @author   NZ
 * @date     24/06/17
-* @note     ã™ã¹ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®åŸºåº•ã‚¯ãƒ©ã‚¹ã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+* @note     ‚·‚×‚Ä‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŠî’êƒNƒ‰ƒX‚Ì’è‹`ƒtƒ@ƒCƒ‹
 */
 
 
-//HWComponentã‚¯ãƒ©ã‚¹ãŒãƒ¡ãƒ³ãƒå¤‰æ•°ã«HWGameObjectã‚¯ãƒ©ã‚¹ã‚’æŒãŸã›ã‚‹ãŸã‚ã«å‰æ–¹å®£è¨€
+//HWComponentƒNƒ‰ƒX‚ªƒƒ“ƒo•Ï”‚ÉHWGameObjectƒNƒ‰ƒX‚ğ‚½‚¹‚é‚½‚ß‚É‘O•ûéŒ¾
 class HWGameObject;
 class HWTransform;
 class HWCollider;
 
 /**
  * @class	HWComponent
- * @brief	å…¨ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®åŸºåº•ã‚¯ãƒ©ã‚¹
+ * @brief	‘S‚Ä‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŠî’êƒNƒ‰ƒX
  */
 class HWComponent
 {
-	// ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ä»¥å¤–ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’é˜²ããŸã‚ã®ãƒ•ãƒ¬ãƒ³ãƒ‰å®£è¨€
+	// “Á’è‚ÌƒNƒ‰ƒXˆÈŠO‚©‚ç‚ÌƒAƒNƒZƒX‚ğ–h‚®‚½‚ß‚ÌƒtƒŒƒ“ƒhéŒ¾
 	friend class HWGameObject;
 	friend class CollisionWaltan;
 
 public:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
 	/**
-	 * @brief		ã“ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹HWGameObject
-	 * @History		24/06/17 ä½œæˆ(NZ)
+	 * @brief		‚±‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚éHWGameObject
+	 * @History		24/06/17 ì¬(NZ)
 	 */
 	HWGameObject* gameObject;
 
 	/**
-	 * @brief		HWGameObjectã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹HWTransform
-	 * @History		24/06/17 ä½œæˆ(NZ)
+	 * @brief		HWGameObject‚ÉƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚éHWTransform
+	 * @History		24/06/17 ì¬(NZ)
 	 */
 	HWTransform* transform;
 
 	/**
-	 * @brief		è¤‡æ•°ã‚¢ã‚¿ãƒƒãƒå¯èƒ½ãªã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‹
-	 * @History		24/08/03 ä½œæˆ(NZ)
+	 * @brief		•¡”ƒAƒ^ƒbƒ`‰Â”\‚ÈƒRƒ“ƒ|[ƒlƒ“ƒg‚©
+	 * @History		24/08/03 ì¬(NZ)
 	 */
 	bool isMultiplePossession;
 
 	/**
-	 * @brief		ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–
-	 * @History		24/08/03 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌƒAƒNƒeƒBƒu
+	 * @History		24/08/03 ì¬(NZ)
 	 */
 	bool active;
 
 	/**
-	 * @brief		ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚„Updateãƒ¡ã‚½ãƒƒãƒ‰ã®å„ªå…ˆé †ä½(é™é †)
-	 * @History		24/09/29 ä½œæˆ(NZ)
+	 * @brief		ƒnƒ“ƒhƒ‰[‚âUpdateƒƒ\ƒbƒh‚Ì—Dæ‡ˆÊ(~‡)
+	 * @History		24/09/29 ì¬(NZ)
 	 */
 	int priority;
 
 private:
 
 	/**
-	 * @brief		æ—¢ã«Startãƒ¡ã‚½ãƒƒãƒ‰ãŒå®Ÿè¡Œæ¸ˆã¿ã‹
-	 * @History		24/10/03 ä½œæˆ(NZ)
+	 * @brief		Šù‚ÉStartƒƒ\ƒbƒh‚ªÀsÏ‚İ‚©
+	 * @History		24/10/03 ì¬(NZ)
 	 */
 	bool completedStartMethod;
 
@@ -70,67 +70,67 @@ private:
 private:
 
 	/**
-	 * @brief		è¡çªåˆ¤å®šã‚’å–ã£ãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/07/19 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë”»’è‚ğæ‚Á‚½‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/07/19 ì¬(NZ)
 	 */
 	std::function<void(HWCollider&)> OnCollisionEnterCallBack;
 
 	/**
-	 * @brief		è¡çªåˆ¤å®šã‚’å–ã£ã¦ã„ã‚‹é–“ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/07/19 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë”»’è‚ğæ‚Á‚Ä‚¢‚éŠÔ‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/07/19 ì¬(NZ)
 	 */
 	std::function<void(HWCollider&)> OnCollisionStayCallBack;
 
 	/**
-	 * @brief		è¡çªåˆ¤å®šãŒè§£ã‹ã‚ŒãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/07/19 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë”»’è‚ª‰ğ‚©‚ê‚½‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/07/19 ì¬(NZ)
 	 */
 	std::function<void(HWCollider&)> OnCollisionExitCallBack;
 
 	/**
-	 * @brief		è¡çªåˆ¤å®šã‚’å–ã£ãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/07/19 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë”»’è‚ğæ‚Á‚½‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/07/19 ì¬(NZ)
 	 */
 	std::function<void(HWCollider&)> OnTriggerEnterCallBack;
 
 	/**
-	 * @brief		è¡çªåˆ¤å®šã‚’å–ã£ã¦ã„ã‚‹é–“ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/07/19 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë”»’è‚ğæ‚Á‚Ä‚¢‚éŠÔ‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/07/19 ì¬(NZ)
 	 */
 	std::function<void(HWCollider&)> OnTriggerStayCallBack;
 
 	/**
-	 * @brief		è¡çªåˆ¤å®šãŒè§£ã‹ã‚ŒãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/07/19 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë”»’è‚ª‰ğ‚©‚ê‚½‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/07/19 ì¬(NZ)
 	 */
 	std::function<void(HWCollider&)> OnTriggerExitCallBack;
 
 
 public:
 
-	/*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+	/*     ƒƒ\ƒbƒh     */
 
 	/**
-	 * @brief		ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒfƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
-	virtual â€¾HWComponent() {}
+	virtual ~HWComponent() {}
 
 protected:
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
 	HWComponent();
 
-#pragma region ä»®æƒ³é–¢æ•°ç¾¤
+#pragma region ‰¼‘zŠÖ”ŒQ
 
 	/**
-	 * @brief		HWGameObjectã«ã‚¢ã‚¿ãƒƒãƒã•ã‚ŒãŸç¬é–“ã«åƒã
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		HWGameObject‚ÉƒAƒ^ƒbƒ`‚³‚ê‚½uŠÔ‚É“­‚­
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/06/17
 	 */
@@ -138,8 +138,8 @@ protected:
 
 
 	/**
-	 * @brief		æœ€åˆã®Updateãƒ¡ã‚½ãƒƒãƒ‰ã®ç›´å‰ã«åƒã
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		Å‰‚ÌUpdateƒƒ\ƒbƒh‚Ì’¼‘O‚É“­‚­
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/06/17
 	 */
@@ -147,8 +147,8 @@ protected:
 
 
 	/**
-	 * @brief		æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/06/17
 	 */
@@ -156,8 +156,8 @@ protected:
 
 
 	/**
-	 * @brief		æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰(Updateã‚ˆã‚Šã‚‚å¾Œã«å‘¼ã°ã‚Œã‚‹)
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚éƒƒ\ƒbƒh(Update‚æ‚è‚àŒã‚ÉŒÄ‚Î‚ê‚é)
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/10/12
 	 */
@@ -165,19 +165,19 @@ protected:
 
 
 	/**
-	 * @brief		å‰Šé™¤ã•ã‚Œã‚‹ç¬é–“ã«åƒã
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		íœ‚³‚ê‚éuŠÔ‚É“­‚­
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/06/17
 	 */
 	virtual void OnDestroy() {}
 
-#pragma region ã‚³ãƒªã‚¸ãƒ§ãƒ³é–¢ä¿‚
+#pragma region ƒRƒŠƒWƒ‡ƒ“ŠÖŒW
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
-	 * @param[out]	HWCollider& è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
+	 * @param[out]	HWCollider& Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[î•ñ
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
@@ -185,9 +185,9 @@ protected:
 
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªä¸­ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
-	 * @param[out]	HWCollider& è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë’†‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
+	 * @param[out]	HWCollider& Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[î•ñ
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
@@ -195,18 +195,18 @@ protected:
 
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªãŒè§£é™¤æ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
-	 * @param[out]	HWCollider& è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë‚ª‰ğœ‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
+	 * @param[out]	HWCollider& Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[î•ñ
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
 	virtual void OnCollisionExit(HWCollider& _collider) {}
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
-	 * @param[out]	HWCollider& è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
+	 * @param[out]	HWCollider& Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[î•ñ
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
@@ -214,9 +214,9 @@ protected:
 
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªä¸­ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
-	 * @param[out]	HWCollider& è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë’†‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
+	 * @param[out]	HWCollider& Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[î•ñ
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
@@ -224,9 +224,9 @@ protected:
 
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªãŒè§£é™¤æ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ä»®æƒ³é–¢æ•°
-	 * @param[out]	HWCollider& è¡çªã—ãŸç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë‚ª‰ğœ‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		‰¼‘zŠÖ”
+	 * @param[out]	HWCollider& Õ“Ë‚µ‚½‘Šè‚ÌƒRƒ‰ƒCƒ_[î•ñ
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
@@ -237,45 +237,45 @@ protected:
 
 #pragma endregion
 
-#pragma region ç™»éŒ²ã•ã‚ŒãŸã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã¶ãƒ¡ã‚½ãƒƒãƒ‰ç¾¤
+#pragma region “o˜^‚³‚ê‚½ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ôƒƒ\ƒbƒhŒQ
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚ŒãŸè¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰ã‚’åƒã‹ã›ã‚‹
+	 * @brief		“o˜^‚³‚ê‚½Õ“Ë‚É“­‚­ƒƒ\ƒbƒh‚ğ“­‚©‚¹‚é
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
 	void OnCollisionEnterHandler(HWCollider& _collider);
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚ŒãŸè¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰ã‚’åƒã‹ã›ã‚‹
+	 * @brief		“o˜^‚³‚ê‚½Õ“Ë‚É“­‚­ƒƒ\ƒbƒh‚ğ“­‚©‚¹‚é
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
 	void OnCollisionStayHandler(HWCollider& _collider);
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚ŒãŸè¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰ã‚’åƒã‹ã›ã‚‹
+	 * @brief		“o˜^‚³‚ê‚½Õ“Ë‚É“­‚­ƒƒ\ƒbƒh‚ğ“­‚©‚¹‚é
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
 	void OnCollisionExsitHandler(HWCollider& _collider);
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚ŒãŸè¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰ã‚’åƒã‹ã›ã‚‹
+	 * @brief		“o˜^‚³‚ê‚½Õ“Ë‚É“­‚­ƒƒ\ƒbƒh‚ğ“­‚©‚¹‚é
 	 * @author		NZ
 	 * @date		24/07/19
 	*/
 	void OnTriggerEnterHandler(HWCollider& _collider);
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚ŒãŸè¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰ã‚’åƒã‹ã›ã‚‹
+	 * @brief		“o˜^‚³‚ê‚½Õ“Ë‚É“­‚­ƒƒ\ƒbƒh‚ğ“­‚©‚¹‚é
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
 	void OnTriggerStayHandler(HWCollider& _collider);
 
 	/**
-	 * @brief		ç™»éŒ²ã•ã‚ŒãŸè¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰ã‚’åƒã‹ã›ã‚‹
+	 * @brief		“o˜^‚³‚ê‚½Õ“Ë‚É“­‚­ƒƒ\ƒbƒh‚ğ“­‚©‚¹‚é
 	 * @author		NZ
 	 * @date		24/07/19
 	 */

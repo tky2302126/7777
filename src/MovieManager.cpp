@@ -3,11 +3,11 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitleã®å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
+* @note		SceneTitle‚ÌÀ‘•ƒtƒ@ƒCƒ‹
 */
 
 //
-// é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°ã®åˆæœŸåŒ–
+// Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //
 
 MovieManager* MovieManager::instance = nullptr;
@@ -15,7 +15,7 @@ MovieManager* MovieManager::instance = nullptr;
 
 void MovieManager::Awake()
 {
-	// è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæ—¢ã«å­˜åœ¨ã™ã‚‹å ´åˆã¯å‰Šé™¤ã—ã€ãã®ã¾ã¾çµ‚äº†
+	// ©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ªŠù‚É‘¶İ‚·‚éê‡‚Ííœ‚µA‚»‚Ì‚Ü‚ÜI—¹
 	if (instance != nullptr)
 	{
 		gameObject->Destroy(gameObject);
@@ -23,7 +23,7 @@ void MovieManager::Awake()
 	}
 
 	//
-	// instanceãŒnullptrã®å ´åˆã®ã¿å®Ÿè¡Œ
+	// instance‚ªnullptr‚Ìê‡‚Ì‚İÀs
 	//
 
 	instance = this;
@@ -33,7 +33,7 @@ void MovieManager::Awake()
 void MovieManager::LateUpdate()
 {
 	//
-	// ãã®ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
+	// ‚»‚ÌƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚ğ“Ç‚İ‚Ş
 	//
 
 	for (auto it = movie_title.begin(); it != movie_title.end(); ++it)
@@ -51,14 +51,14 @@ void MovieManager::LateUpdate()
 
 MovieManager& MovieManager::Instance()
 {
-	// è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã™
+	// ©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ô‚·
 	return *instance;
 }
 
 void MovieManager::Play(const std::string& _key, bool _isReset)
 {
 	//
-	// ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
+	// ƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚©‚çŒŸõ
 	//
 
 	switch (crrSceneTag)
@@ -83,7 +83,7 @@ void MovieManager::Play(const std::string& _key, bool _isReset)
 void MovieManager::Play(const std::string& _key, SceneTag _tag, bool _isReset)
 {
 	//
-	// ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
+	// ƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚©‚çŒŸõ
 	//
 	switch (_tag)
 	{
@@ -104,7 +104,7 @@ void MovieManager::Play(const std::string& _key, SceneTag _tag, bool _isReset)
 void MovieManager::Stop(const std::string& _key, bool _isReset)
 {
 	//
-	// ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
+	// ƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚©‚çŒŸõ
 	//
 
 	switch (crrSceneTag)
@@ -129,7 +129,7 @@ void MovieManager::Stop(const std::string& _key, bool _isReset)
 void MovieManager::Stop(const std::string& _key, SceneTag _tag, bool _isReset)
 {
 	//
-	// ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
+	// ƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚©‚çŒŸõ
 	//
 	switch (_tag)
 	{
@@ -152,7 +152,7 @@ void MovieManager::Stop(const std::string& _key, SceneTag _tag, bool _isReset)
 std::unique_ptr<VideoPlayer>& MovieManager::GetMovie(const std::string& _key)
 {
 	//
-	// ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ¤œç´¢
+	// ƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚©‚çŒŸõ
 	//
 
 	switch (crrSceneTag)
@@ -177,7 +177,7 @@ std::unique_ptr<VideoPlayer>& MovieManager::GetMovie(const std::string& _key)
 void MovieManager::LoadMovie(SceneTag _sceneTag)
 {
 	//
-	// ãã®ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
+	// ‚»‚ÌƒV[ƒ“‚Åg—p‚·‚éƒf[ƒ^‚ğ“Ç‚İ‚Ş
 	//
 
 	switch (_sceneTag)
@@ -185,10 +185,10 @@ void MovieManager::LoadMovie(SceneTag _sceneTag)
 	case SceneTag::Title:
 	{
 		crrSceneTag = _sceneTag;
-		// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã§ä½¿ç”¨ã™ã‚‹å‹•ç”»ã‚’èª­ã¿è¾¼ã‚€
+		// ƒ^ƒCƒgƒ‹‰æ–Ê‚Åg—p‚·‚é“®‰æ‚ğ“Ç‚İ‚Ş
 		if (!movie_title.empty()) return;
 
-		// CSVãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+		// CSVƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
 		LoadCSV("Assets/Movie/Title/Movie_Title.csv", movie_title);
 		break;
 	}
@@ -196,10 +196,10 @@ void MovieManager::LoadMovie(SceneTag _sceneTag)
 	case SceneTag::Game:
 	{
 		crrSceneTag = _sceneTag;
-		// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã§ä½¿ç”¨ã™ã‚‹å‹•ç”»ã‚’èª­ã¿è¾¼ã‚€
+		// ƒ^ƒCƒgƒ‹‰æ–Ê‚Åg—p‚·‚é“®‰æ‚ğ“Ç‚İ‚Ş
 		if (!movie_game.empty()) return;
 
-		// CSVãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+		// CSVƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
 		LoadCSV("Assets/Movie/Game/Movie_Game.csv", movie_game);
 		break;
 	}
@@ -207,10 +207,10 @@ void MovieManager::LoadMovie(SceneTag _sceneTag)
 	case SceneTag::MainMenu:
 	{
 		crrSceneTag = _sceneTag;
-		// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã§ä½¿ç”¨ã™ã‚‹å‹•ç”»ã‚’èª­ã¿è¾¼ã‚€
+		// ƒ^ƒCƒgƒ‹‰æ–Ê‚Åg—p‚·‚é“®‰æ‚ğ“Ç‚İ‚Ş
 		if (!movie_MainMenu.empty()) return;
 
-		// CSVãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
+		// CSVƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
 		LoadCSV("Assets/Movie/MainMenu/Movie_MainMenu.csv", movie_MainMenu);
 		break;
 	}
@@ -222,14 +222,14 @@ void MovieManager::LoadMovie(SceneTag _sceneTag)
 
 void MovieManager::LoadCSV(const std::string& _path, std::unordered_map<std::string, std::unique_ptr<VideoPlayer>>& _output)
 {
-	// CSVãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚­ã‚¹ãƒˆã‚’èª­ã¿è¾¼ã‚€
+	// CSVƒtƒ@ƒCƒ‹‚©‚çƒeƒLƒXƒg‚ğ“Ç‚İ‚Ş
 	auto csv = CsvLoader::Load(_path);
 
 	/*
-		[][0] = åå‰
-		[][1] = ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
- 		[][2] = ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹ã‹
-		[][3] = é€éå‡¦ç†ã‚’æ–½ã™ã‹
+		[][0] = –¼‘O
+		[][1] = ƒtƒ@ƒCƒ‹ƒpƒX
+ 		[][2] = ƒ‹[ƒv‚³‚¹‚é‚©
+		[][3] = “§‰ßˆ—‚ğ{‚·‚©
 	*/
 	for (int i = 1; i < csv.size(); ++i)
 	{

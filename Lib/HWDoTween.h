@@ -4,49 +4,49 @@
 /**
 * @author   NZ
 * @date     25/02/19
-* @note		è‡ªä½œDotweenã®å®šç¾©
+* @note		©ìDotween‚Ì’è‹`
 */
 
 /**
  * @class	Dotween
- * @brief	è‡ªä½œDotween
+ * @brief	©ìDotween
  */
 class HWDotween
 {
 	friend class HandlerWaltan;
 
 	//
-	// ã‚¯ãƒ©ã‚¹
+	// ƒNƒ‰ƒX
 	//
 
 public:
 
 	/**
 	 * @class	Dotween
-	 * @brief	è‡ªä½œDotween
+	 * @brief	©ìDotween
 	 */
 	class TweenEvent
 	{
 		friend class HWDotween;
 	private:
-		//! å®Œäº†æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+		//! Š®—¹‚ÌƒR[ƒ‹ƒoƒbƒN
 		std::function<void(TweenEvent*,int)> function;
-		//! çµŒéæ™‚é–“
+		//! Œo‰ßŠÔ
 		int elapsedTime = 0;
-		//! å®Œäº†ã¾ã§ã®ãƒ•ãƒ¬ãƒ¼ãƒ 
+		//! Š®—¹‚Ü‚Å‚ÌƒtƒŒ[ƒ€
 		int duration;
-		//! ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã•ã›ã‚‹Transform
+		//! ƒAƒjƒ[ƒVƒ‡ƒ“‚³‚¹‚éTransform
 		HWTransform* transform;
-		//! ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã•ã›ã‚‹VECTOR
+		//! ƒAƒjƒ[ƒVƒ‡ƒ“‚³‚¹‚éVECTOR
 		VECTOR* animPtr;
-		//! ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å‰ã®VECTOR
+		//! ƒAƒjƒ[ƒVƒ‡ƒ“‘O‚ÌVECTOR
 		VECTOR prev;
-		//! ç›®æ¨™ã®VECTOR
+		//! –Ú•W‚ÌVECTOR
 		VECTOR target;
 	public:
-		// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+		// ƒXƒe[ƒ^ƒX
 		bool complete = false;
-		// ã‚­ãƒ£ãƒ³ã‚»ãƒ«ç”¨ã®ãƒ•ãƒ©ã‚°
+		// ƒLƒƒƒ“ƒZƒ‹—p‚Ìƒtƒ‰ƒO
 		bool isCancel = false;
 
 	public:
@@ -102,18 +102,18 @@ public:
 
 	/**
 	 * @class	Dotween
-	 * @brief	è‡ªä½œDotween
+	 * @brief	©ìDotween
 	 */
 	class TweenCallback
 	{
 		friend class HWDotween;
 
 	public:
-		// ç´ã¥ã„ã¦ã„ã‚‹TweenEvent
+		// •R‚Ã‚¢‚Ä‚¢‚éTweenEvent
 		TweenEvent* tweenEvent = nullptr;
 
 	private:
-		// å®Œäº†æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+		// Š®—¹‚ÌƒR[ƒ‹ƒoƒbƒN
 		std::function<void()> onComplete;
 
 	public:
@@ -127,68 +127,68 @@ public:
 
 
 	//
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 	//
 
 private:
 
-	//! ç™»éŒ²ã•ã‚ŒãŸDotween
+	//! “o˜^‚³‚ê‚½Dotween
 	static std::unordered_map<TweenEvent*, TweenCallback*> tweens;
 
 
 	//
-	// ãƒ¡ã‚½ãƒƒãƒ‰
+	// ƒƒ\ƒbƒh
 	//
 
 private:
 
 	/**
-	 * @brief		æ›´æ–°å‡¦ç†
+	 * @brief		XVˆ—
 	 */
 	static void Update();
 
 public:
 
 	/**
-	 * @brief		ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç§»å‹•ã•ã›ã‚‹
-	 * @param[in]	ç§»å‹•ã•ã›ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-	 * @param[in]	ç§»å‹•å…ˆã®åº§æ¨™
-	 * @param[in]	ç§»å‹•ã«ã‹ã‘ã‚‹æ™‚é–“(ãƒ•ãƒ¬ãƒ¼ãƒ )
-	 * @return		TweenEventã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
+	 * @brief		ƒIƒuƒWƒFƒNƒg‚ğˆÚ“®‚³‚¹‚é
+	 * @param[in]	ˆÚ“®‚³‚¹‚éƒIƒuƒWƒFƒNƒg
+	 * @param[in]	ˆÚ“®æ‚ÌÀ•W
+	 * @param[in]	ˆÚ“®‚É‚©‚¯‚éŠÔ(ƒtƒŒ[ƒ€)
+	 * @return		TweenEvent‚Ìƒwƒ‹ƒp[ƒNƒ‰ƒX
 	 */
 	static TweenCallback* DoMove(HWTransform* _transform, const VECTOR& _targetPos, int _duration);
 
 	/**
-	 * @brief		ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›è»¢ã•ã›ã‚‹
-	 * @param[in]	å›è»¢ã•ã›ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-	 * @param[in]	å›è»¢å…ˆã®åº§æ¨™
-	 * @param[in]	å›è»¢ã«ã‹ã‘ã‚‹æ™‚é–“(ãƒ•ãƒ¬ãƒ¼ãƒ )
-	 * @return		TweenEventã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
+	 * @brief		ƒIƒuƒWƒFƒNƒg‚ğ‰ñ“]‚³‚¹‚é
+	 * @param[in]	‰ñ“]‚³‚¹‚éƒIƒuƒWƒFƒNƒg
+	 * @param[in]	‰ñ“]æ‚ÌÀ•W
+	 * @param[in]	‰ñ“]‚É‚©‚¯‚éŠÔ(ƒtƒŒ[ƒ€)
+	 * @return		TweenEvent‚Ìƒwƒ‹ƒp[ƒNƒ‰ƒX
 	 */
 	static TweenCallback* DoRotate(HWTransform* _transform, const VECTOR& _targetRot, int _duration);
 
 	/**
-	 * @brief		ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ‹¡ç¸®ã•ã›ã‚‹
-	 * @param[in]	æ‹¡ç¸®ã•ã›ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-	 * @param[in]	æ‹¡ç¸®å…ˆã®åº§æ¨™
-	 * @param[in]	æ‹¡ç¸®ã«ã‹ã‘ã‚‹æ™‚é–“(ãƒ•ãƒ¬ãƒ¼ãƒ )
-	 * @return		TweenEventã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
+	 * @brief		ƒIƒuƒWƒFƒNƒg‚ğŠgk‚³‚¹‚é
+	 * @param[in]	Šgk‚³‚¹‚éƒIƒuƒWƒFƒNƒg
+	 * @param[in]	Šgkæ‚ÌÀ•W
+	 * @param[in]	Šgk‚É‚©‚¯‚éŠÔ(ƒtƒŒ[ƒ€)
+	 * @return		TweenEvent‚Ìƒwƒ‹ƒp[ƒNƒ‰ƒX
 	 */
 	static TweenCallback* DoScale(HWTransform* _transform, const VECTOR& _targetScale, int _duration);
 
 	/**
-	 * @brief		ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ‹¡ç¸®ã•ã›ã‚‹
-	 * @param[in]	æ‹¡ç¸®ã•ã›ã‚‹VEVTORå¤‰æ•°
-	 * @param[in]	æ‹¡ç¸®å…ˆã®åº§æ¨™
-	 * @param[in]	æ‹¡ç¸®ã«ã‹ã‘ã‚‹æ™‚é–“(ãƒ•ãƒ¬ãƒ¼ãƒ )
-	 * @return		TweenEventã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
+	 * @brief		ƒIƒuƒWƒFƒNƒg‚ğŠgk‚³‚¹‚é
+	 * @param[in]	Šgk‚³‚¹‚éVEVTOR•Ï”
+	 * @param[in]	Šgkæ‚ÌÀ•W
+	 * @param[in]	Šgk‚É‚©‚¯‚éŠÔ(ƒtƒŒ[ƒ€)
+	 * @return		TweenEvent‚Ìƒwƒ‹ƒp[ƒNƒ‰ƒX
 	 */
 	static TweenCallback* DoAction(VECTOR* _scalePtr, const VECTOR& _targetScale, int _duration);
 
 	/**
-	 * @brief		ä¸€å®šæ™‚é–“å¾…æ©Ÿ
-	 * @param[in]	ç§»å‹•ã«ã‹ã‹ã‚‹æ™‚é–“(ãƒ•ãƒ¬ãƒ¼ãƒ )
-	 * @return		TweenEventã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
+	 * @brief		ˆê’èŠÔ‘Ò‹@
+	 * @param[in]	ˆÚ“®‚É‚©‚©‚éŠÔ(ƒtƒŒ[ƒ€)
+	 * @return		TweenEvent‚Ìƒwƒ‹ƒp[ƒNƒ‰ƒX
 	 */
 	static TweenCallback* DoDelay(int _duration);
 };

@@ -6,156 +6,156 @@
 /**
 * @author   NZ
 * @date     24/07/18
-* @note		ã‚ãŸã‚Šåˆ¤å®šã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		‚ ‚½‚è”»’è‚Ìî•ñ‚ğ•Û‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @enum	ColliderType
- * @brief	ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ç¨®é¡
+ * @brief	ƒRƒ‰ƒCƒ_[‚Ìí—Ş
  */
 enum class ColliderType
 {
-	//! ç«‹æ–¹ä½“(0)
+	//! —§•û‘Ì(0)
 	Box,
-	//! çƒä½“(1)
+	//! ‹…‘Ì(1)
 	Sphere,
-	//! ã‚«ãƒ—ã‚»ãƒ«å‹(2)
+	//! ƒJƒvƒZƒ‹Œ^(2)
 	Capsule,
-	//! ãƒãƒªã‚´ãƒ³å‹(3)
+	//! ƒ|ƒŠƒSƒ“Œ^(3)
 	Model,
 };
 
 
 /**
  * @class	HWCollider
- * @brief	ã‚ãŸã‚Šåˆ¤å®šã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®åŸºåº•ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+ * @brief	‚ ‚½‚è”»’è‚Ìî•ñ‚ğ•Û‚·‚éƒRƒ‰ƒCƒ_[‚ÌŠî’êƒRƒ“ƒ|[ƒlƒ“ƒg
  */
 class HWCollider : public HWComponent
 {
-	// ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ä»¥å¤–ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’é˜²ããŸã‚ã®ãƒ•ãƒ¬ãƒ³ãƒ‰å®£è¨€
+	// “Á’è‚ÌƒNƒ‰ƒXˆÈŠO‚©‚ç‚ÌƒAƒNƒZƒX‚ğ–h‚®‚½‚ß‚ÌƒtƒŒƒ“ƒhéŒ¾
 	friend class HWGameObject;
 	friend class CollisionWaltan;
 
 public:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æç”»ã™ã‚‹ã‹
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚ğ•`‰æ‚·‚é‚©
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	bool isVisualization;
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒãƒˆãƒªã‚¬ãƒ¼ã‹
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚ªƒgƒŠƒK[‚©
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	bool isTrigger;
 
 	/**
-	 * @brief		è‡ªèº«ã¨åŒã˜ãƒˆãƒªã‚¬ãƒ¼ã‚¿ã‚¤ãƒ—ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨ã®ã¿ã‚ãŸã‚Šåˆ¤å®šã‚’å–ã‚‹ã‹
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		©g‚Æ“¯‚¶ƒgƒŠƒK[ƒ^ƒCƒv‚ÌƒRƒ‰ƒCƒ_[‚Æ‚Ì‚İ‚ ‚½‚è”»’è‚ğæ‚é‚©
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	bool isCollisionCheck_onlySameTriggerType = false;
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸­å¿ƒ(gameObjectã®positionã¨ã®ç›¸å¯¾è·é›¢)
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚Ì’†S(gameObject‚Ìposition‚Æ‚Ì‘Š‘Î‹——£)
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	VECTOR center;
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸­å¿ƒ(ãƒ¯ãƒ¼ãƒ«ãƒ‰ã®åŸç‚¹ã¨ã®çµ¶å¯¾è·é›¢)
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚Ì’†S(ƒ[ƒ‹ƒh‚ÌŒ´“_‚Æ‚Ìâ‘Î‹——£)
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	VECTOR worldPosition;
 
 	/**
-	 * @brief		è¡çªã—ãŸåº§æ¨™
-	 * @History		25/2/3 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë‚µ‚½À•W
+	 * @History		25/2/3 ì¬(NZ)
 	 */
 	VECTOR contact = {-1,-1,-1};
 
 	/**
 	 * @brief		
-	 * @History		24/10/22 ä½œæˆ(NZ)
+	 * @History		24/10/22 ì¬(NZ)
 	 */
 	std::vector<int> ignoreTag;
 
 protected:
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸­å¿ƒ(ãƒ­ãƒ¼ã‚«ãƒ«)
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚Ì’†S(ƒ[ƒJƒ‹)
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	VECTOR localCenter;
 
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ç¨®é¡
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚Ìí—Ş
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	ColliderType colliderType;
 
 	/**
-	 * @brief		è¡çªä¸­ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
-	 * @History		24/09/15 ä½œæˆ(NZ)
+	 * @brief		Õ“Ë’†‚ÌƒRƒ‰ƒCƒ_[
+	 * @History		24/09/15 ì¬(NZ)
 	 */
 	std::vector<HWCollider*> CollidersInCollision;
 
 
-	/*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+	/*     ƒƒ\ƒbƒh     */
 
 public:
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚¿ã‚¤ãƒ—ã‚’å–å¾—ã™ã‚‹
+	 * @brief		ƒRƒ‰ƒCƒ_[ƒ^ƒCƒv‚ğæ“¾‚·‚é
 	 * @author		NZ
 	 * @date		24/07/18
 	 */
 	const ColliderType GetColliderType() { return colliderType; }
 
 	/**
-	 * @brief		è¡çªä¸­ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æƒ…å ±ã‚’å…¨ã¦å–å¾—ã™ã‚‹
+	 * @brief		Õ“Ë’†‚ÌƒRƒ‰ƒCƒ_[î•ñ‚ğ‘S‚Äæ“¾‚·‚é
 	 * @author		NZ
 	 * @date		24/09/18
 	 */
 	const std::vector<HWCollider*> GetCollidersInCollision() { return CollidersInCollision; }
 
 	/**
-	 * @brief		HWColliderã®ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		HWCollider‚ÌƒfƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/07/18
 	 */
-	virtual â€¾HWCollider() {}
+	virtual ~HWCollider() {}
 
 protected:
 
 	/**
-	 * @brief		HWColliderã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		HWCollider‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/07/18
 	 */
 	HWCollider();
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æç”»ã™ã‚‹
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		ƒRƒ‰ƒCƒ_[‚ğ•`‰æ‚·‚é
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	virtual void DrawCollider(){}
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®åº§æ¨™ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		ƒRƒ‰ƒCƒ_[‚ÌÀ•W‚ğƒZƒbƒg‚·‚é
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	virtual void SetCollider() {}
 
-#pragma region ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+#pragma region ƒI[ƒo[ƒ‰ƒCƒhƒƒ\ƒbƒh
 
 #pragma endregion
 };

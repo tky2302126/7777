@@ -16,23 +16,23 @@
 /**
 * @author   NZ
 * @date     24/07/18
-* @note		åŸå‰‡ã€ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã¯ã™ã¹ã¦HandlerWaltanã§å‘¼ã³å‡ºã™
+* @note		Œ´‘¥Aƒnƒ“ƒhƒ‰[‚Í‚·‚×‚ÄHandlerWaltan‚ÅŒÄ‚Ño‚·
 */
 
 
 /**
  * @class	HandlerWaltan
- * @brief   ã™ã¹ã¦ã®ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚’ç®¡ç†ã€å®Ÿè¡Œã™ã‚‹ã‚¯ãƒ©ã‚¹
+ * @brief   ‚·‚×‚Ä‚Ìƒnƒ“ƒhƒ‰[‚ğŠÇ—AÀs‚·‚éƒNƒ‰ƒX
  */
 class HandlerWaltan
 {
 public:
 
-    /*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+    /*     ƒƒ“ƒo•Ï”     */
 
     /**
-     * @brief		ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰ã§å®Ÿè¡Œã™ã‚‹ã‹
-     * @History		24/08/23 ä½œæˆ(NZ)
+     * @brief		ƒfƒoƒbƒOƒ‚[ƒh‚ÅÀs‚·‚é‚©
+     * @History		24/08/23 ì¬(NZ)
      */
     static bool debugMode;
 
@@ -41,59 +41,59 @@ private:
 
 private:
 
-    /*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+    /*     ƒƒ\ƒbƒh     */
 
     /**
-     * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
      * @author      NZ
      * @date        24/07/19
      */
     HandlerWaltan();
 
     /**
-     * @brief       ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @brief       ƒfƒXƒgƒ‰ƒNƒ^
      * @author      NZ
      * @date        24/07/19
      */
-    â€¾HandlerWaltan();
+    ~HandlerWaltan();
 
 
 public:
 
     /**
-      * @brief       å…¨ã¦ã®Updateãƒ¡ã‚½ãƒƒãƒ‰ã‚’å…¨ã¦å‘¼ã³å‡ºã™
+      * @brief       ‘S‚Ä‚ÌUpdateƒƒ\ƒbƒh‚ğ‘S‚ÄŒÄ‚Ño‚·
       * @author      NZ
       * @date        24/08/22
       */
     void Update();
 
     /**
-     * @brief       ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹é™çš„ãƒ¡ã‚½ãƒƒãƒ‰
-     * @detail      åˆã‚ã®ä¸€å›ã ã‘ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
+     * @brief       ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚éÃ“Iƒƒ\ƒbƒh
+     * @detail      ‰‚ß‚Ìˆê‰ñ‚¾‚¯ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é
      * @author      NZ
      * @date        24/07/19
      */
     static HandlerWaltan& Instance();
 
 
-    //ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ã‚³ãƒ”ãƒ¼ç¦æ­¢
-    //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å‰Šé™¤
+    //ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒRƒs[‹Ö~
+    //ƒfƒtƒHƒ‹ƒg‚ÌƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğíœ
     HandlerWaltan(const HandlerWaltan&) = delete;
-    //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚³ãƒ”ãƒ¼ä»£å…¥æ¼”ç®—å­ã‚‚å‰Šé™¤
+    //ƒfƒtƒHƒ‹ƒg‚ÌƒRƒs[‘ã“ü‰‰Zq‚àíœ
     HandlerWaltan& operator=(const HandlerWaltan&) = delete;
 
 
     /**
-     * @brief       ã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚ºç”¨ã®ãƒ¡ã‚½ãƒƒãƒ‰
-     * @detail      ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã—ãŸã¨ãã«å‘¼ã¶
-     * @return      int åˆæœŸåŒ–æˆåŠŸã®æˆå¦
+     * @brief       ƒCƒjƒVƒƒƒ‰ƒCƒY—p‚Ìƒƒ\ƒbƒh
+     * @detail      ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚µ‚½‚Æ‚«‚ÉŒÄ‚Ô
+     * @return      int ‰Šú‰»¬Œ÷‚Ì¬”Û
      * @author      NZ
      * @date        24/07/29
      */
     static int Init(int _particle = 8000);
 
     /**
-     * @brief       çµ‚äº†æ™‚ç”¨ã®ãƒ¡ã‚½ãƒƒãƒ‰
+     * @brief       I—¹—p‚Ìƒƒ\ƒbƒh
      * @author      NZ
      * @date        24/07/29
      */

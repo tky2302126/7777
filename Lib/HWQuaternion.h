@@ -4,76 +4,76 @@
 /**
 * @author   NZ
 * @date     24/09/15
-* @note		çƒä½“å‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		‹…‘ÌŒ^‚ÌƒRƒ‰ƒCƒ_[ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @class	HWSphereCollider
- * @brief	çƒä½“å‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+ * @brief	‹…‘ÌŒ^‚ÌƒRƒ‰ƒCƒ_[ƒRƒ“ƒ|[ƒlƒ“ƒg
  */
 class HWQuaternion
 {
 public:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
-    //! ã‚¹ã‚«ãƒ©ãƒ¼æˆåˆ†
+    //! ƒXƒJƒ‰[¬•ª
     float w; 
-    //! ãƒ™ã‚¯ãƒˆãƒ«æˆåˆ†
+    //! ƒxƒNƒgƒ‹¬•ª
     float x, y, z;
 
 
 public:
-    // ãƒ¡ã‚½ãƒƒãƒ‰
+    // ƒƒ\ƒbƒh
 
 
     /**
-     * @brief   ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @History 24/10/16 ì¬(NZ)
      */
     HWQuaternion();
 
     /**
-     * @brief   ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @History 24/10/16 ì¬(NZ)
      */
     HWQuaternion(float w, float x, float y, float z);
 
 
     /**
-     * @brief   ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã®æ­£è¦åŒ–
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒNƒH[ƒ^ƒjƒIƒ“‚Ì³‹K‰»
+     * @History 24/10/16 ì¬(NZ)
      */
     HWQuaternion Normalize() const;
 
     /**
-     * @brief   ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã®é€†å…ƒï¼ˆå…±å½¹ï¼‰
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒNƒH[ƒ^ƒjƒIƒ“‚Ì‹tŒ³i‹¤–ğj
+     * @History 24/10/16 ì¬(NZ)
      */
     HWQuaternion Conjugate() const;
 
     /**
-     * @brief   ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã®ç©ï¼ˆ2ã¤ã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’åˆæˆã™ã‚‹ï¼‰
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒNƒH[ƒ^ƒjƒIƒ“‚ÌÏi2‚Â‚ÌƒNƒH[ƒ^ƒjƒIƒ“‚ğ‡¬‚·‚éj
+     * @History 24/10/16 ì¬(NZ)
      */
     HWQuaternion operator*(const HWQuaternion& q) const;
 
     /**
-     * @brief   ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã¨ãƒ™ã‚¯ãƒˆãƒ«ã®ç©ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ã«ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’é©ç”¨ï¼‰
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒNƒH[ƒ^ƒjƒIƒ“‚ÆƒxƒNƒgƒ‹‚ÌÏiƒxƒNƒgƒ‹‚ÉƒNƒH[ƒ^ƒjƒIƒ“‚ğ“K—pj
+     * @History 24/10/16 ì¬(NZ)
      */
     VECTOR RotateVector(const VECTOR& v) const;
 
     /**
-     * @brief   ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’å›è»¢è»¸ã¨è§’åº¦ã‹ã‚‰ç”Ÿæˆ
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒNƒH[ƒ^ƒjƒIƒ“‚ğ‰ñ“]²‚ÆŠp“x‚©‚ç¶¬
+     * @History 24/10/16 ì¬(NZ)
      */
     static HWQuaternion FromAxisAngle(const VECTOR& axis, float angle);
 
     /**
-     * @brief   ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’å›è»¢è¡Œåˆ—ã«å¤‰æ›
-     * @History 24/10/16 ä½œæˆ(NZ)
+     * @brief   ƒNƒH[ƒ^ƒjƒIƒ“‚ğ‰ñ“]s—ñ‚É•ÏŠ·
+     * @History 24/10/16 ì¬(NZ)
      */
     MATRIX ToMatrix() const;
 };

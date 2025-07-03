@@ -3,24 +3,24 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitle„ÅÆÂÆüË£Ö„Éï„Ç°„Ç§„É´
+* @note		SceneTitleÇÃé¿ëïÉtÉ@ÉCÉã
 */
 
 
 SceneGame::SceneGame()
 {
-	// ÂÆüË°å‰∏≠„ÅÆ„Ç∑„Éº„É≥„Çø„Ç∞
+	// é¿çsíÜÇÃÉVÅ[ÉìÉ^ÉO
 	sceneTag = SceneTag::Game;
 
 	Sleep(1000);
 
-	// ËÉåÊôØËâ≤„ÇíÂ§âÊõ¥
+	// îwåiêFÇïœçX
 	SetBackgroundColor(255, 255, 255);
 
-	// „Ç≠„ÉºÂÖ•Âäõ„ÅÆ„Ç≥„Éº„É´„Éê„ÉÉ„ÇØ„ÇíÁôªÈå≤
+	// ÉLÅ[ì¸óÕÇÃÉRÅ[ÉãÉoÉbÉNÇìoò^
 	callBackId = input->AddCallBack("cursor", std::bind(&SceneGame::KeyInputCallback, this, std::placeholders::_1));
 
-	// ÊöóËª¢Ëß£Èô§
+	// à√ì]âèú
 	HWDotween::DoDelay(15)->OnComplete([&]
 		{
 			UIManager::FadeOut(20);
@@ -29,7 +29,7 @@ SceneGame::SceneGame()
 
 }
 
-SceneGame::‚ÄæSceneGame()
+SceneGame::~SceneGame()
 {
 }
 
@@ -47,9 +47,9 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
-	std::string text = "„Çπ„Çø„Éº„Éà";
+	std::string text = "ÉXÉ^Å[Ég";
 
-	// „ÉÜ„Ç≠„Çπ„ÉàË°®Á§∫Â∫ßÊ®ô
+	// ÉeÉLÉXÉgï\é¶ç¿ïW
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),

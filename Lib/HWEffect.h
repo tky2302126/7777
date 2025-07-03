@@ -6,65 +6,65 @@
 /**
 * @author   NZ
 * @date     24/09/15
-* @note		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		ƒGƒtƒFƒNƒgƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @enum	StopAction
- * @brief	å†ç”Ÿçµ‚äº†æ™‚ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
+ * @brief	Ä¶I—¹‚ÌƒAƒNƒVƒ‡ƒ“
  */
 enum class StopAction
 {
-	//! ä½•ã‚‚ã—ãªã„(0)
+	//! ‰½‚à‚µ‚È‚¢(0)
 	None,
-	//! ãƒ«ãƒ¼ãƒ—ã™ã‚‹(1)
+	//! ƒ‹[ƒv‚·‚é(1)
 	Loop,
-	//! å‰Šé™¤ã™ã‚‹(2)
+	//! íœ‚·‚é(2)
 	Destroy,
-	//! éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã™ã‚‹(3)
+	//! ”ñƒAƒNƒeƒBƒu‚É‚·‚é(3)
 	Disable,
-	//! ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã¶(4)
+	//! ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ô(4)
 	Callback,
 };
 
 
 /**
  * @class	HWSphereCollider
- * @brief	ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+ * @brief	ƒGƒtƒFƒNƒgƒRƒ“ƒ|[ƒlƒ“ƒg
  */
 class HWEffect : public HWComponent
 {
 private:
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 
 	/**
-	 * @brief		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒãƒ³ãƒ‰ãƒ«
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		ƒGƒtƒFƒNƒgƒnƒ“ƒhƒ‹
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	int effectResourceHandle;
 
 	/**
-	 * @brief		å†ç”Ÿä¸­ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒãƒ³ãƒ‰ãƒ«
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		Ä¶’†‚ÌƒGƒtƒFƒNƒgƒnƒ“ƒhƒ‹
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	int playingEffectHandle;
 
 	/**
-	 * @brief		å†ç”Ÿé€Ÿåº¦
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		Ä¶‘¬“x
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	float playSpeed;
 
 	/**
-	 * @brief		å†ç”Ÿä¸­ã‹
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		Ä¶’†‚©
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	bool isPlay;
 
 	/**
-	 * @brief		å†ç”Ÿçµ‚äº†æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		Ä¶I—¹‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	std::function<void()> CallBack;
 
@@ -74,44 +74,44 @@ private:
 	};
 
 	/**
-	 * @brief		ã‚«ãƒ©ãƒ¼
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		ƒJƒ‰[
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	Color color;
 
 public:
 
 	/**
-	 * @brief		å†ç”Ÿçµ‚äº†æ™‚ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
-	 * @History		24/10/07 ä½œæˆ(NZ)
+	 * @brief		Ä¶I—¹‚ÌƒAƒNƒVƒ‡ƒ“
+	 * @History		24/10/07 ì¬(NZ)
 	 */
 	StopAction stopAction;
 
 
 public:
-	// ãƒ¡ã‚½ãƒƒãƒ‰
+	// ƒƒ\ƒbƒh
 
-	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	HWEffect(const std::string& _path, const float _size = 1.0f);
-	// ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	// ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	HWEffect(const int _handle, const float _size = 1.0f);
-	// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	â€¾HWEffect();
+	// ƒfƒXƒgƒ‰ƒNƒ^
+	~HWEffect();
 
 
-#pragma region Getteré–¢æ•°
+#pragma region GetterŠÖ”
 
 	/**
-	 * @brief		å†ç”ŸçŠ¶æ³ã‚’å–å¾—ã™ã‚‹
-	 * @return		bool å†ç”Ÿä¸­ã‹
+	 * @brief		Ä¶ó‹µ‚ğæ“¾‚·‚é
+	 * @return		bool Ä¶’†‚©
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
 	bool IsPlay() { return isPlay; }
 
 	/**
-	 * @brief		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å†ç”Ÿé€Ÿåº¦ã‚’å–å¾—ã™ã‚‹
-	 * @return		float å†ç”Ÿé€Ÿåº¦
+	 * @brief		ƒGƒtƒFƒNƒg‚ÌÄ¶‘¬“x‚ğæ“¾‚·‚é
+	 * @return		float Ä¶‘¬“x
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
@@ -121,8 +121,8 @@ public:
 	}
 
 	/**
-	 * @brief		å†ç”Ÿä¸­ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒãƒ³ãƒ‰ãƒ«
-	 * @return		int ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒãƒ³ãƒ‰ãƒ«
+	 * @brief		Ä¶’†‚ÌƒGƒtƒFƒNƒgƒnƒ“ƒhƒ‹
+	 * @return		int ƒGƒtƒFƒNƒgƒnƒ“ƒhƒ‹
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
@@ -130,25 +130,25 @@ public:
 
 #pragma endregion
 
-#pragma region Setteré–¢æ•°
+#pragma region SetterŠÖ”
 
 	/**
-	 * @brief		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å†ç”Ÿã™ã‚‹
+	 * @brief		ƒGƒtƒFƒNƒg‚ğÄ¶‚·‚é
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
 	void Play();
 
 	/**
-	 * @brief		å†ç”Ÿã‚’åœæ­¢ã™ã‚‹
+	 * @brief		Ä¶‚ğ’â~‚·‚é
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
 	void Stop();
 
 	/**
-	 * @brief		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å†ç”Ÿé€Ÿåº¦ã‚’è¨­å®šã™ã‚‹
-	 * @rparam[in]	const float å†ç”Ÿé€Ÿåº¦
+	 * @brief		ƒGƒtƒFƒNƒg‚ÌÄ¶‘¬“x‚ğİ’è‚·‚é
+	 * @rparam[in]	const float Ä¶‘¬“x
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
@@ -159,8 +159,8 @@ public:
 	}
 
 	/**
-	 * @brief		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå†ç”Ÿçµ‚äº†æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
-	 * @rparam[in]	std::function<void()> ç™»éŒ²ã™ã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+	 * @brief		ƒGƒtƒFƒNƒgÄ¶I—¹‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğ“o˜^‚·‚é
+	 * @rparam[in]	std::function<void()> “o˜^‚·‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
@@ -170,8 +170,8 @@ public:
 	}
 
 	/**
-	 * @brief		ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ã‚«ãƒ©ãƒ¼ã‚’è¨­å®šã™ã‚‹
-	 * @rparam[in]	const Color& ã‚«ãƒ©ãƒ¼
+	 * @brief		ƒGƒtƒFƒNƒg‚ÌƒJƒ‰[‚ğİ’è‚·‚é
+	 * @rparam[in]	const Color& ƒJƒ‰[
 	 * @author		NZ
 	 * @date		24/10/07
 	 */
