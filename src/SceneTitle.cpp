@@ -30,7 +30,7 @@ SceneTitle::SceneTitle()
 	cursor.ManualInitialize({300,300,0}, {100,20,0});
 	cursor.SetTargetPosition({ 300,300,0 });
 
-	inputHandle = MakeKeyInput(3, TRUE, FALSE, TRUE);
+	inputHandle = MakeKeyInput(4, TRUE, FALSE, TRUE);
 
 	SetKeyInputStringColor(inputHandle,
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
@@ -120,14 +120,11 @@ void SceneTitle::LateUpdate()
 
 	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-
 		"Role       : ");
 	if (GameManager::role == Role::server)
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
 	else
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
-
-
 
 
 	if (GameManager::role == Role::server)
@@ -137,7 +134,6 @@ void SceneTitle::LateUpdate()
 
 	if (connectParameter == ConnectParameter::Wait)
 	{
-
 		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connectiong");
 	}
 	else if (connectParameter == ConnectParameter::Complete)
@@ -232,7 +228,37 @@ void SceneTitle::SelectInput()
 
 void SceneTitle::ServerInputForm()
 {
-	connectParameter = ConnectParameter::Wait;
+	if (selectIndex == 1)
+	{
+		if (isSelect)
+		{
+			DrawKeyInputString(100, 350, inputHandle);
+
+			// �|�[�g�ԍ��̓��͏���
+			if (CheckKeyInput(inputHandle))
+			{
+				// ���͂��ꂽ������𐔗�ɕϊ�
+				portId = GetKeyInputNumber(inputHandle);
+				SetKeyInputString("", inputHandle);
+
+				isSelect = false;
+				cursor.SetColor(GetColor(100, 100, 255));
+				cursor.SetTargetScale({ 100,20,0 });
+			}
+		}
+	}
+
+	DrawFormatString(300, 400 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"ポート番号 : ");
+	if (portId != -1)
+	{
+		DrawFormatString(450, 400 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d", portId);
+	}
+
+	PreparationListenNetWork(portId);
 }
 
 void SceneTitle::ClientInputForm()
@@ -445,7 +471,6 @@ void SceneTitle::RecieveNetData()
 		// デコードしてupdateにイベントを追加
 		
 	}
-
 }
 
 
