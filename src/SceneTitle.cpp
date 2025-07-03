@@ -1,9 +1,9 @@
-#include "SceneTitle.h"
+ï»¿#include "SceneTitle.h"
 
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitle‚ÌÀ‘•ƒtƒ@ƒCƒ‹
+* @note		SceneTitleã®å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 
@@ -11,16 +11,16 @@ SceneTitle::SceneTitle()
 	: selectIndex(0), isSelect(false), inputHandle(-1),portId(-1),
 	ipBuffer{ -1, -1, -1, -1 }
 {
-	// Às’†‚ÌƒV[ƒ“ƒ^ƒO
+	// å®Ÿè¡Œä¸­ã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
 	sceneTag = SceneTag::Title;
 
-	// ”wŒiF‚ğ•ÏX
+	// èƒŒæ™¯è‰²ã‚’å¤‰æ›´
 	SetBackgroundColor(255, 255, 255);
 
-	// ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN‚ğ“o˜^
+	// ã‚­ãƒ¼å…¥åŠ›ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’ç™»éŒ²
 	callBackId = input->AddCallBack("cursor", std::bind(&SceneTitle::KeyInputCallback, this, std::placeholders::_1));
 
-	// ˆÃ“]‰ğœ
+	// æš—è»¢è§£é™¤
 	HWDotween::DoDelay(15)->OnComplete([&]
 		{
 			UIManager::FadeOut(20);
@@ -36,7 +36,7 @@ SceneTitle::SceneTitle()
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
-		); // ƒJƒ‰[‚ğİ’è
+		); // ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
 }
 
 SceneTitle::~SceneTitle()
@@ -54,7 +54,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		if (it->inputState != InputState::Started)
 			continue;
 
-		// Œˆ’èƒL[‰Ÿ‰º‚Ìˆ—
+		// æ±ºå®šã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã®å‡¦ç†
 		if (it->keyCode == KEY_INPUT_Z)
 		{
 			SelectInput();
@@ -62,7 +62,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 		if (isSelect) continue;
 
-		// ƒJ[ƒ\ƒ‹ˆÚ“®‚ÆQÆ€–ÚˆÚ“®‚Ìˆ—
+		// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•ã¨å‚ç…§é …ç›®ç§»å‹•ã®å‡¦ç†
 		if (it->keyCode == PAD_INPUT_UP)
 		{
 			if (--selectIndex < 0)
@@ -107,9 +107,9 @@ void SceneTitle::LateUpdate()
 {
 	cursor.ManualUpdate();
 
-	std::string text = "ƒXƒ^[ƒg";
+	std::string text = "ã‚¹ã‚¿ãƒ¼ãƒˆ";
 
-	// ƒeƒLƒXƒg•\¦À•W
+	// ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤ºåº§æ¨™
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
@@ -120,11 +120,14 @@ void SceneTitle::LateUpdate()
 
 	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
+
 		"Role       : ");
 	if (GameManager::role == Role::server)
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
 	else
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
+
+
 
 
 	if (GameManager::role == Role::server)
@@ -134,11 +137,55 @@ void SceneTitle::LateUpdate()
 
 	if (connectParameter == ConnectParameter::Wait)
 	{
-		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Ú‘±’†...");
+
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connectiong");
 	}
 	else if (connectParameter == ConnectParameter::Complete)
 	{
-		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Ú‘±Š®—¹");
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Complete!");
+		// å…¥åŠ›ä¸­ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’è¨­å®š
+		int inputIndex = 0;
+		for (int i = 0; i < 4; ++i)
+		{
+			if (ipBuffer[i] != -1) continue;
+			inputIndex = i;
+			break;
+		}
+
+		for(int i = 0; i < inputIndex; ++i)
+		{			
+			DrawFormatString(100 + GetFontSize() * 3 * i,
+				100, GetColor(0, 0, 0), 
+				"%d.", ipBuffer[i]);
+		}
+
+		DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 100, inputHandle);
+
+		if (CheckKeyInput(inputHandle))
+		{
+			// å…¥åŠ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’æ•°åˆ—ã«å¤‰æ›
+			int num = GetKeyInputNumber(inputHandle);
+			ipBuffer[inputIndex] = num;
+
+			// å…¥åŠ›ãŒå®Œäº†ã—ãŸå ´åˆ
+			if (ipBuffer[3] != -1)
+			{
+				IPDATA ip;
+				ip.d1 = ipBuffer[0];
+				ip.d2 = ipBuffer[1];
+				ip.d3 = ipBuffer[2];
+				ip.d4 = ipBuffer[3];
+
+				isSelect = false;
+				cursor.SetColor(GetColor(100, 100, 255));
+				cursor.SetTargetScale({ 100,20,0 });
+			}
+			else
+			{
+				SetActiveKeyInput(inputHandle);
+				SetKeyInputString("", inputHandle);
+			}
+		}
 	}
 }
 
@@ -194,7 +241,7 @@ void SceneTitle::ClientInputForm()
 	{
 		if (isSelect)
 		{
-			// “ü—Í’†‚ÌƒOƒ‹[ƒv‚ğİ’è
+			// ï¿½ï¿½ï¿½Í’ï¿½ï¿½ÌƒOï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½İ’ï¿½
 			int inputIndex = 0;
 			for (int i = 0; i < 4; ++i)
 			{
@@ -213,14 +260,14 @@ void SceneTitle::ClientInputForm()
 			DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 350, inputHandle);
 
 
-			// IPƒAƒhƒŒƒX‚Ì“ü—Íˆ—
+			// IPï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½Ì“ï¿½ï¿½Íï¿½ï¿½ï¿½
 			if (CheckKeyInput(inputHandle))
 			{
-				// “ü—Í‚³‚ê‚½•¶š—ñ‚ğ”—ñ‚É•ÏŠ·
+				// ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ”—ï¿½É•ÏŠï¿½
 				int num = GetKeyInputNumber(inputHandle);
 				ipBuffer[inputIndex] = num;
 
-				// “ü—Í‚ªŠ®—¹‚µ‚½ê‡
+				// ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
 				if (ipBuffer[3] != -1)
 				{
 					ipData.d1 = ipBuffer[0];
@@ -246,10 +293,10 @@ void SceneTitle::ClientInputForm()
 		{
 			DrawKeyInputString(100, 450, inputHandle);
 
-			// ƒ|[ƒg”Ô†‚Ì“ü—Íˆ—
+			// ï¿½|ï¿½[ï¿½gï¿½Ôï¿½ï¿½Ì“ï¿½ï¿½Íï¿½ï¿½ï¿½
 			if (CheckKeyInput(inputHandle))
 			{
-				// “ü—Í‚³‚ê‚½•¶š—ñ‚ğ”—ñ‚É•ÏŠ·
+				// ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ”—ï¿½É•ÏŠï¿½
 				portId = GetKeyInputNumber(inputHandle);
 				SetKeyInputString("", inputHandle);
 
@@ -263,7 +310,7 @@ void SceneTitle::ClientInputForm()
 
 	DrawFormatString(300, 400 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"IPƒAƒhƒŒƒX : ");
+		"IPï¿½Aï¿½hï¿½ï¿½ï¿½X : ");
 	if (ipBuffer[3] != -1)
 	{
 		DrawFormatString(450, 400 - GetFontSize() / 2,
@@ -273,7 +320,7 @@ void SceneTitle::ClientInputForm()
 
 	DrawFormatString(300, 500 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"ƒ|[ƒg”Ô† : ");
+		"ï¿½|ï¿½[ï¿½gï¿½Ôï¿½ : ");
 	if (portId != -1)
 	{
 		DrawFormatString(450, 500 - GetFontSize() / 2,
@@ -281,13 +328,13 @@ void SceneTitle::ClientInputForm()
 			"%d", portId);
 	}
 
-	// IPƒAƒhƒŒƒX‚Æƒ|[ƒg”Ô†‚Ì“ü—Í‚ªI—¹‚µ‚Ä‚¢‚éê‡
+	// IPï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½Æƒ|ï¿½[ï¿½gï¿½Ôï¿½ï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
 
 	if (ipBuffer[3] != -1 && portId != -1)
 	{
 		DrawFormatString(300, 600 - GetFontSize() / 2,
 			GetColor(0, 0, 0),
-			"Ú‘±");
+			"ï¿½Ú‘ï¿½");
 	}
 }
 
@@ -296,7 +343,7 @@ void SceneTitle::Connect()
 	networkHandle = ConnectNetWork(ipData, portId);
 	static HWDotween::TweenCallback* tweenCallback = nullptr;
 
-	// Ú‘±‚É¸”s‚µ‚½ê‡Aˆê’èŠÔŒã‚ÉÄ“xÚ‘±‚ğ‚İ‚é
+	// ï¿½Ú‘ï¿½ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½ï¿½èï¿½ÔŒï¿½ÉÄ“xï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½
 	if (networkHandle == -1)
 	{
 		tweenCallback = HWDotween::DoDelay(60);
@@ -310,6 +357,95 @@ void SceneTitle::Connect()
 		connectParameter = ConnectParameter::Complete;
 		tweenCallback->tweenEvent->isCancel = true;
 	}
+}
+
+void SceneTitle::ServerInit()
+{
+	int portNum = 7777;
+	PreparationListenNetWork(portNum);
+	for(auto N: NetWorkHandles)
+	{
+		N = -1;
+	}
+	
+}
+
+void SceneTitle::ServerUpdate()
+{
+	int ConnectedNum = 0;
+	for(int NetHandle : NetWorkHandles)
+	{
+		if (NetHandle > 0) ConnectedNum++;
+	}
+
+	// æ¥ç¶š
+	if(ConnectedNum >=3)
+	{
+		StopListenNetWork();
+	}
+	else
+	{
+		Connect();
+	}
+
+	// å—ä¿¡
+	if(ConnectedNum >0)
+	{
+		DisConnect();
+		RecieveNetData();
+	}
+}
+
+void SceneTitle::ConnectServer()
+{
+	int portNum = 7777;
+	PreparationListenNetWork(portNum);
+	for(int NetHandle : NetWorkHandles)
+	{
+		if (NetHandle != -1) continue;
+		NetHandle = GetNewAcceptNetWork();
+	}
+}
+
+void SceneTitle::DisConnect()
+{
+	int LostHandle = 0;
+	LostHandle = GetLostNetWork();
+
+	for(auto NetHandle: NetWorkHandles)
+	{
+		if(NetHandle == LostHandle)
+		{
+			NetHandle = -1;
+		}
+	}
+
+
+}
+
+void SceneTitle::RecieveNetData()
+{
+	for(auto NetHandle : NetWorkHandles)
+	{
+		if (NetHandle == -1) continue; // NetHandle ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„ã¨ãã€ã‚¹ã‚­ãƒƒãƒ—
+		IPDATA Ip;            // æ¥ç¶šå…ˆï¼©ï¼°ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒ‡ãƒ¼ã‚¿
+		// æ¥ç¶šã—ã¦ããŸãƒã‚·ãƒ³ã®ï¼©ï¼°ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
+		GetNetWorkIP(NetHandle, &Ip);
+	
+		// å–å¾—ã—ã¦ã„ãªã„å—ä¿¡ãƒ‡ãƒ¼ã‚¿é‡ãŒï¼ã®ã¨ãã¯çµ‚äº†
+		if (GetNetWorkDataLength(NetHandle) == 0) continue;
+
+		int DataLength;
+		unsigned char StrBuf[256];
+
+		// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+		DataLength = GetNetWorkDataLength(NetHandle);    // ãƒ‡ãƒ¼ã‚¿ã®é‡ã‚’å–å¾—
+		NetWorkRecv(NetHandle, StrBuf, DataLength);    // ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ•ã‚¡ã«å–å¾—
+		// ãƒãƒƒãƒ•ã‚¡ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«è¿½åŠ 
+		// ãƒ‡ã‚³ãƒ¼ãƒ‰ã—ã¦updateã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿½åŠ 
+		
+	}
+
 }
 
 
