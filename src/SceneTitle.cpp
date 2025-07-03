@@ -253,13 +253,14 @@ void SceneTitle::RecieveNetData()
 		if (GetNetWorkDataLength(NetHandle) == 0) continue;
 
 		int DataLength;
-		char StrBuf[256];
+		unsigned char StrBuf[256];
 
 		// データ受信
 		DataLength = GetNetWorkDataLength(NetHandle);    // データの量を取得
 		NetWorkRecv(NetHandle, StrBuf, DataLength);    // データをバッファに取得
 		// バッファをスタックに追加
-		recvStack.push(StrBuf);
+		// デコードしてupdateにイベントを追加
+		
 	}
 
 }

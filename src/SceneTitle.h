@@ -9,7 +9,6 @@
 #include "MovieManager.h"
 #include "UIManager.h"
 #include "Cursor.h"
-#include <stack>
 
 
 /**
@@ -75,7 +74,7 @@ private:
 	//! サーバーで使うクライアントのネットワークハンドル
 	int NetWorkHandles[3];
 	//! サーバーで使う受信データ
-	std::stack<char[256]> recvStack;
+	
 	
 
 	/**
