@@ -1,5 +1,5 @@
 /**
-* @note		Cursor‚Ì’è‹`ƒtƒ@ƒCƒ‹
+* @note		Cursorã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 #pragma once
@@ -8,14 +8,14 @@
 
 /**
  * @class	Cursor
- * @brief   ƒJ[ƒ\ƒ‹ŠÇ—
+ * @brief   ã‚«ãƒ¼ã‚½ãƒ«ç®¡ç†
  */
 class Cursor
 {
 public:
 
 	/**
-	 * @brief       ‰Šú‰»ŠÖ”
+	 * @brief       åˆæœŸåŒ–é–¢æ•°
 	 */
 	void ManualInitialize(const VECTOR& _pos, const VECTOR& _scale)
 	{
@@ -27,7 +27,7 @@ public:
 	}
 
 	/**
-	 * @brief       ˆÚ“®‚³‚¹‚é
+	 * @brief       ç§»å‹•ã•ã›ã‚‹
 	 */
 	void SetTargetPosition(const VECTOR& _target)
 	{
@@ -35,7 +35,7 @@ public:
 	}
 
 	/**
-	 * @brief       ƒTƒCƒY•ÏX
+	 * @brief       ã‚µã‚¤ã‚ºå¤‰æ›´
 	 */
 	void SetTargetScale(const VECTOR& _target)
 	{
@@ -43,7 +43,7 @@ public:
 	}
 
 	/**
-	 * @brief       ƒJƒ‰[•ÏX
+	 * @brief       ã‚«ãƒ©ãƒ¼å¤‰æ›´
 	 */
 	void SetColor(const unsigned int _color)
 	{
@@ -51,7 +51,7 @@ public:
 	}
 
 	/**
-	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	 */
 	void ManualUpdate()
 	{
@@ -70,11 +70,11 @@ public:
 		//	color, TRUE);
 
 
-		// ˆÚ“®ˆ—
+		// ç§»å‹•å‡¦ç†
 		VECTOR dir = (targetPos - position) * 0.3f;
 		position += dir;
 
-		// Šgkˆ—
+		// æ‹¡ç¸®å‡¦ç†
 		dir = (targetScale - scale) * 0.3f;
 		scale += dir;
 	}
@@ -82,14 +82,14 @@ public:
 
 private:
 
-	//! À•W
+	//! åº§æ¨™
 	VECTOR position;
-	//! –Ú•W’n“_
+	//! ç›®æ¨™åœ°ç‚¹
 	VECTOR targetPos;
-	//! ƒTƒCƒY
+	//! ã‚µã‚¤ã‚º
 	VECTOR scale;
-	//! –Ú•WƒTƒCƒY
+	//! ç›®æ¨™ã‚µã‚¤ã‚º
 	VECTOR targetScale;
-	//! ƒJƒ‰[
+	//! ã‚«ãƒ©ãƒ¼
 	unsigned int color;
 };
