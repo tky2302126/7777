@@ -75,6 +75,9 @@ private:
 	IPDATA ipData;
 	//! ポート番号
 	int portId;
+	//! 接続パラメータ
+	ConnectParameter connectParameter = ConnectParameter::None;
+
 
 	/**
 	 * @brief       決定キーを押した際の処理
@@ -96,4 +99,11 @@ private:
 	 * @date        25/07/03
 	 */
 	void ClientInputForm();
+
+	/**
+	 * @brief       一定時間ごとに指定のIPアドレスとポート番号で接続を試みる
+	 * @author      Suzuki N
+	 * @date        25/07/03
+	 */
+	void Connect();
 };

@@ -167,10 +167,15 @@ void SceneTitle::SelectInput()
 		SetActiveKeyInput(inputHandle);
 		SetKeyInputString("", inputHandle);
 	}
+	else if(selectIndex == 3)
+	{
+		connectParameter = ConnectParameter::Wait;
+	}
 }
 
 void SceneTitle::ServerInputForm()
 {
+	connectParameter = ConnectParameter::Wait;
 }
 
 void SceneTitle::ClientInputForm()
@@ -191,11 +196,11 @@ void SceneTitle::ClientInputForm()
 			for (int i = 0; i < inputIndex; ++i)
 			{
 				DrawFormatString(100 + GetFontSize() * 3 * i,
-					250, GetColor(0, 0, 0),
+					350, GetColor(0, 0, 0),
 					"%d.", ipBuffer[i]);
 			}
 
-			DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 250, inputHandle);
+			DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 350, inputHandle);
 
 
 			// IPアドレスの入力処理
@@ -229,7 +234,7 @@ void SceneTitle::ClientInputForm()
 	{
 		if (isSelect)
 		{
-			DrawKeyInputString(100, 350, inputHandle);
+			DrawKeyInputString(100, 450, inputHandle);
 
 			// ポート番号の入力処理
 			if (CheckKeyInput(inputHandle))
@@ -274,6 +279,11 @@ void SceneTitle::ClientInputForm()
 			GetColor(0, 0, 0),
 			"接続");
 	}
+}
+
+void SceneTitle::Connect()
+{
+	int ret = ConnectNetWork(ipData, portId);
 }
 
 

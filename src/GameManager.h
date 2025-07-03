@@ -14,6 +14,19 @@ enum class Role
 	Client,
 };
 
+/**
+ * @enum	ConnectParameter
+ */
+enum class ConnectParameter
+{
+	//! Ú‘±‘O
+	None,
+	//! Ú‘±‘Ò‹@
+	Wait,
+	//! Ú‘±Š®—¹
+	Complete,
+};
+
 
  
  /**
