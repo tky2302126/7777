@@ -113,7 +113,7 @@ void SceneTitle::LateUpdate()
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
-		 text.c_str());
+		text.c_str());
 
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Title");
@@ -122,15 +122,24 @@ void SceneTitle::LateUpdate()
 		GetColor(0, 0, 0),
 		"Role       : ");
 	if (GameManager::role == Role::server)
-		DrawFormatString(450, 300 - GetFontSize() / 2,GetColor(0, 0, 0),"Sever");
+		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
 	else
-		DrawFormatString(450, 300 - GetFontSize() / 2,GetColor(0, 0, 0),"Client");
+		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
 
 
 	if (GameManager::role == Role::server)
 		ServerInputForm();
 	if (GameManager::role == Role::Client)
 		ClientInputForm();
+
+	if (connectParameter == ConnectParameter::Wait)
+	{
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Ú‘±’†...");
+	}
+	else if (connectParameter == ConnectParameter::Complete)
+	{
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Ú‘±Š®—¹");
+	}
 }
 
 void SceneTitle::SelectInput()
@@ -170,6 +179,7 @@ void SceneTitle::SelectInput()
 	else if(selectIndex == 3)
 	{
 		connectParameter = ConnectParameter::Wait;
+		Connect();
 	}
 }
 
@@ -283,7 +293,23 @@ void SceneTitle::ClientInputForm()
 
 void SceneTitle::Connect()
 {
-	int ret = ConnectNetWork(ipData, portId);
+	networkHandle = ConnectNetWork(ipData, portId);
+	static HWDotween::TweenCallback* tweenCallback = nullptr;
+
+	// Ú‘±‚ÉŽ¸”s‚µ‚½ê‡Aˆê’èŽžŠÔŒã‚ÉÄ“xÚ‘±‚ðŽŽ‚Ý‚é
+	if (networkHandle == -1)
+	{
+		tweenCallback = HWDotween::DoDelay(60);
+		tweenCallback->OnComplete([&]()
+			{
+				Connect();
+			});
+	}
+	else
+	{
+		connectParameter = ConnectParameter::Complete;
+		tweenCallback->tweenEvent->isCancel = true;
+	}
 }
 
 
