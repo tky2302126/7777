@@ -1,7 +1,7 @@
 /**
 * @author   Suzuki N
 * @date     24/2/25
-* @note		VideoPlayer‚Ì’è‹`ƒtƒ@ƒCƒ‹
+* @note		VideoPlayerã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 #pragma once
@@ -10,81 +10,81 @@
 
 /**
  * @enum	PlayStatus
- * @brief   “®‰æ‚ÌÄ¶ó‹µ
+ * @brief   å‹•ç”»ã®å†ç”ŸçŠ¶æ³
  */
 enum class PlayStatus
 {
-	//! ‘Ò‹@’†
+	//! å¾…æ©Ÿä¸­
 	Wait,
-	//! Ä¶’†
+	//! å†ç”Ÿä¸­
 	Play,
-	//! Ä¶’â~
+	//! å†ç”Ÿåœæ­¢
 	Stop,
 };
 
 
 /**
  * @class	VideoPlayer
- * @brief   “®‰æÄ¶—pƒNƒ‰ƒX
+ * @brief   å‹•ç”»å†ç”Ÿç”¨ã‚¯ãƒ©ã‚¹
  */
 class VideoPlayer
 {
 public:
 
-	//! “®‰æ‚Ìƒnƒ“ƒhƒ‹
+	//! å‹•ç”»ã®ãƒãƒ³ãƒ‰ãƒ«
 	int movieHandle;
-	//! Ä¶•û–@
+	//! å†ç”Ÿæ–¹æ³•
 	int playType = DX_PLAYTYPE_BACK;
-	//! “§‰ßˆ—‚ğs‚¤‚©(ƒOƒŠ[ƒ“ƒoƒbƒN)
+	//! é€éå‡¦ç†ã‚’è¡Œã†ã‹(ã‚°ãƒªãƒ¼ãƒ³ãƒãƒƒã‚¯)
 	bool isTrans = true;
-	//! Ä¶ó‹µ
+	//! å†ç”ŸçŠ¶æ³
 	PlayStatus playStatus;
-	//! “®‰æ‚Ì‰¡•
+	//! å‹•ç”»ã®æ¨ªå¹…
 	int wedth;
-	//! “®‰æ‚Ì—§•
+	//! å‹•ç”»ã®ç«‹å¹…
 	int height;
-	//! •\¦À•W
+	//! è¡¨ç¤ºåº§æ¨™
 	VECTOR position;
 
 
 	/**
-	 * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param[in]	ƒtƒ@ƒCƒ‹‚ÌƒpƒX
-	 * @param[in]	Ä¶•û–@
-	 * @param[in]	“§‰ßˆ—‚ğs‚¤‚©
+	 * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param[in]	ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+	 * @param[in]	å†ç”Ÿæ–¹æ³•
+	 * @param[in]	é€éå‡¦ç†ã‚’è¡Œã†ã‹
 	 */
 	VideoPlayer(const std::string& _path, int _playType = DX_PLAYTYPE_BACK, bool _isTrans = true)
 		: movieHandle(LoadGraph(_path.c_str())), playType(_playType), isTrans(_isTrans), playStatus(PlayStatus::Wait),
 		position({ 0,0,0 })
 	{
-		// ƒ‚ƒfƒ‹ƒ[ƒh¸”s‚Ì—áŠOerror
+		// ãƒ¢ãƒ‡ãƒ«ãƒ­ãƒ¼ãƒ‰å¤±æ•—æ™‚ã®ä¾‹å¤–error
 		if (movieHandle == -1)
 			throw std::runtime_error("Failed to load movie: " + _path);
 
-		// “®‰æƒTƒCƒY‚ğ‹L˜^
+		// å‹•ç”»ã‚µã‚¤ã‚ºã‚’è¨˜éŒ²
 		GetGraphSize(movieHandle, &wedth, &height);
 
 		if (!isTrans) return;
 
 		//
-		// “§‰ßˆ—‚ğs‚¤ê‡‚Ìˆ—
+		// é€éå‡¦ç†ã‚’è¡Œã†å ´åˆã®å‡¦ç†
 		//
 
-		// “®‰æ‚Æ“¯ƒTƒCƒY‚ÌƒAƒ‹ƒtƒ@ƒ`ƒƒƒ“ƒlƒ‹•t‚«‚Ì‰æ‘œ‚ğì¬
+		// å‹•ç”»ã¨åŒã‚µã‚¤ã‚ºã®ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒ£ãƒ³ãƒãƒ«ä»˜ãã®ç”»åƒã‚’ä½œæˆ
 		screenHandle = MakeScreen(wedth, height, TRUE);
 	}
 
 	/**
-	 * @brief       –¾¦“I‚ÈXVˆ—
+	 * @brief       æ˜ç¤ºçš„ãªæ›´æ–°å‡¦ç†
 	 */
 	void ManualUpdate()
 	{
-		// Ä¶ó‹µ‚ÌXV
+		// å†ç”ŸçŠ¶æ³ã®æ›´æ–°
 		if (playStatus == PlayStatus::Stop) playStatus = PlayStatus::Wait;
 		if (playStatus != PlayStatus::Play) return;
 
 		//
-		// “§‰ßˆ—‚ğs‚í‚È‚¢ê‡
+		// é€éå‡¦ç†ã‚’è¡Œã‚ãªã„å ´åˆ
 		//
 
 		if (!isTrans)
@@ -93,20 +93,20 @@ public:
 		}
 		else
 		{
-			// Screen ‚É Movie ‚ÌRGBA‚ÌŠeƒ`ƒƒƒ“ƒlƒ‹‚ğ’u‚«Š·‚¦‚½‚è”½“]‚µ‚½‚è‚µ‚Ä“]‘—
+			// Screen ã« Movie ã®RGBAã®å„ãƒãƒ£ãƒ³ãƒãƒ«ã‚’ç½®ãæ›ãˆãŸã‚Šåè»¢ã—ãŸã‚Šã—ã¦è»¢é€
 			GraphBlendBlt(movieHandle, movieHandle, screenHandle, 255, DX_GRAPH_BLEND_RGBA_SELECT_MIX,
 				DX_RGBA_SELECT_SRC_R,
 				DX_RGBA_SELECT_SRC_G,
 				DX_RGBA_SELECT_SRC_B,
-				DX_RGBA_SELECT_SRC_INV_G	// Screen ‚Ì“§–¾“x¬•ª‚É Movie ‚Ì—Î¬•ª‚ğ”½“]‚µ‚½‚à‚Ì‚ğ“]‘—
+				DX_RGBA_SELECT_SRC_INV_G	// Screen ã®é€æ˜åº¦æˆåˆ†ã« Movie ã®ç·‘æˆåˆ†ã‚’åè»¢ã—ãŸã‚‚ã®ã‚’è»¢é€
 			);
 
-			// Screen ‚Ì“à—e‚ğ‰æ–Ê‚É•`‰æ
+			// Screen ã®å†…å®¹ã‚’ç”»é¢ã«æç”»
 			DrawGraph((int)position.x, (int)position.y, screenHandle, TRUE);
 		}
 
 		//
-		// Ä¶ó‹µ‚ğXV
+		// å†ç”ŸçŠ¶æ³ã‚’æ›´æ–°
 		//
 
 		if (GetMovieStateToGraph(movieHandle) == 0)
@@ -114,8 +114,8 @@ public:
 	}
 
 	/**
-	 * @brief       Ä¶
-	 * @param[in]	Ä¶ó‹µ‚ğƒŠƒZƒbƒg‚·‚é‚©
+	 * @brief       å†ç”Ÿ
+	 * @param[in]	å†ç”ŸçŠ¶æ³ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‹
 	 */
 	void Play(bool _isReset = false)
 	{
@@ -127,8 +127,8 @@ public:
 	}
 
 	/**
-	 * @brief       ’â~
-	 * @param[in]	Ä¶ó‹µ‚ğƒŠƒZƒbƒg‚·‚é‚©
+	 * @brief       åœæ­¢
+	 * @param[in]	å†ç”ŸçŠ¶æ³ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã‹
 	 */
 	void Stop(bool _isReset = false)
 	{
@@ -141,6 +141,6 @@ public:
 
 private:
 
-	//! “§‰ßˆ—‚ğs‚¤Û‚Ég—p‚·‚éƒXƒNƒŠ[ƒ“ƒnƒ“ƒhƒ‹
+	//! é€éå‡¦ç†ã‚’è¡Œã†éš›ã«ä½¿ç”¨ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ³ãƒ‰ãƒ«
 	int screenHandle = -1;
 };

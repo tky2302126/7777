@@ -1,7 +1,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitle‚Ì’è‹`ƒtƒ@ƒCƒ‹
+* @note		SceneTitleã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 #pragma once
@@ -13,46 +13,46 @@
 
 /**
  * @class	SceneTitle
- * @brief   ƒ^ƒCƒgƒ‹ƒV[ƒ“
+ * @brief   ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
  */
 class SceneTitle : public SceneBase
 {
 public:
 
 	/**
-	 * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	SceneTitle();
 
 	/**
-	 * @brief       ƒfƒXƒgƒ‰ƒNƒ^
+	 * @brief       ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
-	~SceneTitle() override;
+	â€¾SceneTitle() override;
 
 	/**
-	 * @brief       ƒ[ƒhŠ®‹‚ÌŠÖ”
+	 * @brief       ãƒ­ãƒ¼ãƒ‰å®Œé‚æ™‚ã®é–¢æ•°
 	 */
 	void LoadComplete() override;
 
 	/**
-	 * @brief       ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN
-	 * @param[in]	ƒR[ƒ‹ƒoƒbƒNƒRƒ“ƒeƒLƒXƒg
+	 * @brief       ã‚­ãƒ¼å…¥åŠ›æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+	 * @param[in]	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
 	 */
 	void KeyInputCallback(InputAction::CallBackContext _c)override;
 
 	/**
-	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void Update() override;
 
 	/**
-	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -61,20 +61,20 @@ public:
 
 private:
 
-	//! ƒJ[ƒ\ƒ‹
+	//! ã‚«ãƒ¼ã‚½ãƒ«
 	Cursor cursor;
-	//! ‘I‘ğ€–Ú
+	//! é¸æŠé …ç›®
 	int selectIndex;
-	//! €–Ú‚ğ‘I‘ğ’†
+	//! é …ç›®ã‚’é¸æŠä¸­
 	bool isSelect;
-	//! “ü—Íƒnƒ“ƒhƒ‹(ip/ƒ|[ƒg”Ô†)
+	//! å…¥åŠ›ãƒãƒ³ãƒ‰ãƒ«(ip/ãƒãƒ¼ãƒˆç•ªå·)
 	int inputHandle;
-	//! –¢“ü—Í‚Ì€–Ú‚ğ”»•Ê‚·‚é‚½‚ß‚ÉAˆê“xint‚ğŒo—R‚µ‚Ä‚©‚çIPDATAŒ^‚É•ÏŠ·‚·‚é
+	//! æœªå…¥åŠ›ã®é …ç›®ã‚’åˆ¤åˆ¥ã™ã‚‹ãŸã‚ã«ã€ä¸€åº¦intã‚’çµŒç”±ã—ã¦ã‹ã‚‰IPDATAå‹ã«å¤‰æ›ã™ã‚‹
 	int ipBuffer[4];
 
 
 	/**
-	 * @brief       Œˆ’èƒL[‚ğ‰Ÿ‚µ‚½Û‚Ìˆ—
+	 * @brief       æ±ºå®šã‚­ãƒ¼ã‚’æŠ¼ã—ãŸéš›ã®å‡¦ç†
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
