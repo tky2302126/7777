@@ -170,49 +170,6 @@ void SceneTitle::LateUpdate()
 	else if (connectParameter == ConnectParameter::Complete)
 	{
 		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Complete!");
-		// 入力中のグループを設定
-		int inputIndex = 0;
-		for (int i = 0; i < 4; ++i)
-		{
-			if (ipBuffer[i] != -1) continue;
-			inputIndex = i;
-			break;
-		}
-
-		for(int i = 0; i < inputIndex; ++i)
-		{			
-			DrawFormatString(100 + GetFontSize() * 3 * i,
-				100, GetColor(0, 0, 0), 
-				"%d.", ipBuffer[i]);
-		}
-
-		DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 100, inputHandle);
-
-		if (CheckKeyInput(inputHandle))
-		{
-			// 入力された文字列を数列に変換
-			int num = GetKeyInputNumber(inputHandle);
-			ipBuffer[inputIndex] = num;
-
-			// 入力が完了した場合
-			if (ipBuffer[3] != -1)
-			{
-				IPDATA ip;
-				ip.d1 = ipBuffer[0];
-				ip.d2 = ipBuffer[1];
-				ip.d3 = ipBuffer[2];
-				ip.d4 = ipBuffer[3];
-
-				isSelect = false;
-				cursor.SetColor(GetColor(100, 100, 255));
-				cursor.SetTargetScale({ 100,20,0 });
-			}
-			else
-			{
-				SetActiveKeyInput(inputHandle);
-				SetKeyInputString("", inputHandle);
-			}
-		}
 	}
 }
 
@@ -304,6 +261,15 @@ void SceneTitle::ServerInputForm()
 		DrawFormatString(300, 500 - GetFontSize() / 2,
 			GetColor(0, 0, 0),
 			"Connect");
+	}
+
+	// 接続中の処理
+	if (connectParameter == ConnectParameter::Wait)
+	{
+		// 新しい接続があったらそのネットワークハンドルを得る
+		networkHandle = GetNewAcceptNetWork();
+		if (networkHandle != -1)
+			connectParameter = ConnectParameter::Complete;
 	}
 }
 
