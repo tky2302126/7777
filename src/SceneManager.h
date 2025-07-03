@@ -7,6 +7,7 @@
 #pragma once
 #include "SceneTitle.h"
 #include "SceneGame.h"
+#include "SceneResult.h"
 
 
 /**

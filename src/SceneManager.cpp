@@ -108,7 +108,7 @@ void SceneManager::SceneChangeSync(const SceneTag& _nextSceneTag)
 		break;
 
 	case SceneTag::Result:
-		//crrScene = new SceneResult();
+		crrScene = new SceneResult();
 		break;
 
 	case SceneTag::MainMenu:
