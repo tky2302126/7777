@@ -1,7 +1,7 @@
-/**
+ï»¿/**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitle‚Ì’è‹`ƒtƒ@ƒCƒ‹
+* @note		SceneTitleã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
 */
 
 #pragma once
@@ -10,49 +10,50 @@
 #include "UIManager.h"
 
 
+
 /**
  * @class	SceneTitle
- * @brief   ƒ^ƒCƒgƒ‹ƒV[ƒ“
+ * @brief   ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
  */
 class SceneGame : public SceneBase
 {
 public:
-	// ƒƒ\ƒbƒh
+	// ãƒ¡ã‚½ãƒƒãƒ‰
 
 	/**
-	 * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	SceneGame();
 
 	/**
-	 * @brief       ƒfƒXƒgƒ‰ƒNƒ^
+	 * @brief       ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	~SceneGame() override;
 
 	/**
-	 * @brief       ƒ[ƒhŠ®‹‚ÌŠÖ”
+	 * @brief       ãƒ­ãƒ¼ãƒ‰å®Œé‚æ™‚ã®é–¢æ•°
 	 */
 	void LoadComplete() override;
 
 	/**
-	 * @brief       ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN
-	 * @param[in]	ƒR[ƒ‹ƒoƒbƒNƒRƒ“ƒeƒLƒXƒg
+	 * @brief       ã‚­ãƒ¼å…¥åŠ›æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+	 * @param[in]	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
 	 */
 	void KeyInputCallback(InputAction::CallBackContext _c)override;
 
 	/**
-	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void Update() override;
 
 	/**
-	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -61,6 +62,6 @@ public:
 
 private:
 
-	//! ƒeƒLƒXƒg‚ÌƒtƒHƒ“ƒg
+	//! ãƒ†ã‚­ã‚¹ãƒˆã®ãƒ•ã‚©ãƒ³ãƒˆ
 	int menuFont;
 };
