@@ -65,15 +65,32 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		// カーソル移動と参照項目移動の処理
 		if (it->keyCode == PAD_INPUT_UP)
 		{
-			if (--selectIndex < 0)
+			if (GameManager::role == Role::server)
 			{
-				if (ipBuffer[3] == -1 || portId == -1)
+				if (--selectIndex < 0)
 				{
-					selectIndex = 2;
+					if (portId == -1)
+					{
+						selectIndex = 1;
+					}
+					else
+					{
+						selectIndex = 2;
+					}
 				}
-				else
+			}
+			else if (GameManager::role == Role::Client)
+			{
+				if (--selectIndex < 0)
 				{
-					selectIndex = 3;
+					if (ipBuffer[3] == -1 || portId == -1)
+					{
+						selectIndex = 2;
+					}
+					else
+					{
+						selectIndex = 3;
+					}
 				}
 			}
 		}
@@ -82,15 +99,29 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		{
 			++selectIndex;
 
-			if ((ipBuffer[3] == -1 || portId == -1) &&
-				selectIndex > 2) 
+			if(GameManager::role == Role::Client)
 			{
-				selectIndex = 0;
+				if ((ipBuffer[3] == -1 || portId == -1) &&
+					selectIndex > 2)
+				{
+					selectIndex = 0;
+				}
+				else if ((ipBuffer[3] != -1 && portId != -1) &&
+					selectIndex > 3)
+				{
+					selectIndex = 0;
+				}
 			}
-			else if ((ipBuffer[3] != -1 && portId != -1) &&
-				selectIndex > 3)
+			if(GameManager::role == Role::server)
 			{
-				selectIndex = 0;
+				if (portId == -1 && selectIndex > 1)
+				{
+					selectIndex = 0;
+				}
+				else if (portId != -1 && selectIndex > 2)
+				{
+					selectIndex = 0;
+				}
 			}
 		}
 
@@ -216,8 +247,16 @@ void SceneTitle::SelectInput()
 	}
 	else if(selectIndex == 2)
 	{
-		SetActiveKeyInput(inputHandle);
-		SetKeyInputString("", inputHandle);
+		if (GameManager::role == Role::server)
+		{
+			PreparationListenNetWork(portId);
+			connectParameter = ConnectParameter::Wait;
+		}
+		else if (GameManager::role == Role::Client)
+		{
+			SetActiveKeyInput(inputHandle);
+			SetKeyInputString("", inputHandle);
+		}
 	}
 	else if(selectIndex == 3)
 	{
@@ -258,7 +297,14 @@ void SceneTitle::ServerInputForm()
 			"%d", portId);
 	}
 
-	PreparationListenNetWork(portId);
+	// IPアドレスとポート番号が入力されている場合
+
+	if (portId != -1)
+	{
+		DrawFormatString(300, 500 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"Connect");
+	}
 }
 
 void SceneTitle::ClientInputForm()
@@ -384,6 +430,8 @@ void SceneTitle::Connect()
 		tweenCallback->tweenEvent->isCancel = true;
 	}
 }
+
+
 
 void SceneTitle::ServerInit()
 {
