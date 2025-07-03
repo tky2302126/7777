@@ -5,7 +5,7 @@
 */
 
 #pragma once
-#include "HandlerWaltanForDxLib.h"
+#include "GameManager.h"
 
 /**
  * @enum	SceneTag

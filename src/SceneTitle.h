@@ -1,7 +1,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitleã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+* @note		SceneTitle‚Ì’è‹`ƒtƒ@ƒCƒ‹
 */
 
 #pragma once
@@ -13,46 +13,46 @@
 
 /**
  * @class	SceneTitle
- * @brief   ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
+ * @brief   ƒ^ƒCƒgƒ‹ƒV[ƒ“
  */
 class SceneTitle : public SceneBase
 {
 public:
 
 	/**
-	 * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	SceneTitle();
 
 	/**
-	 * @brief       ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief       ƒfƒXƒgƒ‰ƒNƒ^
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
-	â€¾SceneTitle() override;
+	~SceneTitle() override;
 
 	/**
-	 * @brief       ãƒ­ãƒ¼ãƒ‰å®Œé‚æ™‚ã®é–¢æ•°
+	 * @brief       ƒ[ƒhŠ®‹‚ÌŠÖ”
 	 */
 	void LoadComplete() override;
 
 	/**
-	 * @brief       ã‚­ãƒ¼å…¥åŠ›æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
-	 * @param[in]	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+	 * @brief       ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN
+	 * @param[in]	ƒR[ƒ‹ƒoƒbƒNƒRƒ“ƒeƒLƒXƒg
 	 */
 	void KeyInputCallback(InputAction::CallBackContext _c)override;
 
 	/**
-	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void Update() override;
 
 	/**
-	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -61,22 +61,49 @@ public:
 
 private:
 
-	//! ã‚«ãƒ¼ã‚½ãƒ«
+	//! ƒJ[ƒ\ƒ‹
 	Cursor cursor;
-	//! é¸æŠé …ç›®
+	//! ‘I‘ğ€–Ú
 	int selectIndex;
-	//! é …ç›®ã‚’é¸æŠä¸­
+	//! €–Ú‚ğ‘I‘ğ’†
 	bool isSelect;
-	//! å…¥åŠ›ãƒãƒ³ãƒ‰ãƒ«(ip/ãƒãƒ¼ãƒˆç•ªå·)
+	//! “ü—Íƒnƒ“ƒhƒ‹
 	int inputHandle;
-	//! æœªå…¥åŠ›ã®é …ç›®ã‚’åˆ¤åˆ¥ã™ã‚‹ãŸã‚ã«ã€ä¸€åº¦intã‚’çµŒç”±ã—ã¦ã‹ã‚‰IPDATAå‹ã«å¤‰æ›ã™ã‚‹
+	//! –¢“ü—Í‚Ì€–Ú‚ğ”»•Ê‚·‚é‚½‚ß‚ÉAˆê“xint‚ğŒo—R‚µ‚Ä‚©‚çIPDATAŒ^‚É•ÏŠ·‚·‚é
 	int ipBuffer[4];
+	//! Ú‘±‚·‚éƒT[ƒo[‚ÌIPƒAƒhƒŒƒXƒf[ƒ^
+	IPDATA ipData;
+	//! ƒ|[ƒg”Ô†
+	int portId;
+	//! Ú‘±ƒpƒ‰ƒ[ƒ^
+	ConnectParameter connectParameter = ConnectParameter::None;
 
 
 	/**
-	 * @brief       æ±ºå®šã‚­ãƒ¼ã‚’æŠ¼ã—ãŸéš›ã®å‡¦ç†
+	 * @brief       Œˆ’èƒL[‚ğ‰Ÿ‚µ‚½Û‚Ìˆ—
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void SelectInput();
+
+	/**
+	 * @brief       server‚Ìê‡‚Ì“ü—ÍƒtƒH[ƒ€‚Ì•\¦
+	 * @author      Suzuki N
+	 * @date        25/07/03
+	 */
+	void ServerInputForm();
+
+	/**
+	 * @brief       client‚Ìê‡‚Ì“ü—ÍƒtƒH[ƒ€‚Ì•\¦
+	 * @author      Suzuki N
+	 * @date        25/07/03
+	 */
+	void ClientInputForm();
+
+	/**
+	 * @brief       ˆê’èŠÔ‚²‚Æ‚Éw’è‚ÌIPƒAƒhƒŒƒX‚Æƒ|[ƒg”Ô†‚ÅÚ‘±‚ğ‚İ‚é
+	 * @author      Suzuki N
+	 * @date        25/07/03
+	 */
+	void Connect();
 };

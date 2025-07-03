@@ -3,24 +3,24 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitle„ÅÆÂÆüË£Ö„Éï„Ç°„Ç§„É´
+* @note		SceneTitleÇÃé¿ëïÉtÉ@ÉCÉã
 */
 
 
 SceneTitle::SceneTitle()
-	: selectIndex(0), isSelect(false), inputHandle(-1), 
+	: selectIndex(0), isSelect(false), inputHandle(-1),portId(-1),
 	ipBuffer{ -1, -1, -1, -1 }
 {
-	// ÂÆüË°å‰∏≠„ÅÆ„Ç∑„Éº„É≥„Çø„Ç∞
+	// é¿çsíÜÇÃÉVÅ[ÉìÉ^ÉO
 	sceneTag = SceneTag::Title;
 
-	// ËÉåÊôØËâ≤„ÇíÂ§âÊõ¥
+	// îwåiêFÇïœçX
 	SetBackgroundColor(255, 255, 255);
 
-	// „Ç≠„ÉºÂÖ•Âäõ„ÅÆ„Ç≥„Éº„É´„Éê„ÉÉ„ÇØ„ÇíÁôªÈå≤
+	// ÉLÅ[ì¸óÕÇÃÉRÅ[ÉãÉoÉbÉNÇìoò^
 	callBackId = input->AddCallBack("cursor", std::bind(&SceneTitle::KeyInputCallback, this, std::placeholders::_1));
 
-	// ÊöóËª¢Ëß£Èô§
+	// à√ì]âèú
 	HWDotween::DoDelay(15)->OnComplete([&]
 		{
 			UIManager::FadeOut(20);
@@ -30,16 +30,16 @@ SceneTitle::SceneTitle()
 	cursor.ManualInitialize({300,300,0}, {100,20,0});
 	cursor.SetTargetPosition({ 300,300,0 });
 
-	inputHandle = MakeKeyInput(3, TRUE, FALSE, FALSE);
+	inputHandle = MakeKeyInput(3, TRUE, FALSE, TRUE);
 
-	SetKeyInputStringColor(inputHandle, 
+	SetKeyInputStringColor(inputHandle,
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
-		); // „Ç´„É©„Éº„ÇíË®≠ÂÆö
+		); // ÉJÉâÅ[Çê›íË
 }
 
-SceneTitle::‚ÄæSceneTitle()
+SceneTitle::~SceneTitle()
 {
 }
 
@@ -54,7 +54,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		if (it->inputState != InputState::Started)
 			continue;
 
-		// Ê±∫ÂÆö„Ç≠„ÉºÊäº‰∏ãÊôÇ„ÅÆÂá¶ÁêÜ
+		// åàíËÉLÅ[âüâ∫éûÇÃèàóù
 		if (it->keyCode == KEY_INPUT_Z)
 		{
 			SelectInput();
@@ -62,17 +62,36 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 		if (isSelect) continue;
 
-		// „Ç´„Éº„ÇΩ„É´ÁßªÂãï„Å®ÂèÇÁÖßÈ†ÖÁõÆÁßªÂãï„ÅÆÂá¶ÁêÜ
+		// ÉJÅ[É\Éãà⁄ìÆÇ∆éQè∆çÄñ⁄à⁄ìÆÇÃèàóù
 		if (it->keyCode == PAD_INPUT_UP)
 		{
-			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0;
+			if (--selectIndex < 0)
+			{
+				if (ipBuffer[3] == -1 || portId == -1)
+				{
+					selectIndex = 2;
+				}
+				else
+				{
+					selectIndex = 3;
+				}
+			}
 		}
 
 		if (it->keyCode == PAD_INPUT_DOWN)
 		{
-			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0;
+			++selectIndex;
+
+			if ((ipBuffer[3] == -1 || portId == -1) &&
+				selectIndex > 2) 
+			{
+				selectIndex = 0;
+			}
+			else if ((ipBuffer[3] != -1 && portId != -1) &&
+				selectIndex > 3)
+			{
+				selectIndex = 0;
+			}
 		}
 
 
@@ -88,74 +107,30 @@ void SceneTitle::LateUpdate()
 {
 	cursor.ManualUpdate();
 
-	std::string text = "„Çπ„Çø„Éº„Éà";
+	std::string text = "ÉXÉ^Å[Ég";
 
-	// „ÉÜ„Ç≠„Çπ„ÉàË°®Á§∫Â∫ßÊ®ô
+	// ÉeÉLÉXÉgï\é¶ç¿ïW
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
 		 text.c_str());
 
-
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Title");
 
-
-	DrawFormatString(300, 300 - GetFontSize() / 2, 
+	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"È†ÖÁõÆ1");
+		"Role       : ");
+	if (GameManager::role == Role::server)
+		DrawFormatString(450, 300 - GetFontSize() / 2,GetColor(0, 0, 0),"Sever");
+	else
+		DrawFormatString(450, 300 - GetFontSize() / 2,GetColor(0, 0, 0),"Client");
 
-	DrawFormatString(300, 400 - GetFontSize() / 2,
-		GetColor(0, 0, 0),
-		"È†ÖÁõÆ2");
 
-
-	if (isSelect)
-	{
-		// ÂÖ•Âäõ‰∏≠„ÅÆ„Ç∞„É´„Éº„Éó„ÇíË®≠ÂÆö
-		int inputIndex = 0;
-		for (int i = 0; i < 4; ++i)
-		{
-			if (ipBuffer[i] != -1) continue;
-			inputIndex = i;
-			break;
-		}
-
-		for(int i = 0; i < inputIndex; ++i)
-		{			
-			DrawFormatString(100 + GetFontSize() * 3 * i,
-				100, GetColor(0, 0, 0), 
-				"%d.", ipBuffer[i]);
-		}
-
-		DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 100, inputHandle);
-
-		if (CheckKeyInput(inputHandle))
-		{
-			// ÂÖ•Âäõ„Åï„Çå„ÅüÊñáÂ≠óÂàó„ÇíÊï∞Âàó„Å´Â§âÊèõ
-			int num = GetKeyInputNumber(inputHandle);
-			ipBuffer[inputIndex] = num;
-
-			// ÂÖ•Âäõ„ÅåÂÆå‰∫Ü„Åó„ÅüÂ†¥Âêà
-			if (ipBuffer[3] != -1)
-			{
-				IPDATA ip;
-				ip.d1 = ipBuffer[0];
-				ip.d2 = ipBuffer[1];
-				ip.d3 = ipBuffer[2];
-				ip.d4 = ipBuffer[3];
-
-				isSelect = false;
-				cursor.SetColor(GetColor(100, 100, 255));
-				cursor.SetTargetScale({ 100,20,0 });
-			}
-			else
-			{
-				SetActiveKeyInput(inputHandle);
-				SetKeyInputString("", inputHandle);
-			}
-		}
-	}
+	if (GameManager::role == Role::server)
+		ServerInputForm();
+	if (GameManager::role == Role::Client)
+		ClientInputForm();
 }
 
 void SceneTitle::SelectInput()
@@ -172,8 +147,143 @@ void SceneTitle::SelectInput()
 	cursor.SetColor(GetColor(100, 100, 100));
 	cursor.SetTargetScale({ 150,15,0 });
 
-	SetActiveKeyInput(inputHandle);
-	SetKeyInputString("", inputHandle);
+	if(selectIndex == 0)
+	{
+		GameManager::role == Role::server ? GameManager::role = Role::Client : GameManager::role = Role::server;
+		isSelect = false;
+		cursor.SetColor(GetColor(100, 100, 255));
+		cursor.SetTargetScale({ 100,20,0 });
+		return;
+	}
+	else if(selectIndex == 1)
+	{
+		for (int i = 0; i < 4; ++i)
+			ipBuffer[i] = -1;
+		SetActiveKeyInput(inputHandle);
+		SetKeyInputString("", inputHandle);
+	}
+	else if(selectIndex == 2)
+	{
+		SetActiveKeyInput(inputHandle);
+		SetKeyInputString("", inputHandle);
+	}
+	else if(selectIndex == 3)
+	{
+		connectParameter = ConnectParameter::Wait;
+	}
+}
+
+void SceneTitle::ServerInputForm()
+{
+	connectParameter = ConnectParameter::Wait;
+}
+
+void SceneTitle::ClientInputForm()
+{
+	if (selectIndex == 1)
+	{
+		if (isSelect)
+		{
+			// ì¸óÕíÜÇÃÉOÉãÅ[ÉvÇê›íË
+			int inputIndex = 0;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (ipBuffer[i] != -1) continue;
+				inputIndex = i;
+				break;
+			}
+
+			for (int i = 0; i < inputIndex; ++i)
+			{
+				DrawFormatString(100 + GetFontSize() * 3 * i,
+					350, GetColor(0, 0, 0),
+					"%d.", ipBuffer[i]);
+			}
+
+			DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 350, inputHandle);
+
+
+			// IPÉAÉhÉåÉXÇÃì¸óÕèàóù
+			if (CheckKeyInput(inputHandle))
+			{
+				// ì¸óÕÇ≥ÇÍÇΩï∂éöóÒÇêîóÒÇ…ïœä∑
+				int num = GetKeyInputNumber(inputHandle);
+				ipBuffer[inputIndex] = num;
+
+				// ì¸óÕÇ™äÆóπÇµÇΩèÍçá
+				if (ipBuffer[3] != -1)
+				{
+					ipData.d1 = ipBuffer[0];
+					ipData.d2 = ipBuffer[1];
+					ipData.d3 = ipBuffer[2];
+					ipData.d4 = ipBuffer[3];
+
+					isSelect = false;
+					cursor.SetColor(GetColor(100, 100, 255));
+					cursor.SetTargetScale({ 100,20,0 });
+				}
+				else
+				{
+					SetActiveKeyInput(inputHandle);
+					SetKeyInputString("", inputHandle);
+				}
+			}
+		}
+	}
+	else if (selectIndex == 2)
+	{
+		if (isSelect)
+		{
+			DrawKeyInputString(100, 450, inputHandle);
+
+			// É|Å[Égî‘çÜÇÃì¸óÕèàóù
+			if (CheckKeyInput(inputHandle))
+			{
+				// ì¸óÕÇ≥ÇÍÇΩï∂éöóÒÇêîóÒÇ…ïœä∑
+				portId = GetKeyInputNumber(inputHandle);
+				SetKeyInputString("", inputHandle);
+
+				isSelect = false;
+				cursor.SetColor(GetColor(100, 100, 255));
+				cursor.SetTargetScale({ 100,20,0 });
+			}
+		}
+	}
+
+
+	DrawFormatString(300, 400 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"IPÉAÉhÉåÉX : ");
+	if (ipBuffer[3] != -1)
+	{
+		DrawFormatString(450, 400 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d.%d.%d.%d", ipData.d1, ipData.d2, ipData.d3, ipData.d4);
+	}
+
+	DrawFormatString(300, 500 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"É|Å[Égî‘çÜ : ");
+	if (portId != -1)
+	{
+		DrawFormatString(450, 500 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d", portId);
+	}
+
+	// IPÉAÉhÉåÉXÇ∆É|Å[Égî‘çÜÇÃì¸óÕÇ™èIóπÇµÇƒÇ¢ÇÈèÍçá
+
+	if (ipBuffer[3] != -1 && portId != -1)
+	{
+		DrawFormatString(300, 600 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"ê⁄ë±");
+	}
+}
+
+void SceneTitle::Connect()
+{
+	int ret = ConnectNetWork(ipData, portId);
 }
 
 
