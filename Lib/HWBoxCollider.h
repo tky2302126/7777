@@ -7,117 +7,117 @@
 /**
 * @author   NZ
 * @date     24/09/15
-* @note		ç«‹æ–¹å‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		—§•ûŒ^‚ÌƒRƒ‰ƒCƒ_[ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @class	HWBoxCollider
- * @brief	ç«‹æ–¹å‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+ * @brief	—§•ûŒ^‚ÌƒRƒ‰ƒCƒ_[ƒRƒ“ƒ|[ƒlƒ“ƒg
  */
 class HWBoxCollider : public HWCollider
 {
-	// ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ä»¥å¤–ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’é˜²ããŸã‚ã®ãƒ•ãƒ¬ãƒ³ãƒ‰å®£è¨€
+	// “Á’è‚ÌƒNƒ‰ƒXˆÈŠO‚©‚ç‚ÌƒAƒNƒZƒX‚ğ–h‚®‚½‚ß‚ÌƒtƒŒƒ“ƒhéŒ¾
 	friend class HWGameObject;
 	friend class CollisionWaltan;
 
 public:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚º
-	 * @History		24/09/16 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚ÌƒTƒCƒY
+	 * @History		24/09/16 ì¬(NZ)
 	 */
 	VECTOR size;
 
 	/**
-	 * @brief		å›è»¢è¡Œåˆ—
-	 * @History		24/09/16 ä½œæˆ(NZ)
+	 * @brief		‰ñ“]s—ñ
+	 * @History		24/09/16 ì¬(NZ)
 	 */
 	MATRIX mRotate;
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®å„é ‚ç‚¹åº§æ¨™
-	 * @History		24/09/18 ä½œæˆ(NZ)
+	 * @brief		ƒRƒ‰ƒCƒ_[‚ÌŠe’¸“_À•W
+	 * @History		24/09/18 ì¬(NZ)
 	 */
 	VECTOR vertex[2][4];
 
-	/*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+	/*     ƒƒ\ƒbƒh     */
 
 public:
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @detail		å¼•æ•°ã§ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚ºã‚’æŒ‡å®šå¯
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @detail		ˆø”‚ÅƒRƒ‰ƒCƒ_[‚ÌƒTƒCƒY‚ğw’è‰Â
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	HWBoxCollider();
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @detail		å¼•æ•°ã§ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚ºã‚’æŒ‡å®šå¯
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @detail		ˆø”‚ÅƒRƒ‰ƒCƒ_[‚ÌƒTƒCƒY‚ğw’è‰Â
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	HWBoxCollider(const VECTOR& _size);
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @detail		å¼•æ•°ã§ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚ºã‚’æŒ‡å®šå¯
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @detail		ˆø”‚ÅƒRƒ‰ƒCƒ_[‚ÌƒTƒCƒY‚ğw’è‰Â
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	HWBoxCollider(const float& _sizeX, const float& _sizeY, const float& _sizeZ);
 
 	/**
-	 * @brief		ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒfƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
-	â€¾HWBoxCollider();
+	~HWBoxCollider();
 
 protected:
 
-#pragma region ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+#pragma region ƒI[ƒo[ƒ‰ƒCƒhƒƒ\ƒbƒh
 
 
 	/**
-	 * @brief		ç«‹æ–¹ä½“ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æç”»ã™ã‚‹
-	 * @detail		ã‚ªãƒ¼ãƒãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief		—§•û‘Ì‚ÌƒRƒ‰ƒCƒ_[‚ğ•`‰æ‚·‚é
+	 * @detail		ƒI[ƒoƒ‰ƒCƒhƒƒ\ƒbƒh
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	void DrawCollider() override;
 
 	/**
-	 * @brief		ç«‹æ–¹ä½“ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æ§‹æˆã™ã‚‹
-	 * @detail		ã‚ªãƒ¼ãƒãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief		—§•û‘Ì‚ÌƒRƒ‰ƒCƒ_[‚ğ\¬‚·‚é
+	 * @detail		ƒI[ƒoƒ‰ƒCƒhƒƒ\ƒbƒh
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	void SetCollider() override;
 
 	/**
-	 * @brief		HWGameObjectã«ã‚¢ã‚¿ãƒƒãƒã•ã‚ŒãŸç¬é–“ã«åƒã
-	 * @detail		ã‚ªãƒ¼ãƒãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief		HWGameObject‚ÉƒAƒ^ƒbƒ`‚³‚ê‚½uŠÔ‚É“­‚­
+	 * @detail		ƒI[ƒoƒ‰ƒCƒhƒƒ\ƒbƒh
 	 * @author		NZ
 	 * @date		24/09/15
 	 */
 	void Awake()override;
 
 	/**
-	 * @brief		æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹
-	 * @detail		ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief		–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚é
+	 * @detail		ƒI[ƒo[ƒ‰ƒCƒhƒƒ\ƒbƒh
 	 * @author		NZ
 	 * @date		24/09/16
 	 */
 	void Update() override;
 
 	/**
-	 * @brief		ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¡çªæ™‚ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
-	 * @detail		ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief		ƒRƒ‰ƒCƒ_[Õ“Ë‚É“­‚­ƒƒ\ƒbƒh
+	 * @detail		ƒI[ƒo[ƒ‰ƒCƒhƒƒ\ƒbƒh
 	 * @author		NZ
 	 * @date		24/09/26
 	 */

@@ -1,7 +1,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitleã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+* @note		SceneTitle‚Ì’è‹`ƒtƒ@ƒCƒ‹
 */
 
 #pragma once
@@ -12,47 +12,47 @@
 
 /**
  * @class	SceneTitle
- * @brief   ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
+ * @brief   ƒ^ƒCƒgƒ‹ƒV[ƒ“
  */
 class SceneGame : public SceneBase
 {
 public:
-	// ãƒ¡ã‚½ãƒƒãƒ‰
+	// ƒƒ\ƒbƒh
 
 	/**
-	 * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	SceneGame();
 
 	/**
-	 * @brief       ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief       ƒfƒXƒgƒ‰ƒNƒ^
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
-	â€¾SceneGame() override;
+	~SceneGame() override;
 
 	/**
-	 * @brief       ãƒ­ãƒ¼ãƒ‰å®Œé‚æ™‚ã®é–¢æ•°
+	 * @brief       ƒ[ƒhŠ®‹‚ÌŠÖ”
 	 */
 	void LoadComplete() override;
 
 	/**
-	 * @brief       ã‚­ãƒ¼å…¥åŠ›æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
-	 * @param[in]	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+	 * @brief       ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN
+	 * @param[in]	ƒR[ƒ‹ƒoƒbƒNƒRƒ“ƒeƒLƒXƒg
 	 */
 	void KeyInputCallback(InputAction::CallBackContext _c)override;
 
 	/**
-	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	void Update() override;
 
 	/**
-	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -61,6 +61,6 @@ public:
 
 private:
 
-	//! ãƒ†ã‚­ã‚¹ãƒˆã®ãƒ•ã‚©ãƒ³ãƒˆ
+	//! ƒeƒLƒXƒg‚ÌƒtƒHƒ“ƒg
 	int menuFont;
 };

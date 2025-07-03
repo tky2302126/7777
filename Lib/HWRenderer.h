@@ -6,73 +6,73 @@
 /**
 * @author   NZ
 * @date     24/08/25
-* @note		ãƒ¢ãƒ‡ãƒ«æç”»ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		ƒ‚ƒfƒ‹•`‰æƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @class	HWRenderer
- * @brief	ãƒ¢ãƒ‡ãƒ«æç”»ç”¨ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+ * @brief	ƒ‚ƒfƒ‹•`‰æ—p‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg
  */
 class HWRenderer : public HWComponent
 {
-	// ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ä»¥å¤–ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’é˜²ããŸã‚ã®ãƒ•ãƒ¬ãƒ³ãƒ‰å®£è¨€
+	// “Á’è‚ÌƒNƒ‰ƒXˆÈŠO‚©‚ç‚ÌƒAƒNƒZƒX‚ğ–h‚®‚½‚ß‚ÌƒtƒŒƒ“ƒhéŒ¾
 	friend class HWGameObject;
 
 private:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
 	/**
-	 * @brief		ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«
-	 * @History		24/08/25 ä½œæˆ(NZ)
+	 * @brief		ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
+	 * @History		24/08/25 ì¬(NZ)
 	 */
 	int modelHandle;
 
 
 public:
 
-	/*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+	/*     ƒƒ\ƒbƒh     */
 
 	/**
-	 * @brief		HWRendererã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @detail		å¼•æ•°ã§ãƒ¢ãƒ‡ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‹ã€ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã‚’æŒ‡å®šå¯
+	 * @brief		HWRenderer‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @detail		ˆø”‚Åƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹‚ÌƒpƒX‚©Aƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚ğw’è‰Â
 	 * @author		NZ
 	 * @date		24/08/25
 	 */
 	HWRenderer() : modelHandle(-1) {}
 
 	/**
-	 * @brief		HWRendererã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @detail		ãƒ¢ãƒ‡ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã§ã‚‚å¯
-	 * @param[in]	int ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+	 * @brief		HWRenderer‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @detail		ƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹‚ÌƒpƒX‚Å‚à‰Â
+	 * @param[in]	int ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
 	 * @author		NZ
 	 * @date		24/08/25
 	 */
 	HWRenderer(const int _modelHandle);
 
 	/**
-	 * @brief		HWRendererã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @detail		ãƒ¢ãƒ‡ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã§ã‚‚å¯
-	 * @param[in]	std::string èª­ã¿è¾¼ã‚€ãƒ¢ãƒ‡ãƒ«ã®MV1ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+	 * @brief		HWRenderer‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @detail		ƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹‚ÌƒpƒX‚Å‚à‰Â
+	 * @param[in]	std::string “Ç‚İ‚Şƒ‚ƒfƒ‹‚ÌMV1ƒtƒ@ƒCƒ‹‚ÌƒpƒX
 	 * @author		NZ
 	 * @date		24/08/25
 	 */
 	HWRenderer(const std::string& _pass);
 
 	/**
-	 * @brief		ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒfƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/07/19
 	 */
-	virtual â€¾HWRenderer();
+	virtual ~HWRenderer();
 
 
-#pragma region Getteré–¢æ•°
+#pragma region GetterŠÖ”
 
 	/**
-	 * @brief		ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ã™ã‚‹
-	 * @return		int ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+	 * @brief		ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚ğæ“¾‚·‚é
+	 * @return		int ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
 	 * @author		NZ
 	 * @date		24/08/25
 	 */
@@ -80,11 +80,11 @@ public:
 
 #pragma endregion
 
-#pragma region Setteré–¢æ•°
+#pragma region SetterŠÖ”
 
 	 /**
-	  * @brief		ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã‚’å¤‰æ›´ã™ã‚‹(ãƒ¢ãƒ‡ãƒ«ã®å¤–è¦‹ã‚’å¤‰æ›´ã™ã‚‹æ™‚ãªã©)
-	  * @param[in]	int æ–°ãŸãªãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ« 
+	  * @brief		ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚ğ•ÏX‚·‚é(ƒ‚ƒfƒ‹‚ÌŠOŒ©‚ğ•ÏX‚·‚é‚È‚Ç)
+	  * @param[in]	int V‚½‚Èƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹ 
 	  * @author		NZ
 	  * @date		24/08/25
 	  */
@@ -94,19 +94,19 @@ public:
 
 protected:
 
-#pragma region ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+#pragma region ƒI[ƒo[ƒ‰ƒCƒhƒƒ\ƒbƒh
 
 	/**
-	 * @brief		æœ€åˆã®Updateãƒ¡ã‚½ãƒƒãƒ‰ã®ç›´å‰ã«åƒã
-	 * @detail		ä»®æƒ³é–¢æ•°
+	 * @brief		Å‰‚ÌUpdateƒƒ\ƒbƒh‚Ì’¼‘O‚É“­‚­
+	 * @detail		‰¼‘zŠÖ”
 	 * @author		NZ
 	 * @date		24/06/17
 	 */
 	void Start() override;
 
 	/**
-	 * @brief		æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹
-	 * @detail		ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰é–¢æ•°
+	 * @brief		–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚é
+	 * @detail		ƒI[ƒo[ƒ‰ƒCƒhŠÖ”
 	 * @author		NZ
 	 * @date		24/09/01
 	 */

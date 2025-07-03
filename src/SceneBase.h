@@ -1,7 +1,7 @@
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneBaseã®å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
+* @note		SceneBase‚Ì’è‹`ƒtƒ@ƒCƒ‹
 */
 
 #pragma once
@@ -9,49 +9,49 @@
 
 /**
  * @enum	SceneTag
- * @brief   ã‚·ãƒ¼ãƒ³ã®ã‚¿ã‚°
+ * @brief   ƒV[ƒ“‚Ìƒ^ƒO
  */
 enum class SceneTag
 {
-	//! ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³(0)
+	//! ƒ^ƒCƒgƒ‹ƒV[ƒ“(0)
 	Title,
-	//! ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³(1)
+	//! ƒQ[ƒ€ƒV[ƒ“(1)
 	Game,
-	//! ãƒªã‚¶ãƒ«ãƒˆã‚·ãƒ¼ãƒ³(2)
+	//! ƒŠƒUƒ‹ƒgƒV[ƒ“(2)
 	Result,
-	//! ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼
+	//! ƒƒCƒ“ƒƒjƒ…[
 	MainMenu,
-	//! ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+	//! ƒIƒvƒVƒ‡ƒ“
 	Option,
 
 	/*
-		è¿½åŠ ã™ã‚‹å ´åˆã¯ã€ã“ã“ã«ã‚¿ã‚°ã‚’è¿½åŠ ã—ã€SceneManagerã®SceneChangeãƒ¡ã‚½ãƒƒãƒ‰ã«è¿½è¨˜ã™ã‚‹
+		’Ç‰Á‚·‚éê‡‚ÍA‚±‚±‚Éƒ^ƒO‚ğ’Ç‰Á‚µASceneManager‚ÌSceneChangeƒƒ\ƒbƒh‚É’Ç‹L‚·‚é
 	*/
 
-	//! æœªä½¿ç”¨ (å¸¸ã«æœ«å°¾)
+	//! –¢g—p (í‚É––”ö)
 	NotFound = -1,
 };
 
 
 /**
  * @enum	SceneLoadState
- * @brief   ã‚·ãƒ¼ãƒ³ãƒ­ãƒ¼ãƒ‰ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+ * @brief   ƒV[ƒ“ƒ[ƒh‚ÌƒXƒe[ƒ^ƒX
  */
 enum class SceneLoadState
 {
-	//! å¾…æ©Ÿä¸­(0)
+	//! ‘Ò‹@’†(0)
 	Wait,
-	//! ãƒ­ãƒ¼ãƒ‰ä¸­(1)
+	//! ƒ[ƒh’†(1)
 	Loading,
-	//! ãƒ­ãƒ¼ãƒ‰å®Œäº†(2)
+	//! ƒ[ƒhŠ®—¹(2)
 	Completed,
 };
 
 
 /**
  * @class	SceneBase
- * @brief   å„ã‚·ãƒ¼ãƒ³ã®ã‚‚ã¨ã«ãªã‚‹åŸºåº•ã‚¯ãƒ©ã‚¹
- * @detail	ä»®æƒ³ã‚¯ãƒ©ã‚¹ã®ãŸã‚ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã§ããªã„
+ * @brief   ŠeƒV[ƒ“‚Ì‚à‚Æ‚É‚È‚éŠî’êƒNƒ‰ƒX
+ * @detail	‰¼‘zƒNƒ‰ƒX‚Ì‚½‚ßAƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚Å‚«‚È‚¢
  */
 class SceneBase
 {
@@ -61,31 +61,31 @@ class SceneBase
 public:
 
 	/**
-	 * @brief       æœ€åˆã®Uodateã®ç›´å‰ã«åƒããƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       Å‰‚ÌUodate‚Ì’¼‘O‚É“­‚­ƒƒ\ƒbƒh
 	 */
 	virtual void LoadComplete() {};
 
 	/**
-	 * @brief       éåŒæœŸãƒ­ãƒ¼ãƒ‰ã®ä¸­ã§å‘¼ã°ã‚Œã‚‹å‡¦ç†
+	 * @brief       ”ñ“¯Šúƒ[ƒh‚Ì’†‚ÅŒÄ‚Î‚ê‚éˆ—
 	 */
 	virtual void AsyncAwake() {};
 
 	/**
-	 * @brief       ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief       ƒfƒXƒgƒ‰ƒNƒ^
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
-	virtual â€¾SceneBase() {};
+	virtual ~SceneBase() {};
 
 	/**
-	 * @brief       æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       –ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	virtual void Update() {};
 
 	/**
-	 * @brief       å„ªå…ˆåº¦ã®ä½ã„ã€æ¯Få‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+	 * @brief       —Dæ“x‚Ì’á‚¢A–ˆFŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -94,29 +94,29 @@ public:
 
 protected:
 
-	//! ã‚·ãƒ¼ãƒ³ã®ã‚¿ã‚°
+	//! ƒV[ƒ“‚Ìƒ^ƒO
 	SceneTag sceneTag;
-	//! é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	//! ‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO
 	SceneTag nextSceneTag;
-	//! éåŒæœŸã§èª­ã¿è¾¼ã‚€é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	//! ”ñ“¯Šú‚Å“Ç‚İ‚Ş‘JˆÚæ‚ÌƒV[ƒ“ƒ^ƒO
 	SceneTag nextSceneTagAsync;
-	//! ã‚·ãƒ¼ãƒ³é·ç§»ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã®ID
+	//! ƒV[ƒ“‘JˆÚ‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”‚ÌID
 	int callBackId;
-	//! å…¨ã‚·ãƒ¼ãƒ³å…±é€šã®æ“ä½œç³»
+	//! ‘SƒV[ƒ“‹¤’Ê‚Ì‘€ìŒn
 	static InputSystem* input;
-	//! ãƒ­ãƒ¼ãƒ‰ä¸­
+	//! ƒ[ƒh’†
 	bool isLoad = true;
 
 
 	/**
-	 * @brief       ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief       ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
 	SceneBase() : nextSceneTag(SceneTag::NotFound), nextSceneTagAsync(SceneTag::NotFound)
 	{
 		//
-		// æ“ä½œç³»ã®åˆæœŸè¨­å®š
+		// ‘€ìŒn‚Ì‰Šúİ’è
 		//
 
 		if (input != nullptr)
@@ -128,14 +128,14 @@ protected:
 	}
 
 	/**
-	 * @brief       ã‚­ãƒ¼å…¥åŠ›æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
-	 * @param[in]	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+	 * @brief       ƒL[“ü—Í‚ÌƒR[ƒ‹ƒoƒbƒN
+	 * @param[in]	ƒR[ƒ‹ƒoƒbƒNƒRƒ“ƒeƒLƒXƒg
 	 */
 	virtual void KeyInputCallback(InputAction::CallBackContext _c) = 0;
 
 	/**
-	 * @brief       ã‚·ãƒ¼ãƒ³å†…ã‹ã‚‰ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
-	 * @param[in]	const SceneTag å¤‰æ›´å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	 * @brief       ƒV[ƒ““à‚©‚çƒV[ƒ“‚ğ•ÏX‚·‚é
+	 * @param[in]	const SceneTag •ÏXæ‚ÌƒV[ƒ“ƒ^ƒO
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */
@@ -144,8 +144,8 @@ protected:
 		nextSceneTag = _nextSceneTag;
 	}
 	/**
-	 * @brief       éåŒæœŸã§ã‚·ãƒ¼ãƒ³å†…ã‹ã‚‰ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
-	 * @param[in]	const SceneTag å¤‰æ›´å…ˆã®ã‚·ãƒ¼ãƒ³ã‚¿ã‚°
+	 * @brief       ”ñ“¯Šú‚ÅƒV[ƒ““à‚©‚çƒV[ƒ“‚ğ•ÏX‚·‚é
+	 * @param[in]	const SceneTag •ÏXæ‚ÌƒV[ƒ“ƒ^ƒO
 	 * @author      Suzuki N
 	 * @date        24/11/20
 	 */

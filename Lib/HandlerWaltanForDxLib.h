@@ -1,21 +1,21 @@
 #pragma once
-// HandlerWaltanForDxLib.cpp : ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ ãƒ©ã‚¤ãƒ–ãƒ©ãƒªç”¨ã®é–¢æ•°ã‚’å®šç¾©ã—ã¾ã™ã€‚
+// HandlerWaltanForDxLib.cpp : ƒXƒ^ƒeƒBƒbƒN ƒ‰ƒCƒuƒ‰ƒŠ—p‚ÌŠÖ”‚ğ’è‹`‚µ‚Ü‚·B
 //
 #include "HandlerWaltan.h"
 
 
 
 //-----------------------------------------------------------
-// å‰æ–¹å®£è¨€  
+// ‘O•ûéŒ¾  
 //-----------------------------------------------------------
 
-#pragma region æ§‹é€ ä½“
+#pragma region \‘¢‘Ì
 
 
 
 #pragma endregion
 
-#pragma region ã‚¯ãƒ©ã‚¹
+#pragma region ƒNƒ‰ƒX
 
 class CollisionWaltan;
 
@@ -37,5 +37,5 @@ class HWTransform;
 
 
 //------------------------------------------
-// é–¢æ•°
+// ŠÖ”
 //------------------------------------------

@@ -77,6 +77,8 @@ private:
 	int portId;
 	//! 接続パラメータ
 	ConnectParameter connectParameter = ConnectParameter::None;
+	//! 接続したネットワークハンドル
+	int networkHandle = -1;
 
 
 	/**

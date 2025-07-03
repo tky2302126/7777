@@ -12,45 +12,45 @@
 
 /**
  * @class	HWCamera
- * @brief   ã‚«ãƒ¡ãƒ©æ“ä½œç”¨ã®
+ * @brief   ƒJƒƒ‰‘€ì—p‚Ì
  */
 class HWCamera : public HWComponent
 {
 public:
 
-	/*     ãƒ¡ãƒ³ãƒå¤‰æ•°     */
+	/*     ƒƒ“ƒo•Ï”     */
 
 	/**
-	 * @brief		æ³¨è¦–ç‚¹
-	 * @History		24/09/20 ä½œæˆ(NZ)
+	 * @brief		’Ž‹“_
+	 * @History		24/09/20 ì¬(NZ)
 	 */
 	VECTOR target;	
 
 
 public:
-	/*     ãƒ¡ã‚½ãƒƒãƒ‰     */
+	/*     ƒƒ\ƒbƒh     */
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 * @author		NZ
 	 * @date		24/09/20
 	 */
 	HWCamera();
 
 
-#pragma region ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãƒ¡ã‚½ãƒƒãƒ‰
+#pragma region ƒI[ƒo[ƒ‰ƒCƒhƒƒ\ƒbƒh
 
 	/**
-	 * @brief		HWGameObjectã«ã‚¢ã‚¿ãƒƒãƒã•ã‚ŒãŸçž¬é–“ã«åƒã
-	 * @detail		ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰é–¢æ•°
+	 * @brief		HWGameObject‚ÉƒAƒ^ƒbƒ`‚³‚ê‚½uŠÔ‚É“­‚­
+	 * @detail		ƒI[ƒo[ƒ‰ƒCƒhŠÖ”
 	 * @author		NZ
 	 * @date		24/06/17
 	 */
 	void Awake() override;
 
 	/**
-	 * @brief		æ¯Žãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹
-	 * @detail		ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰é–¢æ•°
+	 * @brief		–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚é
+	 * @detail		ƒI[ƒo[ƒ‰ƒCƒhŠÖ”
 	 * @author		NZ
 	 * @date		24/09/01
 	 */

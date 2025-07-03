@@ -5,40 +5,40 @@
 /**
 * @author   NZ
 * @date     25/03/04
-* @note		ç”»åƒæç”»ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+* @note		‰æ‘œ•`‰æƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
 */
 
 
 /**
  * @class	ImageRenderType
- * @brief	ç”»åƒæç”»ã®ã‚¿ã‚¤ãƒ—
+ * @brief	‰æ‘œ•`‰æ‚Ìƒ^ƒCƒv
  */
 enum class ImageRenderType
 {
-	//! é€šå¸¸æç”»
+	//! ’Êí•`‰æ
 	Default,
-	//! ã‚«ã‚¹ã‚¿ãƒ 
+	//! ƒJƒXƒ^ƒ€
 	Custom,
 };
 
 
 /**
  * @class	HWImage
- * @brief	ç”»åƒæç”»ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®šç¾©
+ * @brief	‰æ‘œ•`‰æƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’è‹`
  */
 class HWImage : public HWComponent
 {
 	//
-	// ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ƒƒ“ƒo•Ï”
 	//
 
 public:
 
-	//! æç”»ã‚¿ã‚¤ãƒ—
+	//! •`‰æƒ^ƒCƒv
 	ImageRenderType renderType;
-	//! ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	//! ‰æ‘œƒnƒ“ƒhƒ‹
 	int graphHandle;
-	//! é€éå‡¦ç†ã‚’è¡Œã†ã‹
+	//! “§‰ßˆ—‚ğs‚¤‚©
 	bool isTrans;
 	
 private:
@@ -47,25 +47,25 @@ private:
  
 
 	//
-	// ãƒ¡ã‚½ãƒƒãƒ‰
+	// ƒƒ\ƒbƒh
 	//
 
 public:
 
 	/**
-	 * @brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-	 * @param[in]	ç”»åƒã®Path
+	 * @brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @param[in]	‰æ‘œ‚ÌPath
 	 */
 	HWImage(const std::string& _path, ImageRenderType _renderType = ImageRenderType::Default);
 
 	/**
-	 * @brief		ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @brief		ƒfƒXƒgƒ‰ƒNƒ^
 	 */
-	â€¾HWImage();
+	~HWImage();
 
 	/**
-	 * @brief		æç”»æ–¹æ³•ã‚’æŒ‡å®š
-	 * @param		æç”»é–¢æ•°ã®æŒ‡å®š
+	 * @brief		•`‰æ•û–@‚ğw’è
+	 * @param		•`‰æŠÖ”‚Ìw’è
 	 */
 	void SetRenderFunction(std::function<void()> _customRenderFunction)
 	{
@@ -73,7 +73,7 @@ public:
 	}
 
 	/**
-	 * @brief		æ›´æ–°å‡¦ç†
+	 * @brief		XVˆ—
 	 */
 	void LateUpdate()override;
 };
