@@ -1,3 +1,2 @@
-Log.txt
-src/SceneTitle.cpp
-src/SceneTitle.h
+src/SceneResult.cpp
+src/SceneResult.h
