@@ -310,7 +310,7 @@ void SceneTitle::ClientInputForm()
 
 	DrawFormatString(300, 400 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"IP�A�h���X : ");
+		"IPアドレス : ");
 	if (ipBuffer[3] != -1)
 	{
 		DrawFormatString(450, 400 - GetFontSize() / 2,
@@ -320,7 +320,7 @@ void SceneTitle::ClientInputForm()
 
 	DrawFormatString(300, 500 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"�|�[�g�ԍ� : ");
+		"ポート番号 : ");
 	if (portId != -1)
 	{
 		DrawFormatString(450, 500 - GetFontSize() / 2,
@@ -328,13 +328,13 @@ void SceneTitle::ClientInputForm()
 			"%d", portId);
 	}
 
-	// IP�A�h���X�ƃ|�[�g�ԍ��̓��͂��I�����Ă���ꍇ
+	// IPアドレスとポート番号が入力されている場合
 
 	if (ipBuffer[3] != -1 && portId != -1)
 	{
 		DrawFormatString(300, 600 - GetFontSize() / 2,
 			GetColor(0, 0, 0),
-			"�ڑ�");
+			"Connect");
 	}
 }
 
