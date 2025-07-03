@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Lib;src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Lib;src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -137,6 +137,7 @@
     <ClCompile Include="src\MovieManager.cpp" />
     <ClCompile Include="src\SceneGame.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\SceneResult.cpp" />
     <ClCompile Include="src\SceneTitle.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="src\SceneBase.h" />
     <ClInclude Include="src\SceneGame.h" />
     <ClInclude Include="src\SceneManager.h" />
+    <ClInclude Include="src\SceneResult.h" />
     <ClInclude Include="src\SceneTitle.h" />
     <ClInclude Include="src\UIManager.h" />
     <ClInclude Include="src\VideoPlayer.h" />
