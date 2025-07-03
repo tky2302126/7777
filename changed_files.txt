@@ -1,2 +1,1 @@
-src/SceneTitle.cpp
-src/SceneTitle.h
+src/SceneManager.cpp
