@@ -5,7 +5,12 @@
 // "DxLib.h" もincludeされる
 #include "HandlerWaltanForDxLib.h"
 #include"SceneManager.h"
+#include "GameManager.h"
 #include <fstream>
+
+
+// 静的メンバ変数の初期化
+Role GameManager::role = Role::Client;
 
 
 // プログラムは WinMain から始まります
@@ -90,11 +95,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		sceneManager.Update();
 
 
-		DrawCapsule3D(
-			pos, pos + VGet(0,400,0), 50.0f * scale.x,
-			12, 
-			GetColor(255, 0, 0),GetColor(255, 0, 0), 
-			FALSE);
+		//DrawCapsule3D(
+		//	pos, pos + VGet(0,400,0), 50.0f * scale.x,
+		//	12, 
+		//	GetColor(255, 0, 0),GetColor(255, 0, 0), 
+		//	FALSE);
 
 
 		sceneManager.LateUpdate();

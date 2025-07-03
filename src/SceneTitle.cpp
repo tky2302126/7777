@@ -8,7 +8,7 @@
 
 
 SceneTitle::SceneTitle()
-	: selectIndex(0), isSelect(false), inputHandle(-1), 
+	: selectIndex(0), isSelect(false), inputHandle(-1),portId(-1),
 	ipBuffer{ -1, -1, -1, -1 }
 {
 	// 実行中のシーンタグ
@@ -30,9 +30,9 @@ SceneTitle::SceneTitle()
 	cursor.ManualInitialize({300,300,0}, {100,20,0});
 	cursor.SetTargetPosition({ 300,300,0 });
 
-	inputHandle = MakeKeyInput(3, TRUE, FALSE, FALSE);
+	inputHandle = MakeKeyInput(3, TRUE, FALSE, TRUE);
 
-	SetKeyInputStringColor(inputHandle, 
+	SetKeyInputStringColor(inputHandle,
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
@@ -65,14 +65,33 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		// カーソル移動と参照項目移動の処理
 		if (it->keyCode == PAD_INPUT_UP)
 		{
-			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0;
+			if (--selectIndex < 0)
+			{
+				if (ipBuffer[3] == -1 || portId == -1)
+				{
+					selectIndex = 2;
+				}
+				else
+				{
+					selectIndex = 3;
+				}
+			}
 		}
 
 		if (it->keyCode == PAD_INPUT_DOWN)
 		{
-			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0;
+			++selectIndex;
+
+			if ((ipBuffer[3] == -1 || portId == -1) &&
+				selectIndex > 2) 
+			{
+				selectIndex = 0;
+			}
+			else if ((ipBuffer[3] != -1 && portId != -1) &&
+				selectIndex > 3)
+			{
+				selectIndex = 0;
+			}
 		}
 
 
@@ -96,66 +115,22 @@ void SceneTitle::LateUpdate()
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
 		 text.c_str());
 
-
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Title");
 
-
-	DrawFormatString(300, 300 - GetFontSize() / 2, 
+	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"項目1");
+		"Role       : ");
+	if (GameManager::role == Role::server)
+		DrawFormatString(450, 300 - GetFontSize() / 2,GetColor(0, 0, 0),"Sever");
+	else
+		DrawFormatString(450, 300 - GetFontSize() / 2,GetColor(0, 0, 0),"Client");
 
-	DrawFormatString(300, 400 - GetFontSize() / 2,
-		GetColor(0, 0, 0),
-		"項目2");
 
-
-	if (isSelect)
-	{
-		// 入力中のグループを設定
-		int inputIndex = 0;
-		for (int i = 0; i < 4; ++i)
-		{
-			if (ipBuffer[i] != -1) continue;
-			inputIndex = i;
-			break;
-		}
-
-		for(int i = 0; i < inputIndex; ++i)
-		{			
-			DrawFormatString(100 + GetFontSize() * 3 * i,
-				100, GetColor(0, 0, 0), 
-				"%d.", ipBuffer[i]);
-		}
-
-		DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 100, inputHandle);
-
-		if (CheckKeyInput(inputHandle))
-		{
-			// 入力された文字列を数列に変換
-			int num = GetKeyInputNumber(inputHandle);
-			ipBuffer[inputIndex] = num;
-
-			// 入力が完了した場合
-			if (ipBuffer[3] != -1)
-			{
-				IPDATA ip;
-				ip.d1 = ipBuffer[0];
-				ip.d2 = ipBuffer[1];
-				ip.d3 = ipBuffer[2];
-				ip.d4 = ipBuffer[3];
-
-				isSelect = false;
-				cursor.SetColor(GetColor(100, 100, 255));
-				cursor.SetTargetScale({ 100,20,0 });
-			}
-			else
-			{
-				SetActiveKeyInput(inputHandle);
-				SetKeyInputString("", inputHandle);
-			}
-		}
-	}
+	if (GameManager::role == Role::server)
+		ServerInputForm();
+	if (GameManager::role == Role::Client)
+		ClientInputForm();
 }
 
 void SceneTitle::SelectInput()
@@ -172,8 +147,133 @@ void SceneTitle::SelectInput()
 	cursor.SetColor(GetColor(100, 100, 100));
 	cursor.SetTargetScale({ 150,15,0 });
 
-	SetActiveKeyInput(inputHandle);
-	SetKeyInputString("", inputHandle);
+	if(selectIndex == 0)
+	{
+		GameManager::role == Role::server ? GameManager::role = Role::Client : GameManager::role = Role::server;
+		isSelect = false;
+		cursor.SetColor(GetColor(100, 100, 255));
+		cursor.SetTargetScale({ 100,20,0 });
+		return;
+	}
+	else if(selectIndex == 1)
+	{
+		for (int i = 0; i < 4; ++i)
+			ipBuffer[i] = -1;
+		SetActiveKeyInput(inputHandle);
+		SetKeyInputString("", inputHandle);
+	}
+	else if(selectIndex == 2)
+	{
+		SetActiveKeyInput(inputHandle);
+		SetKeyInputString("", inputHandle);
+	}
+}
+
+void SceneTitle::ServerInputForm()
+{
+}
+
+void SceneTitle::ClientInputForm()
+{
+	if (selectIndex == 1)
+	{
+		if (isSelect)
+		{
+			// 入力中のグループを設定
+			int inputIndex = 0;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (ipBuffer[i] != -1) continue;
+				inputIndex = i;
+				break;
+			}
+
+			for (int i = 0; i < inputIndex; ++i)
+			{
+				DrawFormatString(100 + GetFontSize() * 3 * i,
+					250, GetColor(0, 0, 0),
+					"%d.", ipBuffer[i]);
+			}
+
+			DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 250, inputHandle);
+
+
+			// IPアドレスの入力処理
+			if (CheckKeyInput(inputHandle))
+			{
+				// 入力された文字列を数列に変換
+				int num = GetKeyInputNumber(inputHandle);
+				ipBuffer[inputIndex] = num;
+
+				// 入力が完了した場合
+				if (ipBuffer[3] != -1)
+				{
+					ipData.d1 = ipBuffer[0];
+					ipData.d2 = ipBuffer[1];
+					ipData.d3 = ipBuffer[2];
+					ipData.d4 = ipBuffer[3];
+
+					isSelect = false;
+					cursor.SetColor(GetColor(100, 100, 255));
+					cursor.SetTargetScale({ 100,20,0 });
+				}
+				else
+				{
+					SetActiveKeyInput(inputHandle);
+					SetKeyInputString("", inputHandle);
+				}
+			}
+		}
+	}
+	else if (selectIndex == 2)
+	{
+		if (isSelect)
+		{
+			DrawKeyInputString(100, 350, inputHandle);
+
+			// ポート番号の入力処理
+			if (CheckKeyInput(inputHandle))
+			{
+				// 入力された文字列を数列に変換
+				portId = GetKeyInputNumber(inputHandle);
+				SetKeyInputString("", inputHandle);
+
+				isSelect = false;
+				cursor.SetColor(GetColor(100, 100, 255));
+				cursor.SetTargetScale({ 100,20,0 });
+			}
+		}
+	}
+
+
+	DrawFormatString(300, 400 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"IPアドレス : ");
+	if (ipBuffer[3] != -1)
+	{
+		DrawFormatString(450, 400 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d.%d.%d.%d", ipData.d1, ipData.d2, ipData.d3, ipData.d4);
+	}
+
+	DrawFormatString(300, 500 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"ポート番号 : ");
+	if (portId != -1)
+	{
+		DrawFormatString(450, 500 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d", portId);
+	}
+
+	// IPアドレスとポート番号の入力が終了している場合
+
+	if (ipBuffer[3] != -1 && portId != -1)
+	{
+		DrawFormatString(300, 600 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"接続");
+	}
 }
 
 

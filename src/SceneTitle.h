@@ -67,11 +67,14 @@ private:
 	int selectIndex;
 	//! 項目を選択中
 	bool isSelect;
-	//! 入力ハンドル(ip/ポート番号)
+	//! 入力ハンドル
 	int inputHandle;
 	//! 未入力の項目を判別するために、一度intを経由してからIPDATA型に変換する
 	int ipBuffer[4];
-
+	//! 接続するサーバーのIPアドレスデータ
+	IPDATA ipData;
+	//! ポート番号
+	int portId;
 
 	/**
 	 * @brief       決定キーを押した際の処理
@@ -79,4 +82,18 @@ private:
 	 * @date        24/11/20
 	 */
 	void SelectInput();
+
+	/**
+	 * @brief       serverの場合の入力フォームの表示
+	 * @author      Suzuki N
+	 * @date        25/07/03
+	 */
+	void ServerInputForm();
+
+	/**
+	 * @brief       clientの場合の入力フォームの表示
+	 * @author      Suzuki N
+	 * @date        25/07/03
+	 */
+	void ClientInputForm();
 };

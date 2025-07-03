@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Cursor.h" />
+    <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\MovieManager.h" />
     <ClInclude Include="src\SceneBase.h" />
     <ClInclude Include="src\SceneGame.h" />
