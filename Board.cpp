@@ -12,7 +12,8 @@ Board::Board()
 	{
 		for(int j = 1; j <= 13; j++) // 
 		{
-			
+			int FrameID = i * 13 + j;
+			cards[FrameID] = Card(FrameID);
 		}
 	}
 }
@@ -22,12 +23,16 @@ Board::~Board()
 	// カードの破棄
 	for(auto card : cards)
 	{
-		
+		card.~Card();
 	}
 }
 
 void Board::Draw()
 {
+#ifdef DEBUG
+
+#endif // DEBUG
+
 }
 
 void Board::Move(Card& card)

@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "HandlerWaltanForDxLib.h"
-enum Suit
+enum Suit : int
 {
-	SPADE,
+	SPADE = 0,
 	CLAB,
 	DIA,
 	HEART
@@ -29,7 +29,7 @@ public:
 	// 表示する位置を決めるID
 	// カードのモデルをuvの要領で決めるために必要
 	int frameId;
-
+	// カードの場所
 	Area area;
 	// 手札の位置
 	int areaNumber;
@@ -45,6 +45,7 @@ private:
 #pragma region メソッド
 public:
 	Card();
+	Card(int _frameId);
 	~Card();
 	void ManualUpdate();
 #pragma endregion
