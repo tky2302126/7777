@@ -37,6 +37,7 @@ SceneGame::~SceneGame()
 
 void SceneGame::LoadComplete()
 {
+	board.ManualLoad();
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -61,6 +62,7 @@ void SceneGame::LateUpdate()
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Game");
 
+	board.Update();
 }
 
 
