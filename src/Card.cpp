@@ -24,9 +24,9 @@ Card::Card(int _frameId)
 	frameId = _frameId;
 	number = frameId %13 + 1;
 	suit = static_cast<Suit>(frameId/13);
-	position = VGet(0, 0, 0);
+	position = VGet(960, 360, 0);
 	rotate = VGet(0, 0, 0);
-	scale = VGet(1, 1, 1);
+	scale = VGet(10, 10, 10);
 }
 
 Card::~Card()

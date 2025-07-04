@@ -52,6 +52,7 @@ public:
 	void ManualLoad();
 	void ManualUpdate();
 	VECTOR GetPosition() { return position; };
+	VECTOR GetScale() { return scale; };
 #pragma endregion
 
 };

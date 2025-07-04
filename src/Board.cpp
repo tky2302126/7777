@@ -51,8 +51,9 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
-	//auto result = MV1SetPosition(cards[0].modelHandle, cards[0].GetPosition());
-	auto result =  MV1DrawModel(cards[0].modelHandle);
+	MV1SetPosition(cards[0].modelHandle, cards[0].GetPosition());
+	MV1SetScale(cards[0].modelHandle, cards[0].GetScale());
+	MV1DrawModel(cards[0].modelHandle);
 }
 
 void Board::ManualLoad()
