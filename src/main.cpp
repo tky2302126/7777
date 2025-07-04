@@ -1,22 +1,25 @@
-#pragma comment(lib,"Lib/MTd_Debug/MyLib_d.lib")
+ï»¿#pragma comment(lib,"Lib/MTd_Debug/MyLib_d.lib")
 #pragma comment(lib,"Lib/MTd_Release/MyLib.lib")
 
-// “–ƒ‰ƒCƒuƒ‰ƒŠ‚Å•K{‚É‚È‚éƒCƒ“ƒNƒ‹[ƒhƒtƒ@ƒCƒ‹
-// "DxLib.h" ‚àinclude‚³‚ê‚é
+// å½“ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§å¿…é ˆã«ãªã‚‹ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«
+// "DxLib.h" ã‚‚includeã•ã‚Œã‚‹
 #include "HandlerWaltanForDxLib.h"
 #include"SceneManager.h"
 #include "GameManager.h"
 #include <fstream>
 
 
-// Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
+// é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°ã®åˆæœŸåŒ–
 Role GameManager::role = Role::Client;
+int GameManager::networkHandle[3] = { -1, -1, -1 };
 
 
-// ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚è‚Ü‚·
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯ WinMain ã‹ã‚‰å§‹ã¾ã‚Šã¾ã™
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// DXƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰»ˆ—‚àŒ“‚Ë‚Ä‚¢‚é
+	SetDoubleStartValidFlag(TRUE);
+
+	// DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ–å‡¦ç†ã‚‚å…¼ã­ã¦ã„ã‚‹
 	if (HandlerWaltan::Instance().Init() == -1)
 	{
 		return 0;
@@ -25,29 +28,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 #ifdef _DEBUG
 
-	// •: 1920, ‚‚³: 1080, ƒrƒbƒg[“x: 32
-	SetGraphMode(1920, 1080, 32);
+	// å¹…: 1920, é«˜ã•: 1080, ãƒ“ãƒƒãƒˆæ·±åº¦: 32
+	SetGraphMode(1920/2, 1000, 32);
 	ChangeWindowMode(TRUE);
-	// ƒfƒoƒbƒOƒ‚[ƒh‚Å‹N“®
+	// ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰ã§èµ·å‹•
 	HandlerWaltan::debugMode = true;
 
 #else
 
-	// •: 1920, ‚‚³: 1080, ƒrƒbƒg[“x: 32
+	// å¹…: 1920, é«˜ã•: 1080, ãƒ“ãƒƒãƒˆæ·±åº¦: 32
 	SetGraphMode(1920, 1080, 32);
-	// ƒEƒCƒ“ƒhƒEƒ‚[ƒh‚Å‹N“®
+	// ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã§èµ·å‹•
 	ChangeWindowMode(FALSE);
-	// ”ñƒfƒoƒbƒOƒ‚[ƒh‚Å‹N“®
+	// éãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰ã§èµ·å‹•
 	HandlerWaltan::debugMode = false;
 
 #endif // DEBUG
 
 
-	SetUseZBuffer3D(TRUE);     // ƒfƒvƒXƒoƒbƒtƒ@iZƒoƒbƒtƒ@j‚ğ—LŒø‚É‚·‚é
-	SetWriteZBuffer3D(TRUE);   // Zƒoƒbƒtƒ@‚Ö‚Ì‘‚«‚İ‚ğ—LŒø‚É‚·‚é
+	SetUseZBuffer3D(TRUE);     // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡ï¼ˆZãƒãƒƒãƒ•ã‚¡ï¼‰ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+	SetWriteZBuffer3D(TRUE);   // Zãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ã‚’æœ‰åŠ¹ã«ã™ã‚‹
 
-	//! ƒnƒ“ƒhƒ‰[‚âƒ‰ƒCƒtƒTƒCƒNƒ‹‚ÉŠî‚Ã‚¢‚½ƒ^ƒCƒ~ƒ“ƒO‚Åƒƒ\ƒbƒh‚ğ©“®“I‚ÉŒÄ‚Ño‚·ƒIƒuƒWƒFƒNƒg
-	//! ƒVƒ“ƒOƒ‹ƒgƒ“‚ÅİŒv‚³‚ê‚Ä‚¢‚é‚½‚ßAˆÈ‰º‚Ì•û–@ˆÈŠO‚ÅƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é‚±‚Æ‚Í‚Å‚«‚È‚¢
+	//! ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚„ãƒ©ã‚¤ãƒ•ã‚µã‚¤ã‚¯ãƒ«ã«åŸºã¥ã„ãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è‡ªå‹•çš„ã«å‘¼ã³å‡ºã™ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	//! ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã§è¨­è¨ˆã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€ä»¥ä¸‹ã®æ–¹æ³•ä»¥å¤–ã§ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ã“ã¨ã¯ã§ããªã„
 	HandlerWaltan& HW = HandlerWaltan::Instance();
 
 	UIManager::ManualInitialize();
@@ -59,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//UIManager::FadeIn(20, 0, false);
 		});
 
-	//! ƒIƒuƒWƒFƒNƒg‚Ì¶¬(unity‚Å‚¢‚¤‚Æ‚±‚ë‚ÌGameObject‚Ì¶¬)
+	//! ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ(unityã§ã„ã†ã¨ã“ã‚ã®GameObjectã®ç”Ÿæˆ)
 	HWGameObject* obj = new HWGameObject();
 
 
@@ -78,7 +81,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			});
 		});
 
-	// ƒƒCƒ“ƒ‹[ƒv
+	// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 	while (ProcessMessage() == 0)
 	{
 		ClearDrawScreen();
@@ -89,7 +92,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 
 
-		// ‘S‚Ä‚ÌUpdateƒƒ\ƒbƒh‚ğ‘S‚ÄŒÄ‚Ño‚·
+		// å…¨ã¦ã®Updateãƒ¡ã‚½ãƒƒãƒ‰ã‚’å…¨ã¦å‘¼ã³å‡ºã™
 		HW.Update();
 
 		sceneManager.Update();
@@ -104,14 +107,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		sceneManager.LateUpdate();
 		UIManager::ManualLateUpdate();
-		// ”ñ“¯Šú‚ÅƒV[ƒ“‚ğ“Ç‚İ‚ñ‚Å‚¢‚éÅ’†
+		// éåŒæœŸã§ã‚·ãƒ¼ãƒ³ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã‚‹æœ€ä¸­
 		if (sceneManager.atomicLoadState.load() == SceneLoadState::Loading)
 			UIManager::LoadingAnimation();
 
 		ScreenFlip();
 	}
 
-	// ƒ\ƒtƒg‚ÌI—¹ 
+	// ã‚½ãƒ•ãƒˆã®çµ‚äº† 
 	HandlerWaltan::End();
 
 	return 0;

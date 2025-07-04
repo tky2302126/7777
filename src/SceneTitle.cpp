@@ -169,7 +169,7 @@ void SceneTitle::LateUpdate()
 	}
 	else if (connectParameter == ConnectParameter::Complete)
 	{
-		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Complete!");
+		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
 	}
 }
 
@@ -255,6 +255,14 @@ void SceneTitle::ServerInputForm()
 	}
 
 	// IPアドレスとポート番号が入力されている場合
+	int connectNum = 0;
+	for (int i = 0; i < 3; ++i)
+		if (GameManager::networkHandle[i] != -1)
+			connectNum++;
+	DrawFormatString(300, 700 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"参加人数 : %d/4",connectNum + 1);
+
 
 	if (portId != -1)
 	{
@@ -263,12 +271,20 @@ void SceneTitle::ServerInputForm()
 			"Connect");
 	}
 
+	//! 接続人数の表示
+	
+
 	// 接続中の処理
 	if (connectParameter == ConnectParameter::Wait)
 	{
+		int index = 0;
+		for(index = 0; index < 3; ++index)
+			if (GameManager::networkHandle[index] == -1)
+				break;
+
 		// 新しい接続があったらそのネットワークハンドルを得る
-		networkHandle = GetNewAcceptNetWork();
-		if (networkHandle != -1)
+		GameManager::networkHandle[index] = GetNewAcceptNetWork();
+		if (GameManager::networkHandle[2] != -1)
 			connectParameter = ConnectParameter::Complete;
 	}
 }
@@ -378,11 +394,11 @@ void SceneTitle::ClientInputForm()
 
 void SceneTitle::Connect()
 {
-	networkHandle = ConnectNetWork(ipData, portId);
+	GameManager::networkHandle[0] = ConnectNetWork(ipData, portId);
 	static HWDotween::TweenCallback* tweenCallback = nullptr;
 
 	// �ڑ��Ɏ��s�����ꍇ�A��莞�Ԍ�ɍēx�ڑ�����݂�
-	if (networkHandle == -1)
+	if (GameManager::networkHandle[0] == -1)
 	{
 		tweenCallback = HWDotween::DoDelay(60);
 		tweenCallback->OnComplete([&]()
@@ -393,99 +409,6 @@ void SceneTitle::Connect()
 	else
 	{
 		connectParameter = ConnectParameter::Complete;
-		tweenCallback->tweenEvent->isCancel = true;
+		//tweenCallback->tweenEvent->isCancel = true;
 	}
 }
-
-
-
-void SceneTitle::ServerInit()
-{
-	int portNum = 7777;
-	PreparationListenNetWork(portNum);
-	for(auto N: NetWorkHandles)
-	{
-		N = -1;
-	}
-	
-}
-
-void SceneTitle::ServerUpdate()
-{
-	int ConnectedNum = 0;
-	for(int NetHandle : NetWorkHandles)
-	{
-		if (NetHandle > 0) ConnectedNum++;
-	}
-
-	// 接続
-	if(ConnectedNum >=3)
-	{
-		StopListenNetWork();
-	}
-	else
-	{
-		Connect();
-	}
-
-	// 受信
-	if(ConnectedNum >0)
-	{
-		DisConnect();
-		RecieveNetData();
-	}
-}
-
-void SceneTitle::ConnectServer()
-{
-	int portNum = 7777;
-	PreparationListenNetWork(portNum);
-	for(int NetHandle : NetWorkHandles)
-	{
-		if (NetHandle != -1) continue;
-		NetHandle = GetNewAcceptNetWork();
-	}
-}
-
-void SceneTitle::DisConnect()
-{
-	int LostHandle = 0;
-	LostHandle = GetLostNetWork();
-
-	for(auto NetHandle: NetWorkHandles)
-	{
-		if(NetHandle == LostHandle)
-		{
-			NetHandle = -1;
-		}
-	}
-
-
-}
-
-void SceneTitle::RecieveNetData()
-{
-	for(auto NetHandle : NetWorkHandles)
-	{
-		if (NetHandle == -1) continue; // NetHandle が登録されていないとき、スキップ
-		IPDATA Ip;            // 接続先ＩＰアドレスデータ
-		// 接続してきたマシンのＩＰアドレスを得る
-		GetNetWorkIP(NetHandle, &Ip);
-	
-		// 取得していない受信データ量が０のときは終了
-		if (GetNetWorkDataLength(NetHandle) == 0) continue;
-
-		int DataLength;
-		unsigned char StrBuf[256];
-
-		// データ受信
-		DataLength = GetNetWorkDataLength(NetHandle);    // データの量を取得
-		NetWorkRecv(NetHandle, StrBuf, DataLength);    // データをバッファに取得
-		// バッファをスタックに追加
-		// デコードしてupdateにイベントを追加
-		
-	}
-}
-
-
-
