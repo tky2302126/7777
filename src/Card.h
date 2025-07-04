@@ -36,7 +36,8 @@ public:
 	int areaNumber;
 
 	static int modelHandle;
-	
+
+	static int instanceCount;
 private:
 	VECTOR position;
 	VECTOR rotate;
@@ -48,7 +49,9 @@ public:
 	Card();
 	Card(int _frameId);
 	~Card();
+	void ManualLoad();
 	void ManualUpdate();
+	VECTOR GetPosition() { return position; };
 #pragma endregion
 
 };
