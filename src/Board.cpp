@@ -54,10 +54,11 @@ void Board::Update()
 	MV1SetPosition(cards[0].modelHandle, cards[0].GetPosition());
 	MV1SetScale(cards[0].modelHandle, cards[0].GetScale());
 	MV1DrawModel(cards[0].modelHandle);
+	MV1DrawModel(modelHandle);
 }
 
 void Board::ManualLoad()
 {
 	cards[0].ManualLoad();
-	
+	modelHandle = MV1LoadModel("Assets/model/Table/Table.mv1");
 }
