@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "HandlerWaltanForDxLib.h"
 
 
@@ -8,9 +8,9 @@
  */
 enum class Role
 {
-	//! ƒzƒXƒg(ƒT[ƒo[‚àŒ“‚Ë‚Ä‚é)
+	//! ãƒ›ã‚¹ãƒˆ(ã‚µãƒ¼ãƒãƒ¼ã‚‚å…¼ã­ã¦ã‚‹)
 	server,
-	//! ƒNƒ‰ƒCƒAƒ“ƒg
+	//! ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆ
 	Client,
 };
 
@@ -19,11 +19,11 @@ enum class Role
  */
 enum class ConnectParameter
 {
-	//! Ú‘±‘O
+	//! æ¥ç¶šå‰
 	None,
-	//! Ú‘±‘Ò‹@
+	//! æ¥ç¶šå¾…æ©Ÿ
 	Wait,
-	//! Ú‘±Š®—¹
+	//! æ¥ç¶šå®Œäº†
 	Complete,
 };
 
@@ -31,12 +31,16 @@ enum class ConnectParameter
  
  /**
  * @class	GameManager
- * @brief   ƒQ[ƒ€‘S‘Ì‚ÅQÆ‚·‚éÃ“IƒNƒ‰ƒX
+ * @brief   ã‚²ãƒ¼ãƒ å…¨ä½“ã§å‚ç…§ã™ã‚‹é™çš„ã‚¯ãƒ©ã‚¹
  */
 class GameManager
 {
 public:
 
-	//! ƒ[ƒ‹
+	//! ãƒ­ãƒ¼ãƒ«
 	static Role role;
+	//! æ¥ç¶šã—ã¦ã„ã‚‹ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒãƒ³ãƒ‰ãƒ«
+	//! ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®å ´åˆã€0ç•ªç›®ã«serverã®ãƒãƒ³ãƒ‰ãƒ«ãŒå…¥ã‚‹
+	static int networkHandle[3];
+
 };

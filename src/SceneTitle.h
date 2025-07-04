@@ -79,8 +79,6 @@ private:
 	int portId;
 	//! 接続パラメータ
 	ConnectParameter connectParameter = ConnectParameter::None;
-	//! 接続したネットワークハンドル
-	int networkHandle = -1;
 	
 
 	/**
@@ -89,42 +87,6 @@ private:
 	 * @date        24/11/20
 	 */
 	void SelectInput();
-
-	/**
-	* @brief		サーバー側のイニシャライズ
-	* @author		Suzuki h
-	* @date			25/7/2
-	*/
-	void ServerInit();
-
-	/**
-	* @brief		サーバー側の処理
-	* @author		Suzuki h
-	* @date			25/7/2
-	*/
-	void ServerUpdate();
-
-	/**
-	* @brief		接続待機処理
-	* @author		Suzuki h
-	* @date			25/7/2
-	*/
-	void ConnectServer();
-
-	/**
-	* @brief		切断処理
-	* @author		Suzuki h
-	* @date			25/7/2
-	*/
-	void DisConnect();
-
-	/**
-	* @brief		受信待機処理
-	* @author		Suzuki h
-	* @date			25/7/2
-	*/
-	void RecieveNetData();
-
 
 	/**
 	 * @brief       serverの場合の入力フォームの表示
