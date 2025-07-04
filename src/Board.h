@@ -11,6 +11,7 @@ public:
 	void Draw();
 	void Move(Card& card);
 	void Update();
+	void ManualLoad();
 #pragma endregion
 
 
@@ -26,6 +27,8 @@ private:
 	int areaR;
 	// 盤面の左端の数字
 	int edgeNumLeft;
+	//盤面のモデル
+	int modelHandle;
 #pragma endregion
 
 };
