@@ -18,7 +18,7 @@ public:
 private:
 #pragma region フィールド
 	// 手札
-	Card cards[SUIT_NUM * DECK_RANGE];
+	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 	// イベントタイマー
 	int timer;
 	// 制限エリア左端

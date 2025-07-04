@@ -3,17 +3,32 @@
 int Card::modelHandle = -1;
 int Card::instanceCount = 0;
 
-Card::Card()
+Card::Card() : 
+	position(VECTOR()), rotate(VECTOR()), scale(VECTOR()),
+	areaNumber(0),area(Area::Area_Invailed)
 {
-	instanceCount++;
-	area = Area_Invailed;
-	areaNumber = -1;
-	frameId = -1;
-	number = -1;
-	suit = SPADE;
-	position = VECTOR();
-	rotate = VECTOR();
-	scale = VECTOR();
+	//
+	// 自身がどのカードかを設定
+	//
+
+	suit = static_cast<Suit>(instanceCount / 13);
+	number = instanceCount++ % 13 + 1; // 1~13の数字
+
+	switch (suit)
+	{
+	case Suit::HEART:
+		frameId = number + 1;
+		break;
+	case Suit::DIA:
+		frameId = number + 13 + 2;
+		break;
+	case Suit::CLAB:
+		frameId = number + 13 * 2 + 3;
+		break;
+	case Suit::SPADE:
+		frameId = number + 13 * 3 + 4;
+		break;
+	}
 }
 
 Card::Card(int _frameId)

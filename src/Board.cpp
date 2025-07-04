@@ -9,23 +9,30 @@ Board::Board()
 
 	std::vector<std::thread> threads;
 
-	// カードの作成
-	for(int suit = 0; suit < SUIT_NUM; ++suit)
+	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
-		threads.emplace_back([this, suit]
-			{
-				for (int rank = 0; rank < DECK_RANGE; ++rank)
-				{
-					int FrameID = suit * DECK_RANGE + rank;
-					cards[FrameID] = Card(FrameID);
-				}
-			});
+		cards[i] = std::make_shared<Card>();
 	}
 
-	for (auto& thread : threads)
-	{
-		thread.join();
-	}
+	int a = 0;
+
+	//// カードの作成
+	//for(int suit = 0; suit < SUIT_NUM; ++suit)
+	//{
+	//	threads.emplace_back([this, suit]
+	//		{
+	//			for (int rank = 0; rank < DECK_RANGE; ++rank)
+	//			{
+	//				int FrameID = suit * DECK_RANGE + rank;
+	//				cards[FrameID] = Card(FrameID);
+	//			}
+	//		});
+	//}
+
+	//for (auto& thread : threads)
+	//{
+	//	thread.join();
+	//}
 }
 
 Board::~Board()
@@ -33,7 +40,7 @@ Board::~Board()
 	// カードの破棄
 	for(auto card : cards)
 	{
-		card.~Card();
+		card.reset();
 	}
 }
 
@@ -51,14 +58,14 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
-	MV1SetPosition(cards[0].modelHandle, cards[0].GetPosition());
-	MV1SetScale(cards[0].modelHandle, cards[0].GetScale());
-	MV1DrawModel(cards[0].modelHandle);
+	MV1SetPosition(Card::modelHandle, cards[0]->GetPosition());
+	MV1SetScale(Card::modelHandle, cards[0]->GetScale());
+	MV1DrawModel(Card::modelHandle);
 	MV1DrawModel(modelHandle);
 }
 
 void Board::ManualLoad()
 {
-	cards[0].ManualLoad();
+	Card::modelHandle = MV1LoadModel("Assets/model/Cards/Cards.mv1");
 	modelHandle = MV1LoadModel("Assets/model/Table/Table.mv1");
 }
