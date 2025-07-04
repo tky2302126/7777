@@ -12,8 +12,6 @@ SceneGame::SceneGame()
 	// 実行中のシーンタグ
 	sceneTag = SceneTag::Game;
 
-	Sleep(1000);
-
 	// 背景色を変更
 	SetBackgroundColor(255, 255, 255);
 
@@ -28,7 +26,6 @@ SceneGame::SceneGame()
 		});
 
 	board = Board();
-
 }
 
 SceneGame::~SceneGame()

@@ -3,10 +3,10 @@
 #include "define.h"
 enum Suit : int
 {
-	SPADE = 0,
-	CLAB,
-	DIA,
-	HEART
+	HEART	= 0,
+	DIA		= 1,
+	CLAB	= 2,
+	SPADE	= 3,
 };
 
 enum Area
@@ -27,16 +27,15 @@ public:
 	Suit suit;
 	// カードの数字
 	int number;
-	// 表示する位置を決めるID
-	// カードのモデルをuvの要領で決めるために必要
+	//! 自身がモデルの何フレーム目のカードか
 	int frameId;
 	// カードの場所
 	Area area;
 	// 手札の位置
 	int areaNumber;
-
+	//! モデルハンドル(カード全てで一つのモデルのため)
 	static int modelHandle;
-
+	//! 生成されたカードインスタンスの数(自身のナンバー決めに使っている)
 	static int instanceCount;
 private:
 	VECTOR position;
@@ -57,3 +56,18 @@ public:
 
 };
 
+
+#pragma pack(1)
+
+/**
+ * @class	CardData
+ * @brief  データ送信用
+ */
+struct CardData
+{
+	unsigned char data;
+	unsigned char area;
+	unsigned char areaNumber;
+};
+
+#pragma pack()
