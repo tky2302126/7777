@@ -65,7 +65,7 @@ void SceneManager::Update()
 		// SceneGame
 		if(CheckHitKey(KEY_INPUT_G) && CheckHitKey(KEY_INPUT_LCONTROL))
 		{
-			crrScene->nextSceneTag = SceneTag::Game;
+			SceneChangeAsync(SceneTag::Game);
 		}
 
 		// SceneResult
