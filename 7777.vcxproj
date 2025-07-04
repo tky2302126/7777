@@ -133,8 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="src\Board.cpp" />
+    <ClCompile Include="src\Card.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MovieManager.cpp" />
     <ClCompile Include="src\SceneGame.cpp" />
@@ -144,10 +144,10 @@
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Card.h" />
-    <ClInclude Include="define.h" />
+    <ClInclude Include="src\Board.h" />
+    <ClInclude Include="src\Card.h" />
     <ClInclude Include="src\Cursor.h" />
+    <ClInclude Include="src\define.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\MovieManager.h" />
     <ClInclude Include="src\SceneBase.h" />

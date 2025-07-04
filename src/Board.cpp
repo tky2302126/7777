@@ -7,14 +7,24 @@ Board::Board()
 	areaR = -1;
 	edgeNumLeft = -1;
 
+	std::vector<std::thread> threads;
+
 	// カードの作成
-	for(int i = 0; i < 4; i++) // SuitNumで置き換えたい
+	for(int suit = 0; suit < SUIT_NUM; ++suit)
 	{
-		for(int j = 1; j <= 13; j++) // 
-		{
-			int FrameID = i * 13 + j;
-			cards[FrameID] = Card(FrameID);
-		}
+		threads.emplace_back([this, suit]
+			{
+				for (int rank = 0; rank < DECK_RANGE; ++rank)
+				{
+					int FrameID = suit * DECK_RANGE + rank;
+					cards[FrameID] = Card(FrameID);
+				}
+			});
+	}
+
+	for (auto& thread : threads)
+	{
+		thread.join();
 	}
 }
 

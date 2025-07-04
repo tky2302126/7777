@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "HandlerWaltanForDxLib.h"
+#include "define.h"
 enum Suit : int
 {
 	SPADE = 0,
@@ -10,12 +11,12 @@ enum Suit : int
 
 enum Area
 {
-	Invailed,
-	Board,
-	Player1,
-	Player2,
-	Player3,
-	Player4,
+	Area_Invailed,
+	Area_Board,
+	Area_Player1,
+	Area_Player2,
+	Area_Player3,
+	Area_Player4,
 };
 
 class Card

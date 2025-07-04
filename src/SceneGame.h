@@ -8,6 +8,7 @@
 #include "SceneBase.h"
 #include "MovieManager.h"
 #include "UIManager.h"
+#include "Board.h"
 
 
 
@@ -64,4 +65,7 @@ private:
 
 	//! テキストのフォント
 	int menuFont;
+
+	//! 盤面
+	Board board;
 };

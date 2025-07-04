@@ -1,4 +1,4 @@
-// @author : h_suzuki
+﻿// @author : h_suzuki
 // @date : 2025-07-03
 // @history : 2025-07-03 update : SceneResultの仮実装
 

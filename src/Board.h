@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Card.h"
+#include "define.h"
 
 class Board
 {
@@ -16,7 +17,7 @@ public:
 private:
 #pragma region フィールド
 	// 手札
-	Card cards[52];
+	Card cards[SUIT_NUM * DECK_RANGE];
 	// イベントタイマー
 	int timer;
 	// 制限エリア左端
