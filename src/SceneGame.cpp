@@ -1,31 +1,33 @@
-#include "SceneGame.h"
+Ôªø#include "SceneGame.h"
 
 /**
 * @author   Suzuki N
 * @date     24/11/20
-* @note		SceneTitleÇÃé¿ëïÉtÉ@ÉCÉã
+* @note		SceneTitle„ÅÆÂÆüË£Ö„Éï„Ç°„Ç§„É´
 */
 
 
 SceneGame::SceneGame()
 {
-	// é¿çsíÜÇÃÉVÅ[ÉìÉ^ÉO
+	// ÂÆüË°å‰∏≠„ÅÆ„Ç∑„Éº„É≥„Çø„Ç∞
 	sceneTag = SceneTag::Game;
 
 	Sleep(1000);
 
-	// îwåiêFÇïœçX
+	// ËÉåÊôØËâ≤„ÇíÂ§âÊõ¥
 	SetBackgroundColor(255, 255, 255);
 
-	// ÉLÅ[ì¸óÕÇÃÉRÅ[ÉãÉoÉbÉNÇìoò^
+	// „Ç≠„ÉºÂÖ•Âäõ„ÅÆ„Ç≥„Éº„É´„Éê„ÉÉ„ÇØ„ÇíÁôªÈå≤
 	callBackId = input->AddCallBack("cursor", std::bind(&SceneGame::KeyInputCallback, this, std::placeholders::_1));
 
-	// à√ì]âèú
+	// ÊöóËª¢Ëß£Èô§
 	HWDotween::DoDelay(15)->OnComplete([&]
 		{
 			UIManager::FadeOut(20);
 			isLoad = false;
 		});
+
+	board = Board();
 
 }
 
@@ -35,6 +37,7 @@ SceneGame::~SceneGame()
 
 void SceneGame::LoadComplete()
 {
+	board.ManualLoad();
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -47,9 +50,9 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
-	std::string text = "ÉXÉ^Å[Ég";
+	std::string text = "„Çπ„Çø„Éº„Éà";
 
-	// ÉeÉLÉXÉgï\é¶ç¿ïW
+	// „ÉÜ„Ç≠„Çπ„ÉàË°®Á§∫Â∫ßÊ®ô
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
 
 	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
@@ -58,6 +61,8 @@ void SceneGame::LateUpdate()
 
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Game");
+
+	board.Update();
 }
 
 
