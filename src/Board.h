@@ -51,7 +51,7 @@ private:
 	bool CanPlace(Card* cardPtr);
 
 	void ShuffleCard();
-	void DistributeCard();
+	void DistributeCard(int playerNum);
 
 	/// <summary>
 	/// カードをスワップする関数

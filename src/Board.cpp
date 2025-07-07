@@ -15,6 +15,7 @@ Board::Board()
 	}
 
 	ShuffleCard();
+	DistributeCard(4);
 }
 
 Board::~Board()
@@ -119,9 +120,19 @@ void Board::ShuffleCard()
 	cards;
 }
 
-void Board::DistributeCard()
+void Board::DistributeCard(int playerNum)
 {
-	// プレイヤー数に応じて剰余の処理を変える
+	for(int i = 0; i < SUIT_NUM; ++i)
+	{
+		cards[i]->area = Area_Board;
+	}
+
+	for(int i = SUIT_NUM; i < SUIT_NUM * DECK_RANGE; ++i)
+	{
+		cards[i]->area = (Area)(i % playerNum + 2);
+	}
+
+	cards;
 }
 
 void Board::SwapCard(int sendFrameId, int recvFrameId)
