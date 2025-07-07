@@ -26,8 +26,30 @@ Board::~Board()
 
 void Board::Draw()
 {
+	// テーブルのモデルの描画
+	MV1DrawModel(modelHandle);
+
+	//DrawBox(
+	//	1920 / 2 - CARD_WIDTH / 2,
+	//	1080 / 2 - CARD_HEIGHT / 2,
+	//	1920 / 2 + CARD_WIDTH / 2,
+	//	1080 / 2 + CARD_HEIGHT / 2,
+	//	GetColor(255, 255, 255), FALSE);
+
+
 	// 盤面の補助線の描画
-	DrawBox(0, 0, 1920 / 2, 1080 / 2, GetColor(255, 255, 255), FALSE);
+	for (int i = 0; i < SUIT_NUM; ++i)
+	{
+		for (int j = 0; j < DECK_RANGE; ++j)
+		{
+			DrawBox(
+				300,
+				200,
+				300 + CARD_WIDTH,
+				200 + CARD_HEIGHT,
+				GetColor(255, 255, 255), FALSE);
+		}
+	}
 
 
 	// カードの描画
@@ -36,8 +58,6 @@ void Board::Draw()
 	MV1SetScale(Card::modelHandle, Card::scale_model);
 	MV1DrawModel(Card::modelHandle);
 
-	// テーブルのモデルの描画
-	MV1DrawModel(modelHandle);
 }
 
 void Board::Move(Card& card)
@@ -46,12 +66,12 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
+	Draw();
+
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
 	}
-
-	Draw();
 }
 
 void Board::ManualLoad()

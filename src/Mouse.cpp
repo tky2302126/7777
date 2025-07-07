@@ -2,7 +2,7 @@
 
 Mouse::Mouse()
 {
-	mouseEnable = false;
+	mouseEnable = true;
 }
 
 Mouse::~Mouse()

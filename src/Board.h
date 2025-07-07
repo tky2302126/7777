@@ -6,6 +6,8 @@ class Board : public HWComponent
 {
 public:
 #pragma region publicメンバ変数
+	// 手札
+	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 #pragma endregion
 
 #pragma region メソッド
@@ -20,8 +22,6 @@ public:
 
 private:
 #pragma region privateメンバ変数
-	// 手札
-	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 	// イベントタイマー
 	int timer;
 	// 制限エリア左端

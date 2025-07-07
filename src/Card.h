@@ -43,6 +43,8 @@ public:
 	VECTOR rotate = VECTOR();
 	//! 拡縮
 	VECTOR scale = VECTOR();
+	//! コリジョンの中心座標
+	VECTOR collisionCenter;
 	//! モデルの座標(変更するとカード全体が移動する)
 	static VECTOR position_model;
 	//! モデルの回転(変更するとカード全体が回転する)

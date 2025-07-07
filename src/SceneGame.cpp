@@ -46,6 +46,24 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
+	static Mouse mouse;
+	mouse.MouseInfoUpdate();
+
+	if (mouse.IsMouseRightButtonClicked())
+	{
+		for (auto& card : boardCp->cards)
+		{
+			auto mousePos = mouse.GetMouseInfo().position;
+
+			if (card->collisionCenter.x - CARD_COLLISION_WIDTH <= mousePos.x &&
+				card->collisionCenter.x + CARD_COLLISION_WIDTH >= mousePos.x &&
+				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
+				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
+			{
+				int i = 0;
+			}
+		}
+	}
 }
 
 void SceneGame::LateUpdate()
