@@ -32,6 +32,8 @@ private:
 	int edgeNumLeft;
 	//盤面のモデル
 	int modelHandle;
+	//! 盤面のデータ
+	char boardData[SUIT_NUM][DECK_RANGE];
 #pragma endregion
 
 };

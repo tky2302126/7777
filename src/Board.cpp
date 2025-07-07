@@ -26,6 +26,10 @@ Board::~Board()
 
 void Board::Draw()
 {
+	// 盤面の補助線の描画
+	DrawBox(0, 0, 1920 / 2, 1080 / 2, GetColor(255, 255, 255), FALSE);
+
+
 	// カードの描画
 	MV1SetPosition(Card::modelHandle, Card::position_model);
 	MV1SetRotationXYZ(Card::modelHandle, Card::rotate_model);
@@ -42,16 +46,6 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
-	if (CheckHitKey(KEY_INPUT_D))
-		Card::rotate_model.y += 0.01f;
-	if (CheckHitKey(KEY_INPUT_A))
-		Card::rotate_model.y -= 0.01f;
-	if (CheckHitKey(KEY_INPUT_W))
-		Card::position_model.y += 3.f;
-	if (CheckHitKey(KEY_INPUT_S))
-		Card::position_model.y -= 3.f;
-
-
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
