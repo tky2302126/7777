@@ -41,6 +41,9 @@ public:
 	bool IsMouseLeftButtonClicked() { return mouseInfo.leftButton == InputState::Started; }
 	bool IsMouseRightButtonClicked() { return mouseInfo.rightButton == InputState::Started; }
 
+	// マウスの座標をスクリーン座標からワールド座標に変換するヘルパー関数
+	VECTOR GetMouseWorldPos() { return ConvScreenPosToWorldPos(VGet(mouseInfo.position.x, mouseInfo.position.y, 0.5f)); }
+
 private:
 	
 	// @brief	    マウスの入力情報
