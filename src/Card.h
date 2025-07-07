@@ -71,6 +71,11 @@ public:
 #pragma region Privateメンバ変数
 private:
 #pragma endregion
+
+#pragma region Privateメソッド
+	Card* Onclick();
+#pragma endregion
+
 };
 
 

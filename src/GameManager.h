@@ -32,6 +32,7 @@ enum class ConnectParameter
  /**
  * @class	GameManager
  * @brief   ゲーム全体で参照する静的クラス
+ *			通信のみ管理
  */
 class GameManager
 {

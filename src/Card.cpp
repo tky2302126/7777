@@ -123,3 +123,8 @@ void Card::AreaChange(Area& _area)
 	area = _area;
 
 }
+
+Card* Card::Onclick()
+{
+	return this;
+}
