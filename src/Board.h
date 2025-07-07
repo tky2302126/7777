@@ -15,6 +15,7 @@ public:
 	void Move(Card& card);
 	void Update()override;
 	void ManualLoad();
+	void OnCardClicked(Card*);
 #pragma endregion
 
 

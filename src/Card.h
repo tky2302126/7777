@@ -19,6 +19,9 @@ enum Area
 	Area_Player4,
 };
 
+// 前方宣言
+class Board;
+
 class Card
 {
 #pragma region Publicメンバ変数
@@ -66,14 +69,17 @@ public:
 	 * @param[in]	変更後の領域
 	 */
 	void AreaChange(Area& _area);
+
+	void RegistBoard(Board* board);
 #pragma endregion
 
 #pragma region Privateメンバ変数
 private:
+	Board* boardPtr; // 通知を送るためのポインタ
 #pragma endregion
 
 #pragma region Privateメソッド
-	Card* Onclick();
+	void Onclick();
 #pragma endregion
 
 };

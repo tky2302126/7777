@@ -1,4 +1,5 @@
 ﻿#include "Card.h"
+#include "Board.h"
 #define DEBUG
 int Card::modelHandle = -1;
 int Card::instanceCount = 0;
@@ -124,7 +125,12 @@ void Card::AreaChange(Area& _area)
 
 }
 
-Card* Card::Onclick()
+void Card::RegistBoard(Board* board)
 {
-	return this;
+	boardPtr = board;
+}
+
+void Card::Onclick()
+{
+	boardPtr->OnCardClicked(this);
 }
