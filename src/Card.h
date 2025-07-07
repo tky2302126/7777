@@ -21,7 +21,7 @@ enum Area
 
 class Card
 {
-#pragma region フィールド
+#pragma region Publicメンバ変数
 public:
 	
 	Suit suit;
@@ -37,23 +37,40 @@ public:
 	static int modelHandle;
 	//! 生成されたカードインスタンスの数(自身のナンバー決めに使っている)
 	static int instanceCount;
-private:
-	VECTOR position;
-	VECTOR rotate;
-	VECTOR scale;
+	//! 座標
+	VECTOR position = VECTOR();
+	//! 回転
+	VECTOR rotate = VECTOR();
+	//! 拡縮
+	VECTOR scale = VECTOR();
+	//! モデルの座標(変更するとカード全体が移動する)
+	static VECTOR position_model;
+	//! モデルの回転(変更するとカード全体が回転する)
+	static VECTOR rotate_model;
+	//! モデルの拡縮(変更するとカード全体が拡縮する)
+	static VECTOR scale_model;
 #pragma endregion
 
-#pragma region メソッド
+#pragma region Publicメソッド
 public:
 	Card();
-	Card(int _frameId);
 	~Card();
-	void ManualLoad();
+
+	/**
+	 * @brief       明示的に呼ぶ必要のある更新処理
+	 */
 	void ManualUpdate();
-	VECTOR GetPosition() { return position; };
-	VECTOR GetScale() { return scale; };
+
+	/**
+	 * @brief       カードの所属領域の変更
+	 * @param[in]	変更後の領域
+	 */
+	void AreaChange(Area& _area);
 #pragma endregion
 
+#pragma region Privateメンバ変数
+private:
+#pragma endregion
 };
 
 

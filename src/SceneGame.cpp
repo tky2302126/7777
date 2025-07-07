@@ -25,16 +25,19 @@ SceneGame::SceneGame()
 			isLoad = false;
 		});
 
-	board = Board();
+	board = std::make_shared<HWGameObject>();
+	boardCp = board->AddComponent<Board>();
 }
 
 SceneGame::~SceneGame()
 {
+	board.reset();
+	input->DeleteCallBack("cursor", callBackId);
 }
 
 void SceneGame::LoadComplete()
 {
-	board.ManualLoad();
+	boardCp->ManualLoad();
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -47,19 +50,6 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
-	std::string text = "スタート";
-
-	// テキスト表示座標
-	float posX = 1920 / 2 - (50 * (text.size() / 4));
-
-	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
-		text.c_str());
-
-
-	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
-		"Game");
-
-	board.Update();
 }
 
 

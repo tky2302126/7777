@@ -67,5 +67,7 @@ private:
 	int menuFont;
 
 	//! 盤面
-	Board board;
+	std::shared_ptr<HWGameObject> board = nullptr;
+	//! 盤面のコンポーネント
+	Board* boardCp = nullptr;
 };

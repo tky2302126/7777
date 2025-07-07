@@ -2,21 +2,24 @@
 #include "Card.h"
 #include "define.h"
 
-class Board
+class Board : public HWComponent
 {
 public:
+#pragma region publicメンバ変数
+#pragma endregion
+
 #pragma region メソッド
 	Board();
 	~Board();
 	void Draw();
 	void Move(Card& card);
-	void Update();
+	void Update()override;
 	void ManualLoad();
 #pragma endregion
 
 
 private:
-#pragma region フィールド
+#pragma region privateメンバ変数
 	// 手札
 	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 	// イベントタイマー

@@ -41,6 +41,7 @@ SceneTitle::SceneTitle()
 
 SceneTitle::~SceneTitle()
 {
+	input->DeleteCallBack("cursor", callBackId);
 }
 
 void SceneTitle::LoadComplete()

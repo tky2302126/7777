@@ -13,26 +13,6 @@ Board::Board()
 	{
 		cards[i] = std::make_shared<Card>();
 	}
-
-	int a = 0;
-
-	//// カードの作成
-	//for(int suit = 0; suit < SUIT_NUM; ++suit)
-	//{
-	//	threads.emplace_back([this, suit]
-	//		{
-	//			for (int rank = 0; rank < DECK_RANGE; ++rank)
-	//			{
-	//				int FrameID = suit * DECK_RANGE + rank;
-	//				cards[FrameID] = Card(FrameID);
-	//			}
-	//		});
-	//}
-
-	//for (auto& thread : threads)
-	//{
-	//	thread.join();
-	//}
 }
 
 Board::~Board()
@@ -46,10 +26,14 @@ Board::~Board()
 
 void Board::Draw()
 {
-#ifdef DEBUG
+	// カードの描画
+	MV1SetPosition(Card::modelHandle, Card::position_model);
+	MV1SetRotationXYZ(Card::modelHandle, Card::rotate_model);
+	MV1SetScale(Card::modelHandle, Card::scale_model);
+	MV1DrawModel(Card::modelHandle);
 
-#endif // DEBUG
-
+	// テーブルのモデルの描画
+	MV1DrawModel(modelHandle);
 }
 
 void Board::Move(Card& card)
@@ -58,14 +42,31 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
-	MV1SetPosition(Card::modelHandle, cards[0]->GetPosition());
-	MV1SetScale(Card::modelHandle, cards[0]->GetScale());
-	MV1DrawModel(Card::modelHandle);
-	MV1DrawModel(modelHandle);
+	if (CheckHitKey(KEY_INPUT_D))
+		Card::rotate_model.y += 0.01f;
+	if (CheckHitKey(KEY_INPUT_A))
+		Card::rotate_model.y -= 0.01f;
+	if (CheckHitKey(KEY_INPUT_W))
+		Card::position_model.y += 3.f;
+	if (CheckHitKey(KEY_INPUT_S))
+		Card::position_model.y -= 3.f;
+
+
+	for (auto& card : cards)
+	{
+		card->ManualUpdate();
+	}
+
+	Draw();
 }
 
 void Board::ManualLoad()
 {
 	Card::modelHandle = MV1LoadModel("Assets/model/Cards/Cards.mv1");
 	modelHandle = MV1LoadModel("Assets/model/Table/Table.mv1");
+
+	// テーブの座標は固定のため、初期化時に設定
+	MV1SetPosition(modelHandle, { 950,500,500 });
+	MV1SetRotationXYZ(modelHandle, { (float)Deg2Rad(-90.0f),0,0 });
+	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
 }
