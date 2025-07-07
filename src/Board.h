@@ -2,6 +2,12 @@
 #include "Card.h"
 #include "define.h"
 
+struct CardInfo
+{
+	Suit suit;
+	int number;
+};
+
 class Board : public HWComponent
 {
 public:
@@ -43,6 +49,15 @@ private:
 	/// </summary>
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(Card* cardPtr);
+
+	void ShuffleCard();
+	void DistributeCard();
+
+	/// <summary>
+	/// カードをスワップする関数
+	/// </summary>
+	void SwapCard(int a, int b);
+	void SwapCard(CardInfo& a, CardInfo& b);
 #pragma endregion
 
 };

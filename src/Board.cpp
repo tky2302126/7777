@@ -13,6 +13,8 @@ Board::Board()
 	{
 		cards[i] = std::make_shared<Card>();
 	}
+
+	ShuffleCard();
 }
 
 Board::~Board()
@@ -65,8 +67,12 @@ void Board::ManualLoad()
 	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
 }
 
-void Board::OnCardClicked(Card*)
+void Board::OnCardClicked(Card* cardPtr)
 {
+	if(CanPlace(cardPtr))
+	{
+		// 配置処理を実行
+	}
 }
 
 bool Board::CanPlace(Card* cardPtr)
@@ -90,4 +96,42 @@ bool Board::CanPlace(Card* cardPtr)
 	if (boardData[suit][arrayNum + 1] == '1') return true;
 
 	return false;
+}
+
+void Board::ShuffleCard()
+{
+	// アニメーション(できたらやる)
+
+	// データ
+	// 最初に7を入れとく
+
+	for(int i = 0; i< SUIT_NUM; ++i)
+	{
+		auto SevenFrameId = i * DECK_RANGE + 6;
+		SwapCard(i, SevenFrameId);
+	}
+
+	// シャッフル
+	std::random_device rd;
+	std::mt19937 seed(rd());
+	std::shuffle(cards + SUIT_NUM, std::end(cards), seed);
+
+	cards;
+}
+
+void Board::DistributeCard()
+{
+	// プレイヤー数に応じて剰余の処理を変える
+}
+
+void Board::SwapCard(int sendFrameId, int recvFrameId)
+{
+	std::swap(cards[sendFrameId], cards[recvFrameId]);
+}
+
+void Board::SwapCard(CardInfo& _a, CardInfo& _b)
+{
+	int a = _a.suit * DECK_RANGE + _a.number;
+	int b = _b.suit * DECK_RANGE + _b.number;
+	SwapCard(a, b);
 }
