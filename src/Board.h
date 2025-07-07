@@ -37,5 +37,13 @@ private:
 	char boardData[SUIT_NUM][DECK_RANGE];
 #pragma endregion
 
+#pragma region privateメソッド
+	/// <summary>
+	/// カードが設置可能か判定する
+	/// </summary>
+	/// <param name="cardPtr">判定するカード</param>
+	bool CanPlace(Card* cardPtr);
+#pragma endregion
+
 };
 

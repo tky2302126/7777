@@ -68,3 +68,26 @@ void Board::ManualLoad()
 void Board::OnCardClicked(Card*)
 {
 }
+
+bool Board::CanPlace(Card* cardPtr)
+{
+	// 手札のカードか
+	if (cardPtr->area == Area::Area_Board || cardPtr->area == Area::Area_Invailed) return false;
+	// 制限エリア内か
+	int num = cardPtr->number;
+	if(areaL != -1) // エリア制限されているか
+	{
+		if(areaL > num || areaR < num)
+		{
+			return false;
+		}
+	}
+	// 隣接するカードが置かれているか
+
+	auto suit = cardPtr->suit;
+	auto arrayNum = num - 1;
+	if (boardData[suit][arrayNum - 1] == '1') return true;
+	if (boardData[suit][arrayNum + 1] == '1') return true;
+
+	return false;
+}
