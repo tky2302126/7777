@@ -121,3 +121,36 @@ void Board::Shuffle()
 	for (int i = 0; i < v.size(); ++i)
 		cards[i]->areaNumber = v[i];
 }
+
+void Board::Distribute(int playerNum)
+{
+	for(auto card : cards)
+	{
+		card->area = (Area)(card->areaNumber % playerNum + 2);
+	}
+
+	for (int i = 0; i < playerNum; ++i)
+	{
+		std::vector<std::shared_ptr<Card>> playerHand;
+		for (auto card : cards)
+		{
+			if (card->area == (Area)(i + 2))
+			{
+				playerHand.push_back(card);
+			}
+		}
+		handData.push_back(playerHand);
+	}
+}
+
+void Board::ShowHand(Area playerArea)
+{
+	float merginX = -8;
+	float merginY = -25;
+	
+
+}
+
+void Board::SortHand(Area playerArea)
+{
+}
