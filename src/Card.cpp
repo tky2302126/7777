@@ -4,7 +4,7 @@
 int Card::modelHandle = -1;
 int Card::instanceCount = 0;
 VECTOR Card::position_model = VGet(400, 200, -300);
-VECTOR Card::rotate_model = VGet(0, (float)Deg2Rad(0), 0);
+VECTOR Card::rotate_model = VGet(0, (float)Deg2Rad(180), 0);
 VECTOR Card::scale_model = VGet(10, 10, 10);
 
 
@@ -41,7 +41,7 @@ Card::Card() :
 	// 初期座標
 	position = {0,0,frameId * -0.03f };
 
-	return;
+	// return;
 
 	if (number == 7)
 	{
@@ -92,14 +92,6 @@ Card::~Card()
 
 void Card::ManualUpdate()
 {
-	position.x = areaNumber * 1.5f;
-	position.z = areaNumber * -0.03f;
-
-	if (CheckHitKey(KEY_INPUT_S))
-		rotate.x += 1.0f;
-	if (CheckHitKey(KEY_INPUT_W))
-		rotate.x -= 1.0f;
-
 
 	// コリジョン
 	collisionCenter = ConvWorldPosToScreenPos(MV1GetFramePosition(Card::modelHandle, frameId));

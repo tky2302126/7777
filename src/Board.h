@@ -56,7 +56,7 @@ public:
 	void Distribute(int playerNum);
 
 	/// <summary>
-	/// 手札を表示する
+	/// 初期位置から手札を表示する
 	/// </summary>
 	/// <param name="playerArea">自分のエリア</param>
 	void ShowHand(Area playerArea);
