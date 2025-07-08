@@ -27,6 +27,9 @@ SceneGame::SceneGame()
 
 	board = std::make_shared<HWGameObject>();
 	boardCp = board->AddComponent<Board>();
+
+	countDownLeftTop = Vector2Int();
+	alpha = 0;
 }
 
 SceneGame::~SceneGame()
@@ -38,6 +41,7 @@ SceneGame::~SceneGame()
 void SceneGame::LoadComplete()
 {
 	boardCp->ManualLoad();
+	CountDouwnGH = LoadGraph("Assets/UI/CountDown.png");
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -81,10 +85,62 @@ void SceneGame::Update()
 			10, 10, GetColor(0, 255, 0),
 			"SUIT = %d, Number = %d", (int)selectedCard->suit, selectedCard->number);
 	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	DrawRectExtendGraph(760, 340, 1160, 740, countDownLeftTop.x, countDownLeftTop.y, 512, 512, CountDouwnGH, TRUE);
+	if (isFade) { alpha -= fadeSpeed; }
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if(CheckHitKey(KEY_INPUT_C))
+	{
+		CountDown();
+	}
 }
 
 void SceneGame::LateUpdate()
 {
+}
+
+void SceneGame::CountDown()
+{
+	alpha = 255;
+
+	Vector2Int CountDownFrames[] =
+	{
+		{0,   0},
+		{511, 0},
+		{0, 511},
+		{511,511}
+	};
+	const int totalSteps = sizeof(CountDownFrames) / sizeof(CountDownFrames[0]);
+	int currentIndex = 0;
+
+	std::function<void()> doCountStep = [&, this]() mutable
+		{
+			if(currentIndex >= totalSteps)
+			{
+				// カウントダウン終了
+				alpha = 0;
+				return;
+			}
+
+			countDownLeftTop = CountDownFrames[currentIndex];
+			alpha = 255;
+			isFade = false;
+
+			HWDotween::DoDelay(30)->OnComplete([&, doCountStep]()
+				{
+					isFade = true;
+					HWDotween::DoDelay(30)->OnComplete([&, doCountStep]()
+						{
+							currentIndex++;
+							doCountStep();
+						});
+				});
+
+		};
+
+	doCountStep();
+
 }
 
 

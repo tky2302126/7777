@@ -11,7 +11,13 @@
 #include "Board.h"
 #include "Mouse.h"
 
-
+struct RectInt
+{
+	int left;
+	int right;
+	int top;
+	int bottom;
+};
 
 /**
  * @class	SceneTitle
@@ -71,4 +77,18 @@ private:
 	std::shared_ptr<HWGameObject> board = nullptr;
 	//! 盤面のコンポーネント
 	Board* boardCp = nullptr;
+
+	// カウントダウン用のグラフィックハンドル
+	int CountDouwnGH;
+
+	Vector2Int countDownLeftTop;
+
+	int alpha;
+	
+	int fadeSpeed = 9;
+
+	bool isFade;
+
+
+	void CountDown();
 };
