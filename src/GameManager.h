@@ -43,5 +43,8 @@ public:
 	//! 接続しているネットワークハンドル
 	//! クライアントの場合、0番目にserverのハンドルが入る
 	static int networkHandle[3];
-
+	//! 接続人数
+	static int connectNum;
+	//! 自身のプレイヤーID
+	static int playerId;
 };

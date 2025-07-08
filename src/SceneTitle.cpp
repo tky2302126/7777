@@ -6,6 +6,7 @@
 * @note		SceneTitleの実装ファイル
 */
 
+#define DEBUG
 
 SceneTitle::SceneTitle()
 	: selectIndex(0), isSelect(false), inputHandle(-1),portId(-1),
@@ -37,6 +38,15 @@ SceneTitle::SceneTitle()
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
 		); // カラーを設定
+
+
+#ifdef DEBUG
+	ipData.d1 = ipBuffer[0] = 10;
+	ipData.d2 = ipBuffer[1] = 204;
+	ipData.d3 = ipBuffer[2] = 6;
+	ipData.d4 = ipBuffer[3] = 89;
+	portId = 7777;
+#endif // DEBUG
 }
 
 SceneTitle::~SceneTitle()
@@ -133,6 +143,39 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneTitle::Update()
 {
+	if (connectParameter == ConnectParameter::Wait)
+	{
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connectiong");
+	}
+	else if (connectParameter == ConnectParameter::Complete)
+	{
+		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
+
+		if (GameManager::role == Role::server)
+		{
+			GameManager::playerId = 0;
+
+			// clientに接続人数とPlayerIDを送信
+			for (int i = 0; i < GameManager::connectNum; ++i)
+			{
+				unsigned char sendData = GameManager::connectNum * 10 + i + 1;
+				NetWorkSend(GameManager::networkHandle[i],
+					&sendData, sizeof(sendData));
+			}
+		}
+		else if (GameManager::role == Role::Client)
+		{
+			unsigned char recvData = 0;
+			NetWorkRecv(GameManager::networkHandle[0],
+				&recvData, sizeof(char));
+
+			if (recvData != 0)
+			{
+				GameManager::connectNum = (int)(recvData / 10);
+				GameManager::playerId = (int)(recvData % 10);
+			}
+		}
+	}
 }
 
 void SceneTitle::LateUpdate()
@@ -158,20 +201,10 @@ void SceneTitle::LateUpdate()
 	else
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
 
-
 	if (GameManager::role == Role::server)
 		ServerInputForm();
 	if (GameManager::role == Role::Client)
 		ClientInputForm();
-
-	if (connectParameter == ConnectParameter::Wait)
-	{
-		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connectiong");
-	}
-	else if (connectParameter == ConnectParameter::Complete)
-	{
-		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
-	}
 }
 
 void SceneTitle::SelectInput()
@@ -256,13 +289,14 @@ void SceneTitle::ServerInputForm()
 	}
 
 	// IPアドレスとポート番号が入力されている場合
-	int connectNum = 0;
-	for (int i = 0; i < 3; ++i)
+	int num = 0;
+	for(int i = 0; i < 3; ++i)
 		if (GameManager::networkHandle[i] != -1)
-			connectNum++;
+			++num;
+	GameManager::connectNum = num + 1;
 	DrawFormatString(300, 700 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"参加人数 : %d/4",connectNum + 1);
+		"参加人数 : %d/4", GameManager::connectNum);
 
 
 	if (portId != -1)
@@ -273,13 +307,13 @@ void SceneTitle::ServerInputForm()
 	}
 
 	//! 接続人数の表示
-	
+
 
 	// 接続中の処理
 	if (connectParameter == ConnectParameter::Wait)
 	{
 		int index = 0;
-		for(index = 0; index < 3; ++index)
+		for (index = 0; index < 3; ++index)
 			if (GameManager::networkHandle[index] == -1)
 				break;
 
@@ -410,6 +444,5 @@ void SceneTitle::Connect()
 	else
 	{
 		connectParameter = ConnectParameter::Complete;
-		//tweenCallback->tweenEvent->isCancel = true;
 	}
 }
