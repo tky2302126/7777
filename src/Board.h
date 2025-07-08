@@ -23,7 +23,6 @@ public:
 	void Move(Card& card);
 	void Update()override;
 	void ManualLoad();
-	void OnCardClicked(Card*);
 #pragma endregion
 
 #pragma region privateメンバ変数
@@ -40,7 +39,7 @@ public:
 	//! 盤面のデータ
 	char boardData[SUIT_NUM][DECK_RANGE];
 	//! 手札のデータ
-	std::vector<std::vector<char>> handData;
+	std::vector<std::vector<std::shared_ptr<Card>>> handData;
 #pragma endregion
 #pragma region privateメソッド
 	/// <summary>
@@ -49,6 +48,24 @@ public:
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(Card* cardPtr);
 	void Shuffle();
+
+	/// <summary>
+	/// カードを配る処理
+	/// </summary>
+	/// <param name="playerNum">ゲームの参加者数</param>
+	void Distribute(int playerNum);
+
+	/// <summary>
+	/// 初期位置から手札を表示する
+	/// </summary>
+	/// <param name="playerArea">自分のエリア</param>
+	void ShowHand(Area playerArea);
+
+	/// <summary>
+	/// 手札をソートする
+	/// </summary>
+	/// <param name="playerArea"></param>
+	void SortHand(Area playerArea);
 #pragma endregion
 };
 

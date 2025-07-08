@@ -91,14 +91,6 @@ Card::~Card()
 
 void Card::ManualUpdate()
 {
-	//position.x = areaNumber * 1.5f;
-	//position.z = areaNumber * -0.03f;
-
-	if (CheckHitKey(KEY_INPUT_S))
-		rotate.x += 1.0f;
-	if (CheckHitKey(KEY_INPUT_W))
-		rotate.x -= 1.0f;
-
 
 	// コリジョン
 	collisionCenter = ConvWorldPosToScreenPos(MV1GetFramePosition(Card::modelHandle, frameId));
