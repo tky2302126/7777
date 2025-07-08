@@ -22,6 +22,8 @@ Board::Board()
 	{
 		Shuffle();
 	}
+	Distribute(4);
+	ShowHand(Area::Area_Player1);
 }
 
 Board::~Board()
@@ -146,12 +148,20 @@ void Board::Distribute(int playerNum)
 
 void Board::ShowHand(Area playerArea)
 {
+	int index = (int)playerArea - 2;
+	std::vector<std::shared_ptr<Card>> handVec;
+	handVec = handData[index];
+
 	float merginX = -8;
 	float merginY = -25;
-	
-
+	for(int i = 0; i< handVec.size(); ++i)
+	{
+		HWDotween::DoAction(&handVec[i]->position, { merginX * i, merginY, 0 }, 30);
+		HWDotween::DoAction(&handVec[i]->rotate, { 0, 0, 180 }, 30);
+	}
 }
 
 void Board::SortHand(Area playerArea)
 {
+
 }
