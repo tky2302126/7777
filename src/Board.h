@@ -40,7 +40,7 @@ public:
 	//! 盤面のデータ
 	char boardData[SUIT_NUM][DECK_RANGE];
 	//! 手札のデータ
-	char hundData[PLAYER_NUM][DECK_RANGE];
+	std::vector<std::vector<char>> handData;
 #pragma endregion
 #pragma region privateメソッド
 	/// <summary>
