@@ -23,7 +23,6 @@ public:
 	void Move(Card& card);
 	void Update()override;
 	void ManualLoad();
-	void OnCardClicked(Card*);
 #pragma endregion
 
 #pragma region privateメンバ変数

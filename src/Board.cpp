@@ -8,7 +8,6 @@ Board::Board()
 	edgeNumLeft = -1;
 
 	memset(boardData, 0, sizeof(boardData));
-	memset(hundData, 0, sizeof(hundData));
 
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
