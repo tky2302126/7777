@@ -102,12 +102,12 @@ void Card::ManualUpdate()
 
 	// コリジョン
 	collisionCenter = ConvWorldPosToScreenPos(MV1GetFramePosition(Card::modelHandle, frameId));
-//	DrawBox(
-//		(int)(collisionCenter.x - CARD_COLLISION_WIDTH),
-//		(int)(collisionCenter.y - CARD_COLLISION_HEIGHT),
-//		(int)(collisionCenter.x + CARD_COLLISION_WIDTH),
-//		(int)(collisionCenter.y + CARD_COLLISION_HEIGHT),
-//		GetColor(255, 0, 0), FALSE);
+	DrawBox(
+		(int)(collisionCenter.x - CARD_COLLISION_WIDTH),
+		(int)(collisionCenter.y - CARD_COLLISION_HEIGHT),
+		(int)(collisionCenter.x + CARD_COLLISION_WIDTH),
+		(int)(collisionCenter.y + CARD_COLLISION_HEIGHT),
+		GetColor(255, 0, 0), FALSE);
 
 	// transform行列
 	MATRIX mat, t, r, s;

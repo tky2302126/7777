@@ -81,6 +81,7 @@ void Board::ManualLoad()
 	MV1SetRotationXYZ(modelHandle, { (float)Deg2Rad(-90.0f),0,0 });
 	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
 }
+
 bool Board::CanPlace(Card* cardPtr)
 {
 	// 手札のカードか
