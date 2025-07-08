@@ -39,7 +39,7 @@ public:
 	//! 盤面のデータ
 	char boardData[SUIT_NUM][DECK_RANGE];
 	//! 手札のデータ
-	std::vector<std::vector<char>> handData;
+	std::vector<std::vector<std::shared_ptr<Card>>> handData;
 #pragma endregion
 #pragma region privateメソッド
 	/// <summary>
@@ -48,6 +48,7 @@ public:
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(Card* cardPtr);
 	void Shuffle();
+	void Distribute(int playerNum);
 #pragma endregion
 };
 
