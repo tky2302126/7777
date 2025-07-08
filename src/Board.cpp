@@ -7,18 +7,23 @@ Board::Board()
 	areaR = -1;
 	edgeNumLeft = -1;
 
-	std::vector<std::thread> threads;
+	memset(boardData, 0, sizeof(boardData));
+	memset(hundData, 0, sizeof(hundData));
 
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
 		cards[i] = std::make_shared<Card>();
 	}
 
-#ifdef _DEBUG
-	ShuffleCard();
-	DistributeCard(4);
-#endif // _DEBUG
 
+
+	// カードの初期配置(手札の配分と7のセット)
+	// ホストの場合のみ行う
+	if (GameManager::role == Role::server)
+	{
+		int a = 0;
+		Shuffle();
+	}
 }
 
 Board::~Board()
@@ -32,8 +37,15 @@ Board::~Board()
 
 void Board::Draw()
 {
-	// 盤面の補助線の描画
-	DrawBox(0, 0, 1920 / 2, 1080 / 2, GetColor(255, 255, 255), FALSE);
+	// テーブルのモデルの描画
+	MV1DrawModel(modelHandle);
+
+	//DrawBox(
+	//	1920 / 2 - CARD_WIDTH / 2,
+	//	1080 / 2 - CARD_HEIGHT / 2,
+	//	1920 / 2 + CARD_WIDTH / 2,
+	//	1080 / 2 + CARD_HEIGHT / 2,
+	//	GetColor(255, 255, 255), FALSE);
 
 
 	// カードの描画
@@ -42,8 +54,6 @@ void Board::Draw()
 	MV1SetScale(Card::modelHandle, Card::scale_model);
 	MV1DrawModel(Card::modelHandle);
 
-	// テーブルのモデルの描画
-	MV1DrawModel(modelHandle);
 }
 
 void Board::Move(Card& card)
@@ -52,12 +62,15 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
+	if (CheckHitKey(KEY_INPUT_RETURN))
+		Shuffle();
+
+	Draw();
+
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
 	}
-
-	Draw();
 }
 
 void Board::ManualLoad()
@@ -70,24 +83,15 @@ void Board::ManualLoad()
 	MV1SetRotationXYZ(modelHandle, { (float)Deg2Rad(-90.0f),0,0 });
 	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
 }
-
-void Board::OnCardClicked(Card* cardPtr)
-{
-	if(CanPlace(cardPtr))
-	{
-		// 配置処理を実行
-	}
-}
-
 bool Board::CanPlace(Card* cardPtr)
 {
 	// 手札のカードか
 	if (cardPtr->area == Area::Area_Board || cardPtr->area == Area::Area_Invailed) return false;
 	// 制限エリア内か
 	int num = cardPtr->number;
-	if(areaL != -1) // エリア制限されているか
+	if (areaL != -1) // エリア制限されているか
 	{
-		if(areaL > num || areaR < num)
+		if (areaL > num || areaR < num)
 		{
 			return false;
 		}
@@ -102,76 +106,20 @@ bool Board::CanPlace(Card* cardPtr)
 	return false;
 }
 
-void Board::ShuffleCard()
+void Board::Shuffle()
 {
-	// アニメーション(できたらやる)
+	//! シャッフルする配列
+	std::vector<int> v;
 
-	// データ
-	// 最初に7を入れとく
-
-	for(int i = 0; i< SUIT_NUM; ++i)
-	{
-		auto SevenFrameId = i * DECK_RANGE + 6;
-		SwapCard(i, SevenFrameId);
-	}
+	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+		v.push_back(i);
 
 	// シャッフル
-	std::random_device rd;
-	std::mt19937 seed(rd());
-	std::shuffle(cards + SUIT_NUM, std::end(cards), seed);
+	std::random_device seed_gen;
+	std::mt19937 engine(seed_gen());
+	std::shuffle(v.begin(), v.end(), engine);
 
-}
-
-void Board::DistributeCard(int playerNum)
-{
-	// データ
-	for(int i = 0; i < SUIT_NUM; ++i)
-	{
-		cards[i]->area = Area_Board;
-	}
-
-	for(int i = SUIT_NUM; i < SUIT_NUM * DECK_RANGE; ++i)
-	{
-		cards[i]->area = (Area)(i % playerNum + 2);
-	}
-
-#ifdef _DEBUG
-	std::vector<std::shared_ptr<Card>> cardVec;
-	for(auto card: cards)
-	{
-		if(card->area == Area_Player1)
-		{
-			cardVec.push_back(card);
-		}
-	}
-
-	//
-	float merginX = -8;
-	float merginY = -25;
-	std::sort(cardVec.begin(), cardVec.end());
-	for(int i =0; i < cardVec.size(); ++i)
-	{
-		cardVec[i]->areaNumber = i;
-
-		HWDotween::DoAction(&cardVec[i]->position, { merginX * i, merginY, 0 }, 30);
-		HWDotween::DoAction(&cardVec[i]->rotate, { 0, 0, 180 }, 30);
-	}
-
-
-	
-#endif // _DEBUG
-
-	
-}
-
-void Board::SwapCard(int sendFrameId, int recvFrameId)
-{
-	std::swap(cards[sendFrameId], cards[recvFrameId]);
-}
-
-void Board::SwapCard(CardInfo& _a, CardInfo& _b)
-{
-	int a = _a.suit * DECK_RANGE + _a.number;
-	int b = _b.suit * DECK_RANGE + _b.number;
-	SwapCard(a, b);
+	// 領域座標を更新
+	for (int i = 0; i < v.size(); ++i)
+		cards[i]->areaNumber = v[i];
 }

@@ -12,9 +12,11 @@ class Board : public HWComponent
 {
 public:
 #pragma region publicメンバ変数
+	// 手札
+	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 #pragma endregion
 
-#pragma region メソッド
+#pragma region publicメソッド
 	Board();
 	~Board();
 	void Draw();
@@ -24,11 +26,7 @@ public:
 	void OnCardClicked(Card*);
 #pragma endregion
 
-
-private:
 #pragma region privateメンバ変数
-	// 手札
-	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 	// イベントタイマー
 	int timer;
 	// 制限エリア左端
@@ -41,24 +39,16 @@ private:
 	int modelHandle;
 	//! 盤面のデータ
 	char boardData[SUIT_NUM][DECK_RANGE];
+	//! 手札のデータ
+	char hundData[PLAYER_NUM][DECK_RANGE];
 #pragma endregion
-
 #pragma region privateメソッド
 	/// <summary>
 	/// カードが設置可能か判定する
 	/// </summary>
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(Card* cardPtr);
-
-	void ShuffleCard();
-	void DistributeCard(int playerNum);
-
-	/// <summary>
-	/// カードをスワップする関数
-	/// </summary>
-	void SwapCard(int a, int b);
-	void SwapCard(CardInfo& a, CardInfo& b);
+	void Shuffle();
 #pragma endregion
-
 };
 

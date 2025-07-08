@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "HandlerWaltanForDxLib.h"
 #include "define.h"
+#include "GameManager.h"
+
 enum Suit : int
 {
 	HEART	= 0,
@@ -46,6 +48,8 @@ public:
 	VECTOR rotate = VECTOR();
 	//! 拡縮
 	VECTOR scale = VECTOR();
+	//! コリジョンの中心座標
+	VECTOR collisionCenter;
 	//! モデルの座標(変更するとカード全体が移動する)
 	static VECTOR position_model;
 	//! モデルの回転(変更するとカード全体が回転する)
@@ -63,21 +67,6 @@ public:
 	 * @brief       明示的に呼ぶ必要のある更新処理
 	 */
 	void ManualUpdate();
-
-	/**
-	 * @brief       カードの所属領域の変更
-	 * @param[in]	変更後の領域
-	 */
-	void AreaChange(Area& _area);
-
-	void RegistBoard(Board* board);
-
-	// ソート用のoperator
-	bool operator<(const Card& other)const
-	{
-		if (number != other.number) return number < other.number;
-		return suit < other.suit;
-	}
 #pragma endregion
 
 #pragma region Privateメンバ変数
@@ -86,7 +75,6 @@ private:
 #pragma endregion
 
 #pragma region Privateメソッド
-	void Onclick();
 #pragma endregion
 
 };

@@ -9,6 +9,7 @@
 #include "MovieManager.h"
 #include "UIManager.h"
 #include "Board.h"
+#include "Mouse.h"
 
 
 
