@@ -48,7 +48,24 @@ public:
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(Card* cardPtr);
 	void Shuffle();
+
+	/// <summary>
+	/// カードを配る処理
+	/// </summary>
+	/// <param name="playerNum">ゲームの参加者数</param>
 	void Distribute(int playerNum);
+
+	/// <summary>
+	/// 手札を表示する
+	/// </summary>
+	/// <param name="playerArea">自分のエリア</param>
+	void ShowHand(Area playerArea);
+
+	/// <summary>
+	/// 手札をソートする
+	/// </summary>
+	/// <param name="playerArea"></param>
+	void SortHand(Area playerArea);
 #pragma endregion
 };
 

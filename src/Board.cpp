@@ -125,7 +125,6 @@ void Board::Shuffle()
 
 void Board::Distribute(int playerNum)
 {
-	//
 	for(auto card : cards)
 	{
 		card->area = (Area)(card->areaNumber % playerNum + 2);
@@ -143,15 +142,16 @@ void Board::Distribute(int playerNum)
 		}
 		handData.push_back(playerHand);
 	}
-	handData;
-#ifdef _DEBUG
+}
+
+void Board::ShowHand(Area playerArea)
+{
 	float merginX = -8;
 	float merginY = -25;
-	// for(int i = 0; i < cardVec.size(); ++i)
-	// {
-	// 	HWDotween::DoAction(&cardVec[i]->position, { merginX * i, merginY, 0 }, 30);
-	// 	HWDotween::DoAction(&cardVec[i]->rotate, { 0, 0, 180 }, 30);
-	// }
-#endif // _DEBUG
+	
 
+}
+
+void Board::SortHand(Area playerArea)
+{
 }
