@@ -14,8 +14,11 @@ Board::Board()
 		cards[i] = std::make_shared<Card>();
 	}
 
+#ifdef _DEBUG
 	ShuffleCard();
 	DistributeCard(4);
+#endif // _DEBUG
+
 }
 
 Board::~Board()
@@ -117,11 +120,11 @@ void Board::ShuffleCard()
 	std::mt19937 seed(rd());
 	std::shuffle(cards + SUIT_NUM, std::end(cards), seed);
 
-	cards;
 }
 
 void Board::DistributeCard(int playerNum)
 {
+	// データ
 	for(int i = 0; i < SUIT_NUM; ++i)
 	{
 		cards[i]->area = Area_Board;
@@ -132,7 +135,33 @@ void Board::DistributeCard(int playerNum)
 		cards[i]->area = (Area)(i % playerNum + 2);
 	}
 
-	cards;
+#ifdef _DEBUG
+	std::vector<std::shared_ptr<Card>> cardVec;
+	for(auto card: cards)
+	{
+		if(card->area == Area_Player1)
+		{
+			cardVec.push_back(card);
+		}
+	}
+
+	//
+	float merginX = -8;
+	float merginY = -25;
+	std::sort(cardVec.begin(), cardVec.end());
+	for(int i =0; i < cardVec.size(); ++i)
+	{
+		cardVec[i]->areaNumber = i;
+
+		HWDotween::DoAction(&cardVec[i]->position, { merginX * i, merginY, 0 }, 30);
+		HWDotween::DoAction(&cardVec[i]->rotate, { 0, 0, 180 }, 30);
+	}
+
+
+	
+#endif // _DEBUG
+
+	
 }
 
 void Board::SwapCard(int sendFrameId, int recvFrameId)

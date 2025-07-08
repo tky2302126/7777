@@ -71,6 +71,13 @@ public:
 	void AreaChange(Area& _area);
 
 	void RegistBoard(Board* board);
+
+	// ソート用のoperator
+	bool operator<(const Card& other)const
+	{
+		if (number != other.number) return number < other.number;
+		return suit < other.suit;
+	}
 #pragma endregion
 
 #pragma region Privateメンバ変数
