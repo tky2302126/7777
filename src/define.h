@@ -20,7 +20,9 @@ struct Vector2Int
 
 constexpr int CARD_WIDTH = 90;
 constexpr int CARD_HEIGHT = 135;
-const Vector2Int DEFAULT_CARD_POSITION = { CARD_WIDTH * 3,CARD_HEIGHT};
+constexpr Vector2Int DEFAULT_CARD_POSITION = { CARD_WIDTH * 3,CARD_HEIGHT};
+constexpr Vector2Int FIELD_BEZEL = { 20, 20 };
+
 
 
 //! カードのコリジョンサイズ_X(半径)
