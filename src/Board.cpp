@@ -70,6 +70,19 @@ void Board::Update()
 	{
 		card->ManualUpdate();
 	}
+
+	for (int i = 0; i < SUIT_NUM; ++i)
+	{
+		for (int j = 0; j < DECK_RANGE; ++j)
+		{
+			DrawBox(
+				DEFAULT_CARD_POSITION.x + (120 * j),
+				DEFAULT_CARD_POSITION.y + (160 * i),
+				DEFAULT_CARD_POSITION.x + (120 * j) + CARD_WIDTH,
+				DEFAULT_CARD_POSITION.y + (160 * i) + CARD_HEIGHT,
+				GetColor(255, 255, 255), FALSE);
+		}
+	}
 }
 
 void Board::ManualLoad()
