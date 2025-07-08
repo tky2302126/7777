@@ -10,7 +10,7 @@ public:
 	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 #pragma endregion
 
-#pragma region メソッド
+#pragma region publicメソッド
 	Board();
 	~Board();
 	void Draw();
@@ -19,8 +19,6 @@ public:
 	void ManualLoad();
 #pragma endregion
 
-
-private:
 #pragma region privateメンバ変数
 	// イベントタイマー
 	int timer;
@@ -34,7 +32,13 @@ private:
 	int modelHandle;
 	//! 盤面のデータ
 	char boardData[SUIT_NUM][DECK_RANGE];
+	//! 手札のデータ
+	char hundData[PLAYER_NUM][DECK_RANGE];
 #pragma endregion
 
+#pragma region privateメソッド
+private:
+	void Shuffle();
+#pragma endregion
 };
 

@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "HandlerWaltanForDxLib.h"
 #include "define.h"
+#include "GameManager.h"
+
 enum Suit : int
 {
 	HEART	= 0,
@@ -62,12 +64,6 @@ public:
 	 * @brief       明示的に呼ぶ必要のある更新処理
 	 */
 	void ManualUpdate();
-
-	/**
-	 * @brief       カードの所属領域の変更
-	 * @param[in]	変更後の領域
-	 */
-	void AreaChange(Area& _area);
 #pragma endregion
 
 #pragma region Privateメンバ変数
@@ -75,7 +71,6 @@ private:
 #pragma endregion
 
 #pragma region Privateメソッド
-	Card* Onclick();
 #pragma endregion
 
 };

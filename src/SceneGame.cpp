@@ -46,6 +46,9 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
+	static Card* selectedCard = nullptr;
+	static bool isSelect = false;
+	static HWDotween::TweenCallback* callback = nullptr;
 	static Mouse mouse;
 	mouse.MouseInfoUpdate();
 
@@ -60,9 +63,23 @@ void SceneGame::Update()
 				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
-				int i = 0;
+				selectedCard = card.get();
+				HWDotween::DoDelay(60)->OnComplete([&]
+					{
+						if (selectedCard)
+							selectedCard = nullptr;
+					});
+
+				break;
 			}
 		}
+	}
+
+	if(selectedCard)
+	{
+		DrawFormatString(
+			10, 10, GetColor(0, 255, 0),
+			"SUIT = %d, Number = %d", (int)selectedCard->suit, selectedCard->number);
 	}
 }
 

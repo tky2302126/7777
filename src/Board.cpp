@@ -7,11 +7,20 @@ Board::Board()
 	areaR = -1;
 	edgeNumLeft = -1;
 
-	std::vector<std::thread> threads;
+	memset(boardData, 0, sizeof(boardData));
+	memset(hundData, 0, sizeof(hundData));
 
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
 		cards[i] = std::make_shared<Card>();
+	}
+
+	// カードの初期配置(手札の配分と7のセット)
+	// ホストの場合のみ行う
+	if (GameManager::role == Role::server)
+	{
+		int a = 0;
+		Shuffle();
 	}
 }
 
@@ -37,21 +46,6 @@ void Board::Draw()
 	//	GetColor(255, 255, 255), FALSE);
 
 
-	// 盤面の補助線の描画
-	for (int i = 0; i < SUIT_NUM; ++i)
-	{
-		for (int j = 0; j < DECK_RANGE; ++j)
-		{
-			DrawBox(
-				300,
-				200,
-				300 + CARD_WIDTH,
-				200 + CARD_HEIGHT,
-				GetColor(255, 255, 255), FALSE);
-		}
-	}
-
-
 	// カードの描画
 	MV1SetPosition(Card::modelHandle, Card::position_model);
 	MV1SetRotationXYZ(Card::modelHandle, Card::rotate_model);
@@ -66,6 +60,9 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
+	if (CheckHitKey(KEY_INPUT_RETURN))
+		Shuffle();
+
 	Draw();
 
 	for (auto& card : cards)
@@ -83,4 +80,22 @@ void Board::ManualLoad()
 	MV1SetPosition(modelHandle, { 950,500,500 });
 	MV1SetRotationXYZ(modelHandle, { (float)Deg2Rad(-90.0f),0,0 });
 	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
+}
+
+void Board::Shuffle()
+{
+	//! シャッフルする配列
+	std::vector<int> v;
+
+	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+		v.push_back(i);
+
+	// シャッフル
+	std::random_device seed_gen;
+	std::mt19937 engine(seed_gen());
+	std::shuffle(v.begin(), v.end(), engine);
+
+	// 領域座標を更新
+	for (int i = 0; i < v.size(); ++i)
+		cards[i]->areaNumber = v[i];
 }
