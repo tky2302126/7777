@@ -11,14 +11,6 @@
 #include "Board.h"
 #include "Mouse.h"
 
-struct RectInt
-{
-	int left;
-	int right;
-	int top;
-	int bottom;
-};
-
 /**
  * @class	SceneTitle
  * @brief   タイトルシーン
@@ -89,6 +81,7 @@ private:
 
 	bool isFade;
 
+	bool isCountDown = false;
 
 	void CountDown();
 };
