@@ -13,7 +13,7 @@ enum Suit : int
 
 enum Area
 {
-	Area_Invailed,
+	Area_Invalid,
 	Area_Board,
 	Area_Player1,
 	Area_Player2,

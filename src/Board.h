@@ -26,6 +26,11 @@ public:
 	bool IsAgari() const { return handData.size() == 0; }
 	int GetScore() const { return score; }
 	void AddScore(int value);
+	/// <summary>
+	/// カードが設置可能か判定する
+	/// </summary>
+	/// <param name="cardPtr">判定するカード</param>
+	bool CanPlace(const Card& card);
 #pragma endregion
 
 #pragma region privateメンバ変数
@@ -47,11 +52,7 @@ public:
 	int score;
 #pragma endregion
 #pragma region privateメソッド
-	/// <summary>
-	/// カードが設置可能か判定する
-	/// </summary>
-	/// <param name="cardPtr">判定するカード</param>
-	bool CanPlace(Card* cardPtr);
+	
 	void Shuffle();
 
 	/// <summary>

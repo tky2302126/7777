@@ -108,12 +108,12 @@ void Board::AddScore(int value)
 {
 	score += value;
 }
-bool Board::CanPlace(Card* cardPtr)
+bool Board::CanPlace(const Card& card)
 {
 	// 手札のカードか
-	if (cardPtr->area == Area::Area_Board || cardPtr->area == Area::Area_Invailed) return false;
+	if (card.area == Area::Area_Board || card.area == Area::Area_Invalid) return false;
 	// 制限エリア内か
-	int num = cardPtr->number;
+	int num = card.number;
 	if (areaL != -1) // エリア制限されているか
 	{
 		if (areaL > num || areaR < num)
@@ -123,10 +123,14 @@ bool Board::CanPlace(Card* cardPtr)
 	}
 	// 隣接するカードが置かれているか
 
-	auto suit = cardPtr->suit;
+	auto suit = card.suit;
 	auto arrayNum = num - 1;
-	if (boardData[suit][arrayNum - 1] == '1') return true;
-	if (boardData[suit][arrayNum + 1] == '1') return true;
+	auto left = arrayNum - 1;
+	if (left < 0) left = DECK_RANGE - 1;
+	auto right = arrayNum + 1;
+	if (right >= DECK_RANGE) right = 0;
+	if (boardData[suit][left] == '1') return true;
+	if (boardData[suit][right] == '1') return true;
 
 	return false;
 }
