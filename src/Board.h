@@ -23,6 +23,7 @@ public:
 	void Move(Card& card);
 	void Update()override;
 	void ManualLoad();
+	bool IsAgari() const { return handData.size() == 0; }
 #pragma endregion
 
 #pragma region privateメンバ変数

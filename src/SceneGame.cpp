@@ -86,10 +86,12 @@ void SceneGame::Update()
 			"SUIT = %d, Number = %d", (int)selectedCard->suit, selectedCard->number);
 	}
 
+	// カウントダウンのスプライトの描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRectExtendGraph(760, 340, 1160, 740, countDownLeftTop.x, countDownLeftTop.y, 512, 512, CountDouwnGH, TRUE);
 	if (isFade) { alpha -= fadeSpeed; }
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 #ifdef _DEBUG
 	if(CheckHitKey(KEY_INPUT_C))
 	{
