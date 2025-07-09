@@ -65,7 +65,7 @@ public:
 	/// 手札をソートする
 	/// </summary>
 	/// <param name="playerArea"></param>
-	void SortHand(Area playerArea);
+	void SortHand();
 #pragma endregion
 };
 

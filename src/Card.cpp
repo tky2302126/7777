@@ -42,6 +42,9 @@ Card::Card() :
 	position = {0,0,frameId * -0.03f };
 
 
+
+	return;
+
 	if (number == 7)
 	{
 		switch (suit)
@@ -125,4 +128,10 @@ void Card::ManualUpdate()
 	mat = MMult(s, MMult(r, t));
 
 	MV1SetFrameUserLocalMatrix(Card::modelHandle, frameId, mat);
+}
+
+void Card::AreaChange(Area _newArea)
+{
+	// 座標を(ベゼル + DEFAULT_POSITION + CARD_WIDTH) * Numberにする
+	// ボード側の手札の配列からRemoveする必要あり
 }

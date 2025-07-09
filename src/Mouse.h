@@ -1,19 +1,8 @@
 ﻿#pragma once
 //! 循環参照注意
 #include "InputSystem.h"
+#include "define.h"
 
-/**
-* @struct Vector2Int
-* @brief 2次元座標を管理する構造体
-*/
-struct Vector2Int
-{
-	int x;
-	int y;
-
-	bool operator== (const Vector2Int& other) const { return x == other.x && y == other.y; }
-	bool operator!=(const Vector2Int& other) const { return !(*this == other); }
-};
 
 /**
 * @struct MouseInfo

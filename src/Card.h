@@ -67,6 +67,12 @@ public:
 	 * @brief       明示的に呼ぶ必要のある更新処理
 	 */
 	void ManualUpdate();
+
+	/**
+	 * @brief       所属領域の変更
+	 */
+	void AreaChange(Area _newArea);
+
 #pragma endregion
 
 #pragma region Privateメンバ変数

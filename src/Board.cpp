@@ -23,6 +23,8 @@ Board::Board()
 		Shuffle();
 	}
 	Distribute(4);
+	SortHand();
+//	ShowHand((Area)(GameManager::playerId + 1));
 	ShowHand(Area::Area_Player1);
 }
 
@@ -62,14 +64,24 @@ void Board::Move(Card& card)
 
 void Board::Update()
 {
-	if (CheckHitKey(KEY_INPUT_RETURN))
-		Shuffle();
-
 	Draw();
 
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
+	}
+
+	for (int i = 0; i < SUIT_NUM; ++i)
+	{
+		for (int j = 0; j < DECK_RANGE; ++j)
+		{
+			DrawBox(
+				DEFAULT_CARD_POSITION.x + (FIELD_BEZEL.x + CARD_WIDTH) * j,
+				DEFAULT_CARD_POSITION.y + (FIELD_BEZEL.y + CARD_HEIGHT) * i,
+				DEFAULT_CARD_POSITION.x + (FIELD_BEZEL.x + CARD_WIDTH) * j + CARD_WIDTH,
+				DEFAULT_CARD_POSITION.y + (FIELD_BEZEL.y + CARD_HEIGHT) * i + CARD_HEIGHT,
+				GetColor(255, 255, 255), FALSE);
+		}
 	}
 }
 
@@ -153,14 +165,27 @@ void Board::ShowHand(Area playerArea)
 
 	float merginX = -8;
 	float merginY = -25;
-	for(int i = 0; i< handVec.size(); ++i)
+	for (auto it = handVec.begin(); it != handVec.end(); ++it)
 	{
-		HWDotween::DoAction(&handVec[i]->position, { merginX * i, merginY, 0 }, 30);
-		HWDotween::DoAction(&handVec[i]->rotate, { 0, 0, 180 }, 30);
+		HWDotween::DoAction(&(*it)->position, { merginX * (*it)->areaNumber, merginY, 0 }, 30);
+		HWDotween::DoAction(&(*it)->rotate, { 0, 0, 180 }, 30);
 	}
 }
 
-void Board::SortHand(Area playerArea)
+void Board::SortHand()
 {
+	std::vector<std::shared_ptr<Card>> handVec;
+	std::copy(handData[0].begin(), handData[0].end(), 
+		std::back_inserter(handVec));
 
+	std::sort(handVec.begin(), handVec.end(), [](std::shared_ptr<Card> a, std::shared_ptr<Card> b) {
+		if (a->number == b->number)
+			return a->suit < b->suit;
+		return a->number < b->number;
+		});
+
+	for (int i = 0; i < handVec.size(); ++i)
+	{
+		handVec[i]->areaNumber = i;
+	}
 }
