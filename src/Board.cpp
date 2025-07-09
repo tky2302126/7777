@@ -22,6 +22,7 @@ Board::Board()
 	{
 		Shuffle();
 	}
+
 	Distribute(4);
 	SortHand();
 //	ShowHand((Area)(GameManager::playerId + 1));

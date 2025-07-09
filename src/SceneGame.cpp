@@ -67,6 +67,8 @@ void SceneGame::Update()
 				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
+				card->AreaChange(Area_Board);
+
 				selectedCard = card.get();
 				HWDotween::DoDelay(60)->OnComplete([&]
 					{

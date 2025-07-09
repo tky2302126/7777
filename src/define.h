@@ -18,10 +18,23 @@ struct Vector2Int
 #define DECK_RANGE 13
 #define PLAYER_NUM 4
 
+
+//! カードの幅(scale = 1 の場合)
 constexpr int CARD_WIDTH = 90;
+//! カードの高さ(scale = 1 の場合)
 constexpr int CARD_HEIGHT = 135;
+
+//! カードのdefault座標(ワールド座標)
 constexpr Vector2Int DEFAULT_CARD_POSITION = { CARD_WIDTH * 3,CARD_HEIGHT};
+//! 盤面の補助線のカードとカードのベゼル(ワールド座標)
 constexpr Vector2Int FIELD_BEZEL = { 20, 20 };
+
+//! 盤面上におかれているカードのscale
+constexpr float CARD_SIZE_ON_BOARD = 0.75f;
+//! カードのdefault座標(ローカル座標) ※Cardで参照する際に使用する
+constexpr VECTOR DEFAULT_CARD_POSITION_LOCAL = { -102.f,-8.55f};
+//! 盤面の補助線のカードとカードのベゼル(ローカル)
+constexpr VECTOR FIELD_BEZEL_LOCAL = { 7.5f, 10.55f };
 
 
 
