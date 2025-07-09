@@ -10,7 +10,7 @@ VECTOR Card::scale_model = VGet(10, 10, 10);
 
 Card::Card() : 
 	position(VECTOR()), rotate(VECTOR()), scale({1,1,1}),
-	areaNumber(-1), area(Area::Area_Invailed), collisionCenter(VECTOR())
+	areaNumber(-1), area(Area::Area_Invalid), collisionCenter(VECTOR())
 {
 	//
 	// 自身がどのカードかを設定
