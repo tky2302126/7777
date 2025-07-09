@@ -142,6 +142,7 @@
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneResult.cpp" />
     <ClCompile Include="src\SceneTitle.cpp" />
+    <ClCompile Include="src\UDPConnection.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\SceneResult.h" />
     <ClInclude Include="src\SceneTitle.h" />
+    <ClInclude Include="src\UDPConnection.h" />
     <ClInclude Include="src\UIManager.h" />
     <ClInclude Include="src\VideoPlayer.h" />
   </ItemGroup>

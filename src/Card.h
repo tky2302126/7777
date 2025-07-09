@@ -84,19 +84,3 @@ private:
 #pragma endregion
 
 };
-
-
-#pragma pack(1)
-
-/**
- * @class	CardData
- * @brief  データ送信用
- */
-struct CardData
-{
-	unsigned char data;
-	unsigned char area;
-	unsigned char areaNumber;
-};
-
-#pragma pack()
