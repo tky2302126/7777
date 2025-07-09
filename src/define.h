@@ -17,6 +17,10 @@ struct Vector2Int
 #define SUIT_NUM 4
 #define DECK_RANGE 13
 #define PLAYER_NUM 4
+#define PLACE_CARD 10
+#define LINE_COMPLETE 100
+#define SUIT_COMPLETE 25
+// #define
 
 constexpr int CARD_WIDTH = 90;
 constexpr int CARD_HEIGHT = 135;
