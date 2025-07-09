@@ -139,7 +139,7 @@ void Card::AreaChange(Area _newArea)
 	{
 		VECTOR boardPos = {
 			DEFAULT_CARD_POSITION_LOCAL.x + (12 - (number - 1)) * FIELD_BEZEL_LOCAL.x,
-			DEFAULT_CARD_POSITION_LOCAL.y + suit		 * FIELD_BEZEL_LOCAL.y,
+			DEFAULT_CARD_POSITION_LOCAL.y + suit				* FIELD_BEZEL_LOCAL.y,
 		};
 
 		HWDotween::DoAction(&position, { (float)boardPos.x, (float)boardPos.y, 0 }, 10);

@@ -68,6 +68,12 @@ public:
 	void ShowHand(Area playerArea);
 
 	/// <summary>
+	/// カードを盤面に配置する
+	/// </summary>
+	/// <param name="_card">配置するカード</param>
+	void CardOnBoard(std::shared_ptr<Card> _card);
+
+	/// <summary>
 	/// 手札をソートする
 	/// </summary>
 	/// <param name="playerArea"></param>

@@ -192,8 +192,14 @@ void Board::ShowHand(Area playerArea)
 		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 		{
 			if (cards[i]->number == 7)
-				cards[i]->AreaChange(Area_Board);
+				CardOnBoard(cards[i]);
 		}});
+}
+
+void Board::CardOnBoard(std::shared_ptr<Card> _card)
+{
+	_card->AreaChange(Area_Board);
+	boardData[(int)_card->suit][_card->number - 1] = '1';
 }
 
 void Board::SortHand(Area playerArea)

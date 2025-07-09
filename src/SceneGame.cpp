@@ -68,11 +68,12 @@ void SceneGame::Update()
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
 #ifdef _DEBUG
-				card->AreaChange(Area_Board);
+				boardCp->CardOnBoard(card);
 #else
 				if(boardCp->CanPlace(*card))
 				{
-					card->AreaChange(Area_Board);
+					boardCp->CardOnBoard(card);
+					//card->AreaChange(Area_Board);
 				}
 #endif // _DEBUG
 
