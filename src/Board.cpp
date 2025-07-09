@@ -23,7 +23,11 @@ Board::Board()
 	{
 		Shuffle();
 	}
+<<<<<<< HEAD
+
+=======
 	//! クライアント側は山札の更新を待つ
+>>>>>>> 66ed6f6ee6421bc86cf12e3a7e4b5a89842081b7
 	Distribute(4);
 	SortHand();
 //	ShowHand((Area)(GameManager::playerId + 1));

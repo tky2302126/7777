@@ -94,15 +94,14 @@ Card::~Card()
 
 void Card::ManualUpdate()
 {
-
 	// コリジョン
 	collisionCenter = ConvWorldPosToScreenPos(MV1GetFramePosition(Card::modelHandle, frameId));
-	DrawBox(
-		(int)(collisionCenter.x - CARD_COLLISION_WIDTH),
-		(int)(collisionCenter.y - CARD_COLLISION_HEIGHT),
-		(int)(collisionCenter.x + CARD_COLLISION_WIDTH),
-		(int)(collisionCenter.y + CARD_COLLISION_HEIGHT),
-		GetColor(255, 0, 0), FALSE);
+	//DrawBox(
+	//	(int)(collisionCenter.x - CARD_COLLISION_WIDTH),
+	//	(int)(collisionCenter.y - CARD_COLLISION_HEIGHT),
+	//	(int)(collisionCenter.x + CARD_COLLISION_WIDTH),
+	//	(int)(collisionCenter.y + CARD_COLLISION_HEIGHT),
+	//	GetColor(255, 0, 0), FALSE);
 
 	// transform行列
 	MATRIX mat, t, r, s;
@@ -132,6 +131,16 @@ void Card::ManualUpdate()
 
 void Card::AreaChange(Area _newArea)
 {
-	// 座標を(ベゼル + DEFAULT_POSITION + CARD_WIDTH) * Numberにする
-	// ボード側の手札の配列からRemoveする必要あり
+	if (area == _newArea) return;
+
+	if(_newArea == Area_Board)
+	{
+		VECTOR boardPos = {
+			DEFAULT_CARD_POSITION_LOCAL.x + (number - 1) * FIELD_BEZEL_LOCAL.x,
+			DEFAULT_CARD_POSITION_LOCAL.y + suit		 * FIELD_BEZEL_LOCAL.y,
+		};
+
+		HWDotween::DoAction(&position, { (float)boardPos.x, (float)boardPos.y, 0 }, 10);
+		HWDotween::DoAction(&scale, { CARD_SIZE_ON_BOARD, CARD_SIZE_ON_BOARD, CARD_SIZE_ON_BOARD }, 5);
+	}
 }
