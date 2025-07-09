@@ -69,10 +69,17 @@ void SceneGame::Update()
 			{
 #ifdef _DEBUG
 				boardCp->CardOnBoard(card);
+				SendData data =
+				{
+					boardCp->score,
+					boardCp->cards
+				};
+				UDPConnection::Send(data);
 #else
 				if(boardCp->CanPlace(*card))
 				{
 					boardCp->CardOnBoard(card);
+
 				}
 #endif // _DEBUG
 

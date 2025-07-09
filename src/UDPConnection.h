@@ -8,14 +8,10 @@
  */
 struct SendData
 {
-	//! 送信時の時刻
-	int sendTime;
 	//! スコア
 	int score;
-	//! 送信データID
-	int id;
-	//! カード情報
-	Card* cards;
+	//! カード情報(先頭アドレス)
+	std::shared_ptr<Card>* cards;
 };
 
 
@@ -41,7 +37,7 @@ public:
 	 * @brief		データを送信する
 	 * @param[in]	SendData 送信するデータ
 	 */
-	void Send(SendData&);
+	static void Send(SendData&);
 
 private:
 };

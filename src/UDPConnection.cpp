@@ -14,9 +14,9 @@ void UDPConnection::Send(SendData& _sendData)
 	// カード情報をパッケージング
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
-		data[i].data = _sendData.cards[i].suit * 13 + _sendData.cards[i].number - 1;
-		data->area = (int)_sendData.cards[i].area;
-		data->areaNumber = _sendData.cards[i].areaNumber;
+		data[i].data = _sendData.cards[i]->suit * 13 + _sendData.cards[i]->number - 1;
+		data[i].area = (int)_sendData.cards[i]->area;
+		data[i].areaNumber = _sendData.cards[i]->areaNumber;
 	}
 
 	unsigned char block[250];

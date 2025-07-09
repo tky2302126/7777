@@ -200,14 +200,6 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 {
 	_card->AreaChange(Area_Board);
 	boardData[(int)_card->suit][_card->number - 1] = '1';
-	if(GameManager::role == Role::Server)
-	{
-		
-	}
-	if(GameManager::role == Role::Client)
-	{
-		
-	}
 }
 
 void Board::SortHand(Area playerArea)
