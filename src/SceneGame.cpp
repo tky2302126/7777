@@ -73,7 +73,6 @@ void SceneGame::Update()
 				if(boardCp->CanPlace(*card))
 				{
 					boardCp->CardOnBoard(card);
-					//card->AreaChange(Area_Board);
 				}
 #endif // _DEBUG
 

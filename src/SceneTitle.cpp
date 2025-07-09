@@ -76,7 +76,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		// カーソル移動と参照項目移動の処理
 		if (it->keyCode == PAD_INPUT_UP)
 		{
-			if (GameManager::role == Role::server)
+			if (GameManager::role == Role::Server)
 			{
 				if (--selectIndex < 0)
 				{
@@ -123,7 +123,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 					selectIndex = 0;
 				}
 			}
-			if(GameManager::role == Role::server)
+			if(GameManager::role == Role::Server)
 			{
 				if (portId == -1 && selectIndex > 1)
 				{
@@ -151,7 +151,7 @@ void SceneTitle::Update()
 	{
 		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
 
-		if (GameManager::role == Role::server)
+		if (GameManager::role == Role::Server)
 		{
 			GameManager::playerId = 0;
 
@@ -200,12 +200,12 @@ void SceneTitle::LateUpdate()
 	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
 		"Role       : ");
-	if (GameManager::role == Role::server)
+	if (GameManager::role == Role::Server)
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
 	else
 		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
 
-	if (GameManager::role == Role::server)
+	if (GameManager::role == Role::Server)
 		ServerInputForm();
 	if (GameManager::role == Role::Client)
 		ClientInputForm();
@@ -227,7 +227,7 @@ void SceneTitle::SelectInput()
 
 	if(selectIndex == 0)
 	{
-		GameManager::role == Role::server ? GameManager::role = Role::Client : GameManager::role = Role::server;
+		GameManager::role == Role::Server ? GameManager::role = Role::Client : GameManager::role = Role::Server;
 		isSelect = false;
 		cursor.SetColor(GetColor(100, 100, 255));
 		cursor.SetTargetScale({ 100,20,0 });
@@ -242,7 +242,7 @@ void SceneTitle::SelectInput()
 	}
 	else if(selectIndex == 2)
 	{
-		if (GameManager::role == Role::server)
+		if (GameManager::role == Role::Server)
 		{
 			PreparationListenNetWork(portId);
 			connectParameter = ConnectParameter::Wait;

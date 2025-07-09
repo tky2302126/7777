@@ -21,7 +21,7 @@ Board::Board()
 
 	// カードの初期配置(手札の配分と7のセット)
 	// ホストの場合のみ行う
-	if (GameManager::role == Role::server)
+	if (GameManager::role == Role::Server)
 	{
 		Shuffle();
 	}
@@ -200,6 +200,14 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 {
 	_card->AreaChange(Area_Board);
 	boardData[(int)_card->suit][_card->number - 1] = '1';
+	if(GameManager::role == Role::Server)
+	{
+		
+	}
+	if(GameManager::role == Role::Client)
+	{
+		
+	}
 }
 
 void Board::SortHand(Area playerArea)

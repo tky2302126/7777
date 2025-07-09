@@ -10,7 +10,7 @@
 
 
 // 静的メンバ変数の初期化
-Role GameManager::role = Role::server;
+Role GameManager::role = Role::Server;
 int GameManager::networkHandle[3] = { -1, -1, -1 };
 int GameManager::connectNum = -1;
 int GameManager::playerId = -1;

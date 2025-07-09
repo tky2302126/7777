@@ -9,7 +9,7 @@
 enum class Role
 {
 	//! ホスト(サーバーも兼ねてる)
-	server,
+	Server,
 	//! クライアント
 	Client,
 };
