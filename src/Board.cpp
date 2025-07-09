@@ -6,6 +6,7 @@ Board::Board()
 	areaL = -1;
 	areaR = -1;
 	edgeNumLeft = -1;
+	score = 0;
 
 	memset(boardData, 0, sizeof(boardData));
 
@@ -22,7 +23,11 @@ Board::Board()
 	{
 		Shuffle();
 	}
+<<<<<<< HEAD
 
+=======
+	//! クライアント側は山札の更新を待つ
+>>>>>>> 66ed6f6ee6421bc86cf12e3a7e4b5a89842081b7
 	Distribute(4);
 	SortHand();
 //	ShowHand((Area)(GameManager::playerId + 1));
@@ -95,6 +100,10 @@ void Board::ManualLoad()
 	MV1SetPosition(modelHandle, { 950,500,500 });
 	MV1SetRotationXYZ(modelHandle, { (float)Deg2Rad(-90.0f),0,0 });
 	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
+}
+void Board::AddScore(int value)
+{
+	score += value;
 }
 bool Board::CanPlace(Card* cardPtr)
 {

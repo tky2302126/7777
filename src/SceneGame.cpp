@@ -88,14 +88,22 @@ void SceneGame::Update()
 			"SUIT = %d, Number = %d", (int)selectedCard->suit, selectedCard->number);
 	}
 
+	// カウントダウンのスプライトの描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRectExtendGraph(760, 340, 1160, 740, countDownLeftTop.x, countDownLeftTop.y, 512, 512, CountDouwnGH, TRUE);
 	if (isFade) { alpha -= fadeSpeed; }
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+#ifdef _DEBUG
 	if(CheckHitKey(KEY_INPUT_C))
 	{
-		CountDown();
+		if(!isCountDown)
+		{
+			CountDown();
+		}
 	}
+#endif // _DEBUG
+
 }
 
 void SceneGame::LateUpdate()
@@ -104,6 +112,8 @@ void SceneGame::LateUpdate()
 
 void SceneGame::CountDown()
 {
+	if (isCountDown) return;
+	isCountDown = true;
 	alpha = 255;
 
 	Vector2Int CountDownFrames[] =
@@ -114,34 +124,36 @@ void SceneGame::CountDown()
 		{511,511}
 	};
 	const int totalSteps = sizeof(CountDownFrames) / sizeof(CountDownFrames[0]);
-	int currentIndex = 0;
+	auto currentIndex = std::make_shared<int>(0);
+	auto doCountStep = std::make_shared<std::function<void()>>();
 
-	std::function<void()> doCountStep = [&, this]() mutable
+	*doCountStep = [this, currentIndex, CountDownFrames, doCountStep]() 
 		{
-			if(currentIndex >= totalSteps)
+			if(*currentIndex >= totalSteps)
 			{
 				// カウントダウン終了
 				alpha = 0;
+				isCountDown = false;
 				return;
 			}
 
-			countDownLeftTop = CountDownFrames[currentIndex];
+			countDownLeftTop = CountDownFrames[*currentIndex];
 			alpha = 255;
 			isFade = false;
 
-			HWDotween::DoDelay(30)->OnComplete([&, doCountStep]()
+			HWDotween::DoDelay(30)->OnComplete([this, currentIndex, CountDownFrames, doCountStep]()
 				{
 					isFade = true;
-					HWDotween::DoDelay(30)->OnComplete([&, doCountStep]()
+					HWDotween::DoDelay(30)->OnComplete([this, currentIndex, CountDownFrames, doCountStep]()
 						{
-							currentIndex++;
-							doCountStep();
+							(*currentIndex)++;
+							(*doCountStep)();
 						});
 				});
 
 		};
 
-	doCountStep();
+	(*doCountStep)();
 
 }
 
