@@ -133,14 +133,19 @@ void Card::AreaChange(Area _newArea)
 {
 	if (area == _newArea) return;
 
+	area = _newArea;
+
 	if(_newArea == Area_Board)
 	{
 		VECTOR boardPos = {
-			DEFAULT_CARD_POSITION_LOCAL.x + (number - 1) * FIELD_BEZEL_LOCAL.x,
+			DEFAULT_CARD_POSITION_LOCAL.x + (12 - (number - 1)) * FIELD_BEZEL_LOCAL.x,
 			DEFAULT_CARD_POSITION_LOCAL.y + suit		 * FIELD_BEZEL_LOCAL.y,
 		};
 
 		HWDotween::DoAction(&position, { (float)boardPos.x, (float)boardPos.y, 0 }, 10);
 		HWDotween::DoAction(&scale, { CARD_SIZE_ON_BOARD, CARD_SIZE_ON_BOARD, CARD_SIZE_ON_BOARD }, 5);
+
+		if (rotate.z != 180.0f)
+			HWDotween::DoAction(&rotate, { 0, 0, 180 }, 30);
 	}
 }

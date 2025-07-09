@@ -187,6 +187,13 @@ void Board::ShowHand(Area playerArea)
 		HWDotween::DoAction(&(*it)->position, { merginX * (*it)->areaNumber, merginY, 0 }, 30);
 		HWDotween::DoAction(&(*it)->rotate, { 0, 0, 180 }, 30);
 	}
+
+	HWDotween::DoDelay(60)->OnComplete([&] {
+		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+		{
+			if (cards[i]->number == 7)
+				cards[i]->AreaChange(Area_Board);
+		}});
 }
 
 void Board::SortHand(Area playerArea)
