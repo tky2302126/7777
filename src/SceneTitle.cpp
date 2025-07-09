@@ -162,6 +162,8 @@ void SceneTitle::Update()
 				NetWorkSend(GameManager::networkHandle[i],
 					&sendData, sizeof(sendData));
 			}
+
+			SceneChangeAsync(SceneTag::Game);
 		}
 		else if (GameManager::role == Role::Client)
 		{
@@ -173,6 +175,8 @@ void SceneTitle::Update()
 			{
 				GameManager::connectNum = (int)(recvData / 10);
 				GameManager::playerId = (int)(recvData % 10);
+
+				SceneChangeAsync(SceneTag::Game);
 			}
 		}
 	}

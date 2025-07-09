@@ -1,5 +1,7 @@
 ﻿#include "Board.h"
 
+//#define DEBUG
+
 Board::Board()
 {
 	timer = -1;
@@ -23,15 +25,16 @@ Board::Board()
 	{
 		Shuffle();
 	}
-<<<<<<< HEAD
 
-=======
 	//! クライアント側は山札の更新を待つ
->>>>>>> 66ed6f6ee6421bc86cf12e3a7e4b5a89842081b7
 	Distribute(4);
-	SortHand();
-//	ShowHand((Area)(GameManager::playerId + 1));
+#ifdef DEBUG
+	SortHand(Area::Area_Player1);
 	ShowHand(Area::Area_Player1);
+#else
+	SortHand((Area)(GameManager::playerId + 2));
+	ShowHand((Area)(GameManager::playerId + 2));
+#endif // DEBUG
 }
 
 Board::~Board()
@@ -182,10 +185,11 @@ void Board::ShowHand(Area playerArea)
 	}
 }
 
-void Board::SortHand()
+void Board::SortHand(Area playerArea)
 {
+	int index = (int)playerArea - 2;
 	std::vector<std::shared_ptr<Card>> handVec;
-	std::copy(handData[0].begin(), handData[0].end(), 
+	std::copy(handData[index].begin(), handData[index].end(),
 		std::back_inserter(handVec));
 
 	std::sort(handVec.begin(), handVec.end(), [](std::shared_ptr<Card> a, std::shared_ptr<Card> b) {
