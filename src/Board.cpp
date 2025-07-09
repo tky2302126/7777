@@ -6,6 +6,7 @@ Board::Board()
 	areaL = -1;
 	areaR = -1;
 	edgeNumLeft = -1;
+	score = 0;
 
 	memset(boardData, 0, sizeof(boardData));
 
@@ -95,6 +96,10 @@ void Board::ManualLoad()
 	MV1SetPosition(modelHandle, { 950,500,500 });
 	MV1SetRotationXYZ(modelHandle, { (float)Deg2Rad(-90.0f),0,0 });
 	MV1SetScale(modelHandle, { 1.5f,1.5f,1.5f });
+}
+void Board::AddScore(int value)
+{
+	score += value;
 }
 bool Board::CanPlace(Card* cardPtr)
 {

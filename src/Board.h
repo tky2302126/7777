@@ -24,6 +24,8 @@ public:
 	void Update()override;
 	void ManualLoad();
 	bool IsAgari() const { return handData.size() == 0; }
+	int GetScore() const { return score; }
+	void AddScore(int value);
 #pragma endregion
 
 #pragma region privateメンバ変数
@@ -41,6 +43,8 @@ public:
 	char boardData[SUIT_NUM][DECK_RANGE];
 	//! 手札のデータ
 	std::vector<std::vector<std::shared_ptr<Card>>> handData;
+	//! スコア
+	int score;
 #pragma endregion
 #pragma region privateメソッド
 	/// <summary>
