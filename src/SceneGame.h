@@ -84,5 +84,7 @@ private:
 
 	bool isCountDown = false;
 
+	int UDPSocketHandle[3];
+
 	void CountDown();
 };
