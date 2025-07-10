@@ -1,6 +1,6 @@
 ﻿#include "UDPConnection.h"
 
-void UDPConnection::Send(SendData& _sendData)
+void UDPConnection::SendServer(SendData& _sendData,const int& UDPSocketHandle)
 {
 #pragma pack(1)
 	CardData data[SUIT_NUM * DECK_RANGE];
@@ -29,6 +29,9 @@ void UDPConnection::Send(SendData& _sendData)
 	b += sizeof(int);
 	std::memcpy(b, data, sizeof(data));
 	
-
-	// 送信するデータは "block" のほう
+	// UDPで送信
+	// クライアントのみ送信
+	auto portNum = GameManager::portNum;
+	auto Ip = GameManager::IPAdress[0];
+	NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, sizeof(b));
 }

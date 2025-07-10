@@ -30,6 +30,20 @@ SceneGame::SceneGame()
 
 	countDownLeftTop = Vector2Int();
 	alpha = 0;
+
+	auto portNum = GameManager::portNum;
+
+	if(GameManager::role == Role::Client)
+	{
+		UDPSocketHandle[0] = MakeUDPSocket(portNum);
+	}
+	if(GameManager::role == Role::Server)
+	{
+		for(auto socket : UDPSocketHandle)
+		{
+			socket = MakeUDPSocket(portNum);
+		}
+	}
 }
 
 SceneGame::~SceneGame()
@@ -80,7 +94,11 @@ void SceneGame::Update()
 					boardCp->score,
 					boardCp->cards
 				};
-				UDPConnection::Send(data);
+				if(GameManager::role == Role::Client)
+				{
+					UDPConnection::SendServer(data, UDPSocketHandle[0]);
+				}
+
 #else
 				if(boardCp->CanPlace(*card))
 				{

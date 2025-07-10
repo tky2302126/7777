@@ -145,7 +145,7 @@ void SceneTitle::Update()
 {
 	if (connectParameter == ConnectParameter::Wait)
 	{
-		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connectiong");
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connecting");
 	}
 	else if (connectParameter == ConnectParameter::Complete)
 	{
@@ -156,11 +156,13 @@ void SceneTitle::Update()
 			GameManager::playerId = 0;
 
 			// clientに接続人数とPlayerIDを送信
+			// !タイミングがよくなさそう
 			for (int i = 0; i < GameManager::connectNum; ++i)
 			{
 				unsigned char sendData = GameManager::connectNum * 10 + i + 1;
 				NetWorkSend(GameManager::networkHandle[i],
 					&sendData, sizeof(sendData));
+				GetNetWorkIP(GameManager::networkHandle[i], &GameManager::IPAdress[i]);
 			}
 
 			SceneChangeAsync(SceneTag::Game);
@@ -175,7 +177,7 @@ void SceneTitle::Update()
 			{
 				GameManager::connectNum = (int)(recvData / 10);
 				GameManager::playerId = (int)(recvData % 10);
-
+				GetNetWorkIP(GameManager::networkHandle[0], &GameManager::IPAdress[0]);
 				SceneChangeAsync(SceneTag::Game);
 			}
 		}

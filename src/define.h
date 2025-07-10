@@ -48,3 +48,18 @@ constexpr VECTOR FIELD_BEZEL_LOCAL = { 7.5f, 10.55f };
 constexpr float CARD_COLLISION_WIDTH = 60.0f;
 //! カードのコリジョンサイズ_Y(半径)
 constexpr float CARD_COLLISION_HEIGHT = 90.0f;
+
+// 通信で使うイベント
+enum Event
+{
+	Event_CountDown,   // スタート時のカウントダウン
+	Event_MouseEnable, // マウス入力を許可
+	Event_DiceRoll,    // ダイスロール
+	Event_IsAgari,	   // あがり
+	Event_Bomb,		   // 爆弾
+	Event_Fever,	   // フィーバータイム
+	Event_LuckyNumber, // ラッキーナンバー
+	Event_LimitArea,   // エリア制限
+	Event_MoveArea,    // エリア移動
+	Event_ShuffleHand, // 手札交換
+};
