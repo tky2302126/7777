@@ -34,10 +34,10 @@ class UDPConnection
 public:
 
 	/**
-	 * @brief		データを送信する
+	 * @brief		クライアントがサーバーにデータを送信する
 	 * @param[in]	SendData 送信するデータ
 	 */
-	static void Send(SendData&);
+	static void SendServer(SendData&, const int&);
 
 private:
 };
