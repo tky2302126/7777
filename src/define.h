@@ -20,6 +20,8 @@ struct Vector2Int
 #define PLACE_CARD 10
 #define LINE_COMPLETE 100
 #define SUIT_COMPLETE 25
+// 秒数
+#define PLACE_COOL_TIME 1.5f
 // #define
 
 

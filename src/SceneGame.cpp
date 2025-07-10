@@ -67,6 +67,14 @@ void SceneGame::Update()
 				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
+				// カードを置いた場合、一定時間経つまで置けなくする
+				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
+				{
+					lastPlacedTime = GetNowCount();
+				}
+
+
+
 #ifdef _DEBUG
 				boardCp->CardOnBoard(card);
 				SendData data =
@@ -83,8 +91,6 @@ void SceneGame::Update()
 				}
 #endif // _DEBUG
 
-
-
 				selectedCard = card.get();
 				HWDotween::DoDelay(60)->OnComplete([&]
 					{
@@ -95,6 +101,13 @@ void SceneGame::Update()
 				break;
 			}
 		}
+	}
+
+	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
+	{
+		DrawFormatString(
+			10, 30, GetColor(0, 255, 0),
+			"coolTime = %d", (int)(PLACE_COOL_TIME * 1000) - (GetNowCount() - lastPlacedTime));
 	}
 
 	if(selectedCard)

@@ -39,7 +39,7 @@ Card::Card() :
 	}
 
 	// 初期座標
-	position = {0,0,frameId * -0.03f };
+	position = {-55,50,frameId * 0.0f };
 
 
 
