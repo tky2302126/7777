@@ -19,7 +19,7 @@ void UDPConnection::SendServer(SendData& _sendData,const int& UDPSocketHandle)
 		data[i].areaNumber = _sendData.cards[i]->areaNumber;
 	}
 
-	unsigned char block[250];
+	unsigned char block[164];
 
 	unsigned char* b = block;
 

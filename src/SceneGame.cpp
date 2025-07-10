@@ -35,13 +35,13 @@ SceneGame::SceneGame()
 
 	if(GameManager::role == Role::Client)
 	{
-		UDPSocketHandle[0] = MakeUDPSocket(UDP_PORT_NUM);
+		UDPSocketHandle[0] = MakeUDPSocket(-1);
 	}
 	if(GameManager::role == Role::Server)
 	{
 		for(auto& socket : UDPSocketHandle)
 		{
-			socket = MakeUDPSocket(portNum);
+			socket = MakeUDPSocket(UDP_PORT_NUM);
 		}
 	}
 }
@@ -79,7 +79,7 @@ void SceneGame::Update()
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
 				// カードが置けるかどうかチェック
-				if (!boardCp->CanPlace(*card)) continue;
+				//if (!boardCp->CanPlace(*card)) continue;
 
 				// カードを置いた場合、一定時間経つまで置けなくする
 				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
@@ -144,23 +144,60 @@ void SceneGame::LateUpdate()
 		int portNum = UDP_PORT_NUM;
 		char* recvData[164];
 
-		int ret = NetWorkRecvUDP(UDPSocketHandle[0], &GameManager::IPAdress[0], &portNum, 
-			recvData,5, FALSE);
+		int ret = NetWorkRecvUDP(UDPSocketHandle[0], &GameManager::IPAdress[0], &portNum,
+			recvData, 164, TRUE);
 
+		static int debug = -999;
+
+		//! 受け取ったカードデータのデコード先
+		static Card decodeData[SUIT_NUM * DECK_RANGE];
 		if (ret > 0)
 		{
-			int a = 0;
+			debug = ret;
+
+			int sendTime = -1;
+
+			// 送信時刻を書き込み
+			sendTime = *(int*)recvData;
+
+			//! 受け取ったカードデータ
+			CardData* cdp = (CardData*)(recvData + sizeof(int) + sizeof(int));
+
+
+			// カードデータをデコードする
+			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+			{
+				decodeData[i].suit = (Suit)(cdp[i].data / 13);
+				decodeData[i].number = cdp[i].data % 13 + 1;
+				decodeData[i].area = static_cast<Area>(cdp[i].area);
+				decodeData[i].areaNumber = cdp[i].areaNumber;
+			}
+
+			// デコードしたデータを記録
 		}
+
+		int index = 0;
+		for (auto card : decodeData)
+		{
+			if (card.area == Area_Player1)
+			{
+				DrawFormatString(
+					100, 20 * index++, GetColor(0, 255, 0),
+					"SUIT = %d, NUMBER", card.suit, card.number);
+			}
+		}
+
+		DrawFormatString(
+			10, 110, GetColor(0, 255, 0),
+			"受信データサイズ = %d", debug);
 	}
-	else
+	if (GameManager::role == Role::Client)
 	{
-		int portNum = UDP_PORT_NUM;
-		char* recvData[164];
-
-		int ret = NetWorkSendUDP(UDPSocketHandle[0], GameManager::IPAdress[0], 
-			portNum, "test", 5);
-
 	}
+
+	DrawFormatString(
+		10, 60, GetColor(0, 255, 0),
+		"PlayerID = %d", GameManager::playerId);
 }
 
 void SceneGame::CountDown()
