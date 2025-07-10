@@ -22,6 +22,9 @@ struct Vector2Int
 #define SUIT_COMPLETE 25
 // 秒数
 #define PLACE_COOL_TIME 1.5f
+
+#define UDP_PORT_NUM 9999
+#define MAX_PLAYER 2
 // #define
 
 

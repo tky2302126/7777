@@ -23,8 +23,8 @@ Board::Board()
 	// ホストの場合のみ行う
 	if (GameManager::role == Role::Server)
 	{
-		Shuffle();
 	}
+		Shuffle();
 
 	//! クライアント側は山札の更新を待つ
 	Distribute(4);

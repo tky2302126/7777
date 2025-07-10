@@ -37,7 +37,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #ifdef _DEBUG
 
 	// 幅: 1920, 高さ: 1080, ビット深度: 32
-	SetGraphMode(1920, 1080, 32);
+	//SetGraphMode(1920, 1080, 32);
+	SetGraphMode(1920 / 2, 1000, 32);
 	ChangeWindowMode(TRUE);
 	// デバッグモードで起動
 	HandlerWaltan::debugMode = true;
@@ -64,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
-	sceneManager.SceneChangeSync(SceneTag::Game);
+	sceneManager.SceneChangeSync(SceneTag::Title);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
 		//sceneManager.SceneChangeAsync(SceneTag::Game);

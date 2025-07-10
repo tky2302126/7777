@@ -9,7 +9,7 @@
 #include "MovieManager.h"
 #include "UIManager.h"
 #include "Cursor.h"
-
+#include "GameManager.h"
 
 /**
  * @class	SceneTitle

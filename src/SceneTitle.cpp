@@ -165,6 +165,7 @@ void SceneTitle::Update()
 				GetNetWorkIP(GameManager::networkHandle[i], &GameManager::IPAdress[i]);
 			}
 
+			GameManager::portNum = portId;
 			SceneChangeAsync(SceneTag::Game);
 		}
 		else if (GameManager::role == Role::Client)
@@ -178,6 +179,7 @@ void SceneTitle::Update()
 				GameManager::connectNum = (int)(recvData / 10);
 				GameManager::playerId = (int)(recvData % 10);
 				GetNetWorkIP(GameManager::networkHandle[0], &GameManager::IPAdress[0]);
+				GameManager::portNum = portId;
 				SceneChangeAsync(SceneTag::Game);
 			}
 		}
@@ -296,7 +298,7 @@ void SceneTitle::ServerInputForm()
 
 	// IPアドレスとポート番号が入力されている場合
 	int num = 0;
-	for(int i = 0; i < 3; ++i)
+	for(int i = 0; i < MAX_PLAYER - 1; ++i)
 		if (GameManager::networkHandle[i] != -1)
 			++num;
 	GameManager::connectNum = num + 1;
@@ -325,7 +327,7 @@ void SceneTitle::ServerInputForm()
 
 		// 新しい接続があったらそのネットワークハンドルを得る
 		GameManager::networkHandle[index] = GetNewAcceptNetWork();
-		if (GameManager::networkHandle[2] != -1)
+		if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
 			connectParameter = ConnectParameter::Complete;
 	}
 }

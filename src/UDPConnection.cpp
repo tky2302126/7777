@@ -28,10 +28,14 @@ void UDPConnection::SendServer(SendData& _sendData,const int& UDPSocketHandle)
 	std::memcpy(b, &sendDataId, sizeof(int));
 	b += sizeof(int);
 	std::memcpy(b, data, sizeof(data));
+
+	// 送信データのサイズを取得
+	int dataSize = sizeof(int) * 2 + sizeof(data);
 	
 	// UDPで送信
 	// クライアントのみ送信
-	auto portNum = GameManager::portNum;
+	auto portNum = UDP_PORT_NUM;
 	auto Ip = GameManager::IPAdress[0];
-	NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, sizeof(b));
+	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, dataSize);
+
 }

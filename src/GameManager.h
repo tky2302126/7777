@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "HandlerWaltanForDxLib.h"
+#include "define.h"
 
 
 

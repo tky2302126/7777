@@ -35,11 +35,11 @@ SceneGame::SceneGame()
 
 	if(GameManager::role == Role::Client)
 	{
-		UDPSocketHandle[0] = MakeUDPSocket(portNum);
+		UDPSocketHandle[0] = MakeUDPSocket(UDP_PORT_NUM);
 	}
 	if(GameManager::role == Role::Server)
 	{
-		for(auto socket : UDPSocketHandle)
+		for(auto& socket : UDPSocketHandle)
 		{
 			socket = MakeUDPSocket(portNum);
 		}
@@ -139,6 +139,28 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
+	if (GameManager::role == Role::Server)
+	{
+		int portNum = UDP_PORT_NUM;
+		char* recvData[164];
+
+		int ret = NetWorkRecvUDP(UDPSocketHandle[0], &GameManager::IPAdress[0], &portNum, 
+			recvData,5, FALSE);
+
+		if (ret > 0)
+		{
+			int a = 0;
+		}
+	}
+	else
+	{
+		int portNum = UDP_PORT_NUM;
+		char* recvData[164];
+
+		int ret = NetWorkSendUDP(UDPSocketHandle[0], GameManager::IPAdress[0], 
+			portNum, "test", 5);
+
+	}
 }
 
 void SceneGame::CountDown()
