@@ -71,6 +71,17 @@ void Board::Update()
 		card->ManualUpdate();
 	}
 
+	DrawFormatString(
+		10, 10, GetColor(0, 255, 0),
+		"P1 = %d", handData[0].size());
+	DrawFormatString(
+		150, 10, GetColor(0, 255, 0),
+		"P2 = %d", handData[1].size());
+	DrawFormatString(
+		300, 10, GetColor(0, 255, 0),
+		"P3 = %d", handData[2].size());
+
+
 	for (int i = 0; i < SUIT_NUM; ++i)
 	{
 		for (int j = 0; j < DECK_RANGE; ++j)
@@ -191,6 +202,18 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 {
 	_card->AreaChange(Area_Board);
 	boardData[(int)_card->suit][_card->number - 1] = '1';
+
+#ifdef DEBUG
+	handData[Area::Area_Player1 - 2].erase(
+		std::remove(handData[Area::Area_Player1 - 2].begin(),handData[Area::Area_Player1 - 2].end(), _card),
+		handData[Area::Area_Player1 - 2].end());
+
+	SortHand(Area::Area_Player1);
+	//ShowHand(Area::Area_Player1);
+#else
+	SortHand((Area)(GameManager::playerId + 2));
+	ShowHand((Area)(GameManager::playerId + 2));
+#endif // DEBUG
 }
 
 void Board::SortHand(Area playerArea)

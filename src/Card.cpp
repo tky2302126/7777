@@ -40,45 +40,6 @@ Card::Card() :
 
 	// 初期座標
 	position = {-55,50,frameId * 0.0f };
-
-
-
-	return;
-
-	if (number == 7)
-	{
-		switch (suit)
-		{
-		case Suit::HEART:
-			HWDotween::DoAction(&position, { -40,15,0 }, 60)->OnComplete([&] {	
-				HWDotween::DoAction(&position, position + VGet(0, 0, -10), 10)->OnComplete([&] {
-					HWDotween::DoAction(&rotate, { 0,0,180 }, 30)->OnComplete([&] {
-						HWDotween::DoAction(&position, position + VGet(0, 0, 10), 10);
-						});});});
-			break;
-		case Suit::DIA:
-			HWDotween::DoAction(&position, { -40,0,0 }, 60)->OnComplete([&] {
-				HWDotween::DoAction(&position, position + VGet(0, 0, -10), 10)->OnComplete([&] {
-					HWDotween::DoAction(&rotate, { 0,0,180 }, 30)->OnComplete([&] {
-						HWDotween::DoAction(&position, position + VGet(0, 0, 10), 10);
-						}); }); });
-					break;
-		case Suit::CLAB:
-			HWDotween::DoAction(&position, { -40,-15,0 }, 60)->OnComplete([&] {
-				HWDotween::DoAction(&position, position + VGet(0, 0, -10), 10)->OnComplete([&] {
-					HWDotween::DoAction(&rotate, { 0,0,180 }, 30)->OnComplete([&] {
-						HWDotween::DoAction(&position, position + VGet(0, 0, 10), 10);
-						}); }); });
-					break;
-		case Suit::SPADE:
-			HWDotween::DoAction(&position, { -40,-30,0 }, 60)->OnComplete([&] {
-				HWDotween::DoAction(&position, position + VGet(0, 0, -10), 10)->OnComplete([&] {
-					HWDotween::DoAction(&rotate, { 0,0,180 }, 30)->OnComplete([&] {
-						HWDotween::DoAction(&position, position + VGet(0, 0, 10), 10);
-						}); }); });
-					break;
-		}
-	}
 }
 
 Card::~Card()

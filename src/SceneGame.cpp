@@ -50,9 +50,6 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
-	static Card* selectedCard = nullptr;
-	static bool isSelect = false;
-	static HWDotween::TweenCallback* callback = nullptr;
 	static Mouse mouse;
 	mouse.MouseInfoUpdate();
 
@@ -67,13 +64,14 @@ void SceneGame::Update()
 				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
+				// カードが置けるかどうかチェック
+				if (!boardCp->CanPlace(*card)) continue;
+
 				// カードを置いた場合、一定時間経つまで置けなくする
 				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
 				{
 					lastPlacedTime = GetNowCount();
 				}
-
-
 
 #ifdef _DEBUG
 				boardCp->CardOnBoard(card);
@@ -91,13 +89,6 @@ void SceneGame::Update()
 				}
 #endif // _DEBUG
 
-				selectedCard = card.get();
-				HWDotween::DoDelay(60)->OnComplete([&]
-					{
-						if (selectedCard)
-							selectedCard = nullptr;
-					});
-
 				break;
 			}
 		}
@@ -108,13 +99,6 @@ void SceneGame::Update()
 		DrawFormatString(
 			10, 30, GetColor(0, 255, 0),
 			"coolTime = %d", (int)(PLACE_COOL_TIME * 1000) - (GetNowCount() - lastPlacedTime));
-	}
-
-	if(selectedCard)
-	{
-		DrawFormatString(
-			10, 10, GetColor(0, 255, 0),
-			"SUIT = %d, Number = %d", (int)selectedCard->suit, selectedCard->number);
 	}
 
 	// カウントダウンのスプライトの描画
