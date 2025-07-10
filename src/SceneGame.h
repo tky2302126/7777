@@ -70,7 +70,8 @@ private:
 	std::shared_ptr<HWGameObject> board = nullptr;
 	//! 盤面のコンポーネント
 	Board* boardCp = nullptr;
-
+	//! 直近のカード配置時間
+	int lastPlacedTime = 0;
 	// カウントダウン用のグラフィックハンドル
 	int CountDouwnGH;
 

@@ -51,20 +51,11 @@ void Board::Draw()
 	// テーブルのモデルの描画
 	MV1DrawModel(modelHandle);
 
-	//DrawBox(
-	//	1920 / 2 - CARD_WIDTH / 2,
-	//	1080 / 2 - CARD_HEIGHT / 2,
-	//	1920 / 2 + CARD_WIDTH / 2,
-	//	1080 / 2 + CARD_HEIGHT / 2,
-	//	GetColor(255, 255, 255), FALSE);
-
-
 	// カードの描画
 	MV1SetPosition(Card::modelHandle, Card::position_model);
 	MV1SetRotationXYZ(Card::modelHandle, Card::rotate_model);
 	MV1SetScale(Card::modelHandle, Card::scale_model);
 	MV1DrawModel(Card::modelHandle);
-
 }
 
 void Board::Move(Card& card)
