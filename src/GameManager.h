@@ -43,6 +43,14 @@ public:
 	//! 接続しているネットワークハンドル
 	//! クライアントの場合、0番目にserverのハンドルが入る
 	static int networkHandle[3];
+	// 接続しているIPアドレス インゲームで使う
+	// クライアントは[0]だけ使う	
+	static IPDATA IPAdress[3];
+	// マッチングで使用するポート番号
+	// インゲームのudp通信で使用
+	static int portNum;
+
+	
 	//! 接続人数
 	static int connectNum;
 	//! 自身のプレイヤーID
