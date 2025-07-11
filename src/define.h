@@ -22,6 +22,7 @@ struct Vector2Int
 #define SUIT_COMPLETE 25
 // 秒数
 #define PLACE_COOL_TIME 1.5f
+#define EVENT_TIME 6000
 
 #define UDP_PORT_NUM 9999
 #define MAX_PLAYER 2
@@ -55,6 +56,7 @@ constexpr float CARD_COLLISION_HEIGHT = 90.0f;
 // 通信で使うイベント
 enum Event
 {
+	Event_None,		   // イベント実行なし
 	Event_CountDown,   // スタート時のカウントダウン
 	Event_MouseEnable, // マウス入力を許可
 	Event_DiceRoll,    // ダイスロール
