@@ -31,8 +31,7 @@ void UDPConnection::SendServer(Card& _card,const int& UDPSocketHandle)
 	auto Ip = GameManager::IPAdress[0];
 	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, 12);
 
-
-	std::ofstream outputfile("client.txt");
+	std::ofstream outputfile("client_2.txt");
 	outputfile << "送信 -> \n";
 	outputfile << ret;
 }
@@ -67,10 +66,15 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 	std::memcpy(b, data, sizeof(data));
 
 
+	std::ofstream outputfile("sever_2.txt");
+	outputfile << "送信 -> \n";
+
 	for(int i  = 0; i < MAX_PLAYER; ++i)
 	{
 		auto portNum = UDP_PORT_NUM;
 		auto Ip = GameManager::IPAdress[i];
 		int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 250);
+
+		outputfile << ret;
 	}
 }

@@ -89,6 +89,9 @@ private:
 
 	//! ゲーム開始フラグ
 	bool isGame = false;
+	std::ofstream outputfile_c;
+	std::ofstream outputfile_s;
+
 
 
 	/**
