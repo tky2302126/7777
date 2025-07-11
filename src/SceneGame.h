@@ -103,7 +103,7 @@ private:
 	 * @detail		client限定
 	 * @return		初期配置を受信した場合、以降true
 	 */
-	bool ReceiveInitData();
+	int ReceiveInitData();
 
 	/**
 	 * @brief       Update前に最初のカードデータを送る

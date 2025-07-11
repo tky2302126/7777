@@ -75,6 +75,21 @@ void SceneGame::Update()
 	{
 		if (!ReceiveInitData())
 			return;
+		else
+		{
+			int debug = 0;
+
+			DrawFormatString(
+				0, 0, GetColor(0, 255, 0),
+				"なんでやねん");
+
+			if (boardCp->handData.empty())
+				debug += 2;
+
+			DrawFormatString(
+				0, 30, GetColor(255, 0, 0),
+				"Debug : %d",debug);
+		}
 	}
 
 
@@ -251,12 +266,12 @@ void SceneGame::CheckMouseInput()
 	}
 }
 
-bool SceneGame::ReceiveInitData()
+int SceneGame::ReceiveInitData()
 {
 	// 一度受信したら、以降はtrue
-	static bool ret = false;
+	static int ret = FALSE;
 
-	if (ret) return true;
+	if (ret) return TRUE;
 
 	//! 受け取ったカードデータのデコード先
 	static Card decodeData[SUIT_NUM * DECK_RANGE];
@@ -267,7 +282,7 @@ bool SceneGame::ReceiveInitData()
 		int portNum = UDP_PORT_NUM;
 		unsigned char recvData[250];
 
-		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+		NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
 			recvData, 250, TRUE);
 
 		// 送信時刻を書き込み
@@ -291,10 +306,24 @@ bool SceneGame::ReceiveInitData()
 			boardCp->cards[i]->area = decodeData[i].area;
 			boardCp->cards[i]->areaNumber = decodeData[i].areaNumber;
 		}
+
+		for (int i = 0; i < 3; ++i)
+		{
+			std::vector<std::shared_ptr<Card>> playerHand;
+			for (auto card : boardCp->cards)
+			{
+				if (card->area == (Area)(i + 2))
+				{
+					playerHand.push_back(card);
+				}
+			}
+			boardCp->handData.push_back(playerHand);
+		}
+
 		boardCp->SortHand(Area::Area_Player1);
 		boardCp->ShowHand(Area::Area_Player1);
 
-		ret = true;
+		ret = 1;
 	}
 
 	return ret;
