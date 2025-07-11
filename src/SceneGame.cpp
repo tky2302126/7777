@@ -35,7 +35,8 @@ SceneGame::SceneGame()
 
 	if(GameManager::role == Role::Client)
 	{
-		UDPSocketHandle[0] = MakeUDPSocket(-1);
+		//UDPSocketHandle[0] = MakeUDPSocket(-1);
+		UDPSocketHandle[0] = MakeUDPSocket(UDP_PORT_NUM);
 	}
 	if(GameManager::role == Role::Server)
 	{
@@ -56,6 +57,11 @@ void SceneGame::LoadComplete()
 {
 	boardCp->ManualLoad();
 	CountDouwnGH = LoadGraph("Assets/UI/CountDown.png");
+
+	if (GameManager::role == Role::Server)
+	{
+		SendInitData();
+	}
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -64,53 +70,17 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
-	static Mouse mouse;
-	mouse.MouseInfoUpdate();
-
-	if (mouse.IsMouseRightButtonClicked())
+	// clientの場合、最初のデータ受信までゲーム開始を待機
+	if (GameManager::role == Role::Client)
 	{
-		for (auto& card : boardCp->cards)
-		{
-			auto mousePos = mouse.GetMouseInfo().position;
-
-			if (card->collisionCenter.x - CARD_COLLISION_WIDTH <= mousePos.x &&
-				card->collisionCenter.x + CARD_COLLISION_WIDTH >= mousePos.x &&
-				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
-				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
-			{
-				// カードが置けるかどうかチェック
-				//if (!boardCp->CanPlace(*card)) continue;
-
-				// カードを置いた場合、一定時間経つまで置けなくする
-				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
-				{
-					lastPlacedTime = GetNowCount();
-				}
-
-#ifdef _DEBUG
-				boardCp->CardOnBoard(card);
-				SendData data =
-				{
-					boardCp->score,
-					boardCp->cards
-				};
-				if(GameManager::role == Role::Client)
-				{
-					UDPConnection::SendServer(data, UDPSocketHandle[0]);
-				}
-
-#else
-				if(boardCp->CanPlace(*card))
-				{
-					boardCp->CardOnBoard(card);
-
-				}
-#endif // _DEBUG
-
-				break;
-			}
-		}
+		if (!ReceiveInitData())
+			return;
 	}
+
+
+	// カードの設置関係
+	CheckMouseInput();
+
 
 	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
 	{
@@ -141,28 +111,23 @@ void SceneGame::LateUpdate()
 {
 	if (GameManager::role == Role::Server)
 	{
-		int portNum = UDP_PORT_NUM;
-		char* recvData[164];
-
-		int ret = NetWorkRecvUDP(UDPSocketHandle[0], &GameManager::IPAdress[0], &portNum,
-			recvData, 164, TRUE);
-
-		static int debug = -999;
-
 		//! 受け取ったカードデータのデコード先
 		static Card decodeData[SUIT_NUM * DECK_RANGE];
-		if (ret > 0)
-		{
-			debug = ret;
+		int sendTime = -1;
 
-			int sendTime = -1;
+		if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) == TRUE)
+		{
+			int portNum = UDP_PORT_NUM;
+			unsigned char recvData[250];
+
+			int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+				recvData, 250, TRUE);
 
 			// 送信時刻を書き込み
 			sendTime = *(int*)recvData;
 
 			//! 受け取ったカードデータ
-			CardData* cdp = (CardData*)(recvData + sizeof(int) + sizeof(int));
-
+			CardData* cdp = (CardData*)(recvData + sizeof(int) * 2);
 
 			// カードデータをデコードする
 			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
@@ -172,31 +137,19 @@ void SceneGame::LateUpdate()
 				decodeData[i].area = static_cast<Area>(cdp[i].area);
 				decodeData[i].areaNumber = cdp[i].areaNumber;
 			}
-
-			// デコードしたデータを記録
 		}
 
-		int index = 0;
-		for (auto card : decodeData)
-		{
-			if (card.area == Area_Player1)
-			{
-				DrawFormatString(
-					100, 20 * index++, GetColor(0, 255, 0),
-					"SUIT = %d, NUMBER", card.suit, card.number);
-			}
-		}
-
-		DrawFormatString(
-			10, 110, GetColor(0, 255, 0),
-			"受信データサイズ = %d", debug);
+		auto portNum = UDP_PORT_NUM;
+		auto Ip = GameManager::IPAdress[0];
+		int ret = NetWorkSendUDP(UDPSocketHandle[0], Ip, portNum, "block", 6);
 	}
 	if (GameManager::role == Role::Client)
 	{
+
 	}
 
 	DrawFormatString(
-		10, 60, GetColor(0, 255, 0),
+		550, 20, GetColor(0, 255, 0),
 		"PlayerID = %d", GameManager::playerId);
 }
 
@@ -245,6 +198,117 @@ void SceneGame::CountDown()
 
 	(*doCountStep)();
 
+}
+
+void SceneGame::CheckMouseInput()
+{
+	static Mouse mouse;
+	mouse.MouseInfoUpdate();
+
+	if (mouse.IsMouseRightButtonClicked())
+	{
+		for (auto& card : boardCp->cards)
+		{
+			auto mousePos = mouse.GetMouseInfo().position;
+
+			if (card->collisionCenter.x - CARD_COLLISION_WIDTH <= mousePos.x &&
+				card->collisionCenter.x + CARD_COLLISION_WIDTH >= mousePos.x &&
+				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
+				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
+			{
+				// カードが置けるかどうかチェック
+				//if (!boardCp->CanPlace(*card)) continue;
+
+				// カードを置いた場合、一定時間経つまで置けなくする
+				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
+				{
+					lastPlacedTime = GetNowCount();
+				}
+
+#ifdef _DEBUG
+				boardCp->CardOnBoard(card);
+				SendData data =
+				{
+					boardCp->score,
+					boardCp->cards
+				};
+				if (GameManager::role == Role::Client)
+				{
+					UDPConnection::SendServer(data, UDPSocketHandle[0]);
+				}
+
+#else
+				if (boardCp->CanPlace(*card))
+				{
+					boardCp->CardOnBoard(card);
+
+				}
+#endif // _DEBUG
+
+				break;
+			}
+		}
+	}
+}
+
+bool SceneGame::ReceiveInitData()
+{
+	// 一度受信したら、以降はtrue
+	static bool ret = false;
+
+	if (ret) return true;
+
+	//! 受け取ったカードデータのデコード先
+	static Card decodeData[SUIT_NUM * DECK_RANGE];
+	int sendTime = -1;
+
+	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) == TRUE)
+	{
+		int portNum = UDP_PORT_NUM;
+		unsigned char recvData[250];
+
+		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+			recvData, 250, TRUE);
+
+		// 送信時刻を書き込み
+		sendTime = *(int*)recvData;
+
+		//! 受け取ったカードデータ
+		CardData* cdp = (CardData*)(recvData + sizeof(int) * 2);
+
+		// カードデータをデコードする
+		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+		{
+			decodeData[i].suit = (Suit)(cdp[i].data / 13);
+			decodeData[i].number = cdp[i].data % 13 + 1;
+			decodeData[i].area = static_cast<Area>(cdp[i].area);
+			decodeData[i].areaNumber = cdp[i].areaNumber;
+		}
+		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+		{
+			boardCp->cards[i]->suit = decodeData[i].suit;
+			boardCp->cards[i]->number = decodeData[i].number;
+			boardCp->cards[i]->area = decodeData[i].area;
+			boardCp->cards[i]->areaNumber = decodeData[i].areaNumber;
+		}
+		boardCp->SortHand(Area::Area_Player1);
+		boardCp->ShowHand(Area::Area_Player1);
+
+		ret = true;
+	}
+
+	return ret;
+}
+
+void SceneGame::SendInitData()
+{
+	SendData data =
+	{
+		boardCp->score,
+		boardCp->cards
+	};
+
+	UDPConnection::SendClients(data, UDPSocketHandle);
 }
 
 

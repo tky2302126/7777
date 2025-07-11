@@ -17,24 +17,21 @@ Board::Board()
 		cards[i] = std::make_shared<Card>();
 	}
 
-
-
 	// カードの初期配置(手札の配分と7のセット)
 	// ホストの場合のみ行う
 	if (GameManager::role == Role::Server)
 	{
-	}
 		Shuffle();
-
-	//! クライアント側は山札の更新を待つ
-	Distribute(4);
+		//! クライアント側は山札の更新を待つ
+		Distribute(4);
 #ifdef DEBUG
-	SortHand(Area::Area_Player1);
-	ShowHand(Area::Area_Player1);
+		SortHand(Area::Area_Player1);
+		ShowHand(Area::Area_Player1);
 #else
-	SortHand((Area)(GameManager::playerId + 2));
-	ShowHand((Area)(GameManager::playerId + 2));
+		SortHand((Area)(GameManager::playerId + 2));
+		ShowHand((Area)(GameManager::playerId + 2));
 #endif // DEBUG
+	}
 }
 
 Board::~Board()
@@ -71,15 +68,15 @@ void Board::Update()
 		card->ManualUpdate();
 	}
 
-	DrawFormatString(
-		10, 10, GetColor(0, 255, 0),
-		"P1 = %d", handData[0].size());
-	DrawFormatString(
-		150, 10, GetColor(0, 255, 0),
-		"P2 = %d", handData[1].size());
-	DrawFormatString(
-		300, 10, GetColor(0, 255, 0),
-		"P3 = %d", handData[2].size());
+	//DrawFormatString(
+	//	10, 10, GetColor(0, 255, 0),
+	//	"P1 = %d", handData[0].size());
+	//DrawFormatString(
+	//	150, 10, GetColor(0, 255, 0),
+	//	"P2 = %d", handData[1].size());
+	//DrawFormatString(
+	//	300, 10, GetColor(0, 255, 0),
+	//	"P3 = %d", handData[2].size());
 
 
 	for (int i = 0; i < SUIT_NUM; ++i)

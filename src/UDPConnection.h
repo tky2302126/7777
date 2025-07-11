@@ -39,6 +39,12 @@ public:
 	 */
 	static void SendServer(SendData&, const int&);
 
+	/**
+	 * @brief		サーバーがクライアントにデータを送信する
+	 * @param[in]	SendData 送信するデータ
+	 */
+	static void SendClients(SendData&, int*);
+
 private:
 };
 

@@ -14,6 +14,8 @@ public:
 #pragma region publicメンバ変数
 	// 手札
 	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
+	//! ゲームの開始時間(最初のカード情報を受信した時刻を開始時刻とする)
+	int statTime = -1;
 #pragma endregion
 
 #pragma region publicメソッド

@@ -87,5 +87,27 @@ private:
 
 	int UDPSocketHandle[3];
 
+
+	/**
+	 * @brief       カウントダウン
+	 */
 	void CountDown();
+
+	/**
+	 * @brief       マウス操作を見て、カードの配置を行う
+	 */
+	void CheckMouseInput();
+
+	/**
+	 * @brief       serverからカードの初期配置を受信する
+	 * @detail		client限定
+	 * @return		初期配置を受信した場合、以降true
+	 */
+	bool ReceiveInitData();
+
+	/**
+	 * @brief       Update前に最初のカードデータを送る
+	 * @detail		サーバー側でゲーム開始時に最初のカードデータを全プレイヤーに送信する
+	 */
+	void SendInitData();
 };
