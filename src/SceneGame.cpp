@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-#define DEBUG
+//#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -47,6 +47,9 @@ SceneGame::SceneGame()
 			socket = MakeUDPSocket(UDP_PORT_NUM);
 		}
 	}
+
+	outputfile_c = std::ofstream("client.txt");
+	outputfile_s = std::ofstream("server.txt");
 }
 
 SceneGame::~SceneGame()
@@ -63,6 +66,7 @@ void SceneGame::LoadComplete()
 	if (GameManager::role == Role::Server)
 	{
 		SendInitData();
+		isGame = true;
 	}
 }
 
@@ -114,11 +118,7 @@ void SceneGame::LateUpdate()
 
 	if (GameManager::role == Role::Server)
 	{
-		ReceiveUpdateData_Client();
-	}
-	else if (GameManager::role == Role::Client)
-	{
-		if (ReceiveUpdateData_Server())
+		if (ReceiveUpdateData_Client() == TRUE)
 		{
 			// 受信したら全clientに送信
 			SendData data =
@@ -128,6 +128,10 @@ void SceneGame::LateUpdate()
 			};
 			UDPConnection::SendClients(data, UDPSocketHandle);
 		}
+	}
+	else if (GameManager::role == Role::Client)
+	{
+		ReceiveUpdateData_Server();
 	}
 
 	DrawFormatString(
@@ -207,7 +211,6 @@ void SceneGame::CheckMouseInput()
 					lastPlacedTime = GetNowCount();
 				}
 
-#ifdef _DEBUG
 				boardCp->CardOnBoard(card);
 				SendData data =
 				{
@@ -218,15 +221,17 @@ void SceneGame::CheckMouseInput()
 				{
 					UDPConnection::SendServer(*card, UDPSocketHandle[0]);
 				}
-
-#else
-				if (boardCp->CanPlace(*card))
+				if (GameManager::role == Role::Server)
 				{
-					boardCp->CardOnBoard(card);
+					SendData data =
+					{
+						boardCp->score,
+						boardCp->cards
+					};
 
+					UDPConnection::SendClients(data, UDPSocketHandle);
 				}
-#endif // _DEBUG
-
+				
 				break;
 			}
 		}
@@ -250,7 +255,7 @@ int SceneGame::ReceiveInitData()
 		unsigned char recvData[250];
 
 		NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
-			recvData, 250, TRUE);
+			recvData, 250, FALSE);
 
 		// 送信時刻を書き込み
 		sendTime = *(int*)recvData;
@@ -319,10 +324,15 @@ int SceneGame::ReceiveUpdateData_Client()
 	int recvCount = 0;
 
 	static bool isRecv = false;
-	if (isRecv) 
+	if (isRecv)
 		DrawFormatString(
 			10, 60, GetColor(0, 255, 0),
 			"Recv");
+	else
+		DrawFormatString(
+			10, 60, GetColor(0, 255, 0),
+			"なし");
+
 
 
 	for (int i = 0; i < MAX_PLAYER; ++i)
@@ -330,12 +340,10 @@ int SceneGame::ReceiveUpdateData_Client()
 		// 受信データなし
 		if (CheckNetWorkRecvUDP(UDPSocketHandle[i]) != TRUE) continue;
 
-		std::ofstream outputfile("server.txt");
-		outputfile << "受信\n";
-		outputfile << i;
+		outputfile_s << "受信 -> " << i;
 
 		isRecv = true;
-		HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false;});
+		HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
 
 		// 受信データがあったらカウントアップ
 		recvCount++;
@@ -345,10 +353,10 @@ int SceneGame::ReceiveUpdateData_Client()
 		int sendTime = -1;
 
 		int portNum = UDP_PORT_NUM;
-		unsigned char recvData[11];
+		unsigned char recvData[12];
 
-		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
-			recvData, 11, TRUE);
+		int ret = NetWorkRecvUDP(UDPSocketHandle[i], NULL, NULL,
+			recvData, 12, FALSE);
 
 		// 送信時刻を書き込み
 		sendTime = *(int*)recvData;
@@ -365,8 +373,8 @@ int SceneGame::ReceiveUpdateData_Client()
 		// デコードしたデータと現在のデータを比較し、変更点を反映する
 		for (int j = 0; j < SUIT_NUM * DECK_RANGE; ++j)
 		{
-			if (decodeData.area != Area_Board &&
-				boardCp->cards[j]->area == Area_Board)
+			if (decodeData.suit == boardCp->cards[j]->suit &&
+				decodeData.number == boardCp->cards[j]->number)
 			{
 				boardCp->CardOnBoard(boardCp->cards[j]);
 			}
@@ -383,6 +391,11 @@ int SceneGame::ReceiveUpdateData_Server()
 		DrawFormatString(
 			10, 60, GetColor(0, 255, 0),
 			"Recv");
+	else
+		DrawFormatString(
+			10, 60, GetColor(0, 255, 0),
+			"なし");
+
 
 	// 受信データなし
 	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) != TRUE) return 0;
@@ -399,11 +412,12 @@ int SceneGame::ReceiveUpdateData_Server()
 	unsigned char recvData[250];
 
 	int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
-		recvData, 250, TRUE);
+		recvData, 250, FALSE);
 
-	std::ofstream outputfile("client.txt");
-	outputfile << "受信 -> \n";
-	outputfile << ret;	
+
+	outputfile_c << "受信 -> \n";
+	outputfile_c << ret;	
+
 
 
 	// 送信時刻を書き込み
@@ -427,8 +441,8 @@ int SceneGame::ReceiveUpdateData_Server()
 
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
-		if (decodeData[i].area != Area_Board &&
-			boardCp->cards[i]->area == Area_Board)
+		if (decodeData[i].area == Area_Board &&
+			boardCp->cards[i]->area != Area_Board)
 		{
 			boardCp->CardOnBoard(boardCp->cards[i]);
 		}
@@ -436,6 +450,3 @@ int SceneGame::ReceiveUpdateData_Server()
 
 	return 1;
 }
-
-
-

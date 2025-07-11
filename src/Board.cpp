@@ -1,6 +1,6 @@
 ﻿#include "Board.h"
 
-#define DEBUG
+//#define DEBUG
 
 Board::Board()
 {
@@ -202,14 +202,14 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 
 #ifdef DEBUG
 	handData[Area::Area_Player1 - 2].erase(
-		std::remove(handData[Area::Area_Player1 - 2].begin(),handData[Area::Area_Player1 - 2].end(), _card),
+		std::remove(handData[Area::Area_Player1 - 2].begin(), handData[Area::Area_Player1 - 2].end(), _card),
 		handData[Area::Area_Player1 - 2].end());
-
 	SortHand(Area::Area_Player1);
-	//ShowHand(Area::Area_Player1);
 #else
+	handData[GameManager::playerId].erase(
+		std::remove(handData[GameManager::playerId].begin(), handData[GameManager::playerId].end(), _card),
+		handData[GameManager::playerId].end());
 	SortHand((Area)(GameManager::playerId + 2));
-	ShowHand((Area)(GameManager::playerId + 2));
 #endif // DEBUG
 }
 
