@@ -90,11 +90,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		sceneManager.Update();
 
 
-		DrawCapsule3D(
+		/*DrawCapsule3D(
 			pos, pos + VGet(0,400,0), 50.0f * scale.x,
 			12, 
 			GetColor(255, 0, 0),GetColor(255, 0, 0), 
-			FALSE);
+			FALSE);*/
 
 
 		sceneManager.LateUpdate();

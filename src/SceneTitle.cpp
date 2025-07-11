@@ -37,6 +37,11 @@ SceneTitle::SceneTitle()
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
 		); // カラーを設定
+
+	// タイトル画面の読み込み
+	gh_title = LoadGraph("Assets/Sprite/title8.png");
+	gh_titleBack = LoadGraph("Assets/Sprite/title_back2.png");
+	gh_titleLogo = LoadGraph("Assets/Sprite/title_Logo3.png");
 }
 
 SceneTitle::~SceneTitle()
@@ -66,7 +71,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		if (it->keyCode == PAD_INPUT_UP)
 		{
 			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0;
+			else if (selectIndex == 1)	selectIndex = 0; 
 		}
 
 		if (it->keyCode == PAD_INPUT_DOWN)
@@ -82,6 +87,28 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneTitle::Update()
 {
+	// 画面背景描画
+	DrawGraph(0, 0, gh_titleBack, TRUE);
+	//　背景の柄を動かす
+	offsetX--;
+	if (offsetX <= -tileSize) {
+		offsetX = 0;
+	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);  // 描画ブレンドモードをアルファブレンドにする
+	for (int y = 0; y < tilesY; ++y) {
+		for (int x = 0; x <= tilesX; ++x) {
+			// 画面柄描画
+			DrawGraph(x * tileSize + offsetX, y * tileSize, gh_title, TRUE);
+
+		}
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 描画モードをノーブレンドにする
+	// ロゴを画面中央に描画する
+	int screenWidth = 1920;
+	int logoX, logoY;
+	GetGraphSize(gh_titleLogo, &logoX, &logoY);
+	DrawGraph((screenWidth-logoX)/2, 200, gh_titleLogo, TRUE);
+	
 }
 
 void SceneTitle::LateUpdate()
