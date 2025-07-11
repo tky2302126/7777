@@ -87,6 +87,9 @@ private:
 
 	int UDPSocketHandle[3];
 
+	//! ゲーム開始フラグ
+	bool isGame = false;
+
 
 	/**
 	 * @brief       カウントダウン
@@ -110,4 +113,16 @@ private:
 	 * @detail		サーバー側でゲーム開始時に最初のカードデータを全プレイヤーに送信する
 	 */
 	void SendInitData();
+
+	/**
+	 * @brief       clientからカードの更新要素を受信する
+	 * @return		0 = 受信なし, 1 = 受信あり, -1 = 問題発生
+	 */
+	int ReceiveUpdateData_Client();
+
+	/**
+	 * @brief       serverからカードの更新要素を受信する
+	 * @return		0 = 受信なし, 1 = 受信あり, -1 = 問題発生
+	 */
+	int ReceiveUpdateData_Server();
 };

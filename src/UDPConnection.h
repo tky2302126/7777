@@ -1,12 +1,14 @@
 ﻿#pragma once
 #include "GameManager.h"
 #include "Card.h"
+# include<iostream>
+# include<fstream>
 
 /**
  * @struct	SendData
  * @brief  送受信するデータをパッケージングしたデータ群
  */
-struct SendData
+struct SendData                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 {
 	//! スコア
 	int score;
@@ -37,7 +39,7 @@ public:
 	 * @brief		クライアントがサーバーにデータを送信する
 	 * @param[in]	SendData 送信するデータ
 	 */
-	static void SendServer(SendData&, const int&);
+	static void SendServer(Card&, const int&);
 
 	/**
 	 * @brief		サーバーがクライアントにデータを送信する

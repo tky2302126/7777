@@ -1,9 +1,9 @@
 ﻿#include "UDPConnection.h"
 
-void UDPConnection::SendServer(SendData& _sendData,const int& UDPSocketHandle)
+void UDPConnection::SendServer(Card& _card,const int& UDPSocketHandle)
 {
 #pragma pack(1)
-	CardData data[SUIT_NUM * DECK_RANGE];
+	CardData data;
 #pragma pack()
 
 	//! 送信時刻
@@ -11,15 +11,11 @@ void UDPConnection::SendServer(SendData& _sendData,const int& UDPSocketHandle)
 	//! 送信データID
 	static unsigned int sendDataId = 10000 * GameManager::playerId;
 	sendDataId++;
-	// カード情報をパッケージング
-	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
-	{
-		data[i].data = _sendData.cards[i]->suit * 13 + _sendData.cards[i]->number - 1;
-		data[i].area = (int)_sendData.cards[i]->area;
-		data[i].areaNumber = _sendData.cards[i]->areaNumber;
-	}
+		data.data = _card.suit * 13 + _card.number - 1;
+		data.area = (int)_card.area;
+		data.areaNumber = _card.areaNumber;
 
-	unsigned char block[250];
+	unsigned char block[12];
 
 	unsigned char* b = block;
 
@@ -27,13 +23,18 @@ void UDPConnection::SendServer(SendData& _sendData,const int& UDPSocketHandle)
 	b += sizeof(int);
 	std::memcpy(b, &sendDataId, sizeof(int));
 	b += sizeof(int);
-	std::memcpy(b, data, sizeof(data));
+	std::memcpy(b, &data, sizeof(data));
 
 	// UDPで送信
 	// クライアントのみ送信
 	auto portNum = UDP_PORT_NUM;
 	auto Ip = GameManager::IPAdress[0];
-	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, 250);
+	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, 12);
+
+
+	std::ofstream outputfile("client.txt");
+	outputfile << "送信 -> \n";
+	outputfile << ret;
 }
 
 void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)

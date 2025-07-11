@@ -1,5 +1,7 @@
 ﻿#include "SceneGame.h"
 
+#define DEBUG
+
 /**
 * @author   Suzuki N
 * @date     24/11/20
@@ -73,23 +75,7 @@ void SceneGame::Update()
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
-		if (!ReceiveInitData())
-			return;
-		else
-		{
-			int debug = 0;
-
-			DrawFormatString(
-				0, 0, GetColor(0, 255, 0),
-				"なんでやねん");
-
-			if (boardCp->handData.empty())
-				debug += 2;
-
-			DrawFormatString(
-				0, 30, GetColor(255, 0, 0),
-				"Debug : %d",debug);
-		}
+		if (!ReceiveInitData())return;
 	}
 
 
@@ -124,43 +110,24 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
+	if (!isGame)return;
+
 	if (GameManager::role == Role::Server)
 	{
-		//! 受け取ったカードデータのデコード先
-		static Card decodeData[SUIT_NUM * DECK_RANGE];
-		int sendTime = -1;
-
-		if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) == TRUE)
-		{
-			int portNum = UDP_PORT_NUM;
-			unsigned char recvData[250];
-
-			int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
-				recvData, 250, TRUE);
-
-			// 送信時刻を書き込み
-			sendTime = *(int*)recvData;
-
-			//! 受け取ったカードデータ
-			CardData* cdp = (CardData*)(recvData + sizeof(int) * 2);
-
-			// カードデータをデコードする
-			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
-			{
-				decodeData[i].suit = (Suit)(cdp[i].data / 13);
-				decodeData[i].number = cdp[i].data % 13 + 1;
-				decodeData[i].area = static_cast<Area>(cdp[i].area);
-				decodeData[i].areaNumber = cdp[i].areaNumber;
-			}
-		}
-
-		auto portNum = UDP_PORT_NUM;
-		auto Ip = GameManager::IPAdress[0];
-		int ret = NetWorkSendUDP(UDPSocketHandle[0], Ip, portNum, "block", 6);
+		ReceiveUpdateData_Client();
 	}
-	if (GameManager::role == Role::Client)
+	else if (GameManager::role == Role::Client)
 	{
-
+		if (ReceiveUpdateData_Server())
+		{
+			// 受信したら全clientに送信
+			SendData data =
+			{
+				boardCp->score,
+				boardCp->cards
+			};
+			UDPConnection::SendClients(data, UDPSocketHandle);
+		}
 	}
 
 	DrawFormatString(
@@ -249,7 +216,7 @@ void SceneGame::CheckMouseInput()
 				};
 				if (GameManager::role == Role::Client)
 				{
-					UDPConnection::SendServer(data, UDPSocketHandle[0]);
+					UDPConnection::SendServer(*card, UDPSocketHandle[0]);
 				}
 
 #else
@@ -299,6 +266,7 @@ int SceneGame::ReceiveInitData()
 			decodeData[i].area = static_cast<Area>(cdp[i].area);
 			decodeData[i].areaNumber = cdp[i].areaNumber;
 		}
+		// デコードしたデータで上書き
 		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 		{
 			boardCp->cards[i]->suit = decodeData[i].suit;
@@ -307,7 +275,7 @@ int SceneGame::ReceiveInitData()
 			boardCp->cards[i]->areaNumber = decodeData[i].areaNumber;
 		}
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < MAX_PLAYER; ++i)
 		{
 			std::vector<std::shared_ptr<Card>> playerHand;
 			for (auto card : boardCp->cards)
@@ -320,10 +288,16 @@ int SceneGame::ReceiveInitData()
 			boardCp->handData.push_back(playerHand);
 		}
 
+#ifdef DEBUG
 		boardCp->SortHand(Area::Area_Player1);
 		boardCp->ShowHand(Area::Area_Player1);
+#else
+		boardCp->SortHand((Area)(GameManager::playerId + 2));
+		boardCp->ShowHand((Area)(GameManager::playerId + 2));
+#endif // DEBUG
 
 		ret = 1;
+		isGame = true;
 	}
 
 	return ret;
@@ -338,6 +312,129 @@ void SceneGame::SendInitData()
 	};
 
 	UDPConnection::SendClients(data, UDPSocketHandle);
+}
+
+int SceneGame::ReceiveUpdateData_Client()
+{
+	int recvCount = 0;
+
+	static bool isRecv = false;
+	if (isRecv) 
+		DrawFormatString(
+			10, 60, GetColor(0, 255, 0),
+			"Recv");
+
+
+	for (int i = 0; i < MAX_PLAYER; ++i)
+	{
+		// 受信データなし
+		if (CheckNetWorkRecvUDP(UDPSocketHandle[i]) != TRUE) continue;
+
+		std::ofstream outputfile("server.txt");
+		outputfile << "受信\n";
+		outputfile << i;
+
+		isRecv = true;
+		HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false;});
+
+		// 受信データがあったらカウントアップ
+		recvCount++;
+		//! 受け取ったカードデータのデコード先
+		Card decodeData;
+		//! 送信時刻
+		int sendTime = -1;
+
+		int portNum = UDP_PORT_NUM;
+		unsigned char recvData[11];
+
+		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+			recvData, 11, TRUE);
+
+		// 送信時刻を書き込み
+		sendTime = *(int*)recvData;
+
+		//! 受け取ったカードデータ
+		CardData* cdp = (CardData*)(recvData + sizeof(int) * 2);
+
+		// カードデータをデコードする
+		decodeData.suit = (Suit)(cdp->data / 13);
+		decodeData.number = cdp->data % 13 + 1;
+		decodeData.area = static_cast<Area>(cdp->area);
+		decodeData.areaNumber = cdp->areaNumber;
+
+		// デコードしたデータと現在のデータを比較し、変更点を反映する
+		for (int j = 0; j < SUIT_NUM * DECK_RANGE; ++j)
+		{
+			if (decodeData.area != Area_Board &&
+				boardCp->cards[j]->area == Area_Board)
+			{
+				boardCp->CardOnBoard(boardCp->cards[j]);
+			}
+		}
+	}
+
+	return recvCount > 0 ? TRUE : FALSE;
+}
+
+int SceneGame::ReceiveUpdateData_Server()
+{
+	static bool isRecv = false;
+	if (isRecv)
+		DrawFormatString(
+			10, 60, GetColor(0, 255, 0),
+			"Recv");
+
+	// 受信データなし
+	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) != TRUE) return 0;
+
+	isRecv = true;
+	HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
+
+	//! 受け取ったカードデータのデコード先
+	static Card decodeData[SUIT_NUM * DECK_RANGE];
+	//! 送信時刻
+	int sendTime = -1;
+
+	int portNum = UDP_PORT_NUM;
+	unsigned char recvData[250];
+
+	int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+		recvData, 250, TRUE);
+
+	std::ofstream outputfile("client.txt");
+	outputfile << "受信 -> \n";
+	outputfile << ret;	
+
+
+	// 送信時刻を書き込み
+	sendTime = *(int*)recvData;
+
+	//! 受け取ったカードデータ
+	CardData* cdp = (CardData*)(recvData + sizeof(int) * 2);
+
+	// カードデータをデコードする
+	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+	{
+		decodeData[i].suit = (Suit)(cdp[i].data / 13);
+		decodeData[i].number = cdp[i].data % 13 + 1;
+		decodeData[i].area = static_cast<Area>(cdp[i].area);
+		decodeData[i].areaNumber = cdp[i].areaNumber;
+	}
+
+	//
+	// デコードしたデータと現在のデータを比較し、変更点を反映する
+	//
+
+	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+	{
+		if (decodeData[i].area != Area_Board &&
+			boardCp->cards[i]->area == Area_Board)
+		{
+			boardCp->CardOnBoard(boardCp->cards[i]);
+		}
+	}
+
+	return 1;
 }
 
 
