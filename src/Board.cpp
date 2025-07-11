@@ -26,7 +26,7 @@ Board::Board()
 	{
 		Shuffle();
 		//! クライアント側は山札の更新を待つ
-		Distribute(4);
+		Distribute(MAX_PLAYER);
 #ifdef DEBUG
 		SortHand(Area::Area_Player1);
 		ShowHand(Area::Area_Player1);

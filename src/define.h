@@ -1,5 +1,5 @@
 ﻿#pragma once
-// ! Includeを入れない
+#include "HandlerWaltanForDxLib.h"
 
 /**
 * @struct Vector2Int

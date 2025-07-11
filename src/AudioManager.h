@@ -1,10 +1,7 @@
 ﻿#pragma once
 #include "define.h"
 #include "HandlerWaltanForDxLib.h"
-#include <iostream>
 #include <unordered_map>
-#include <thread>
-#include <mutex>
 
 enum SEList
 {
@@ -18,6 +15,8 @@ enum BGMList
 
 class AudioManager
 {
+public:
+
 	AudioManager();
 	~AudioManager();
 
