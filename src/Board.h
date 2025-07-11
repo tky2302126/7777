@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Card.h"
+#include "Dice.h"
 #include "define.h"
 
 struct CardInfo
@@ -64,6 +65,8 @@ public:
 	int eventCountTimer;
 	// 実行しているイベント
 	Event currentEvent;
+
+	Dice* dice;
 #pragma endregion
 #pragma region privateメソッド
 	

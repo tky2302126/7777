@@ -13,6 +13,8 @@ Board::Board()
 
 	memset(boardData, 0, sizeof(boardData));
 
+	dice = new Dice();
+
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
 		cards[i] = std::make_shared<Card>();
@@ -45,6 +47,8 @@ Board::~Board()
 	{
 		card.reset();
 	}
+
+	delete dice;
 }
 
 void Board::Draw()
@@ -57,6 +61,9 @@ void Board::Draw()
 	MV1SetRotationXYZ(Card::modelHandle, Card::rotate_model);
 	MV1SetScale(Card::modelHandle, Card::scale_model);
 	MV1DrawModel(Card::modelHandle);
+
+	//
+	dice->Update();
 }
 
 void Board::Move(Card& card)
@@ -105,12 +112,22 @@ void Board::Update()
 	{
 		eventCountTimer--;
 	}
+
+#ifdef _DEBUG
+	if(CheckHitKey(KEY_INPUT_R))
+	{
+		auto num = Random::GetRandomInt(1,6);
+		dice->Roll(num);
+	}
+#endif // _DEBUG
+
 }
 
 void Board::ManualLoad()
 {
 	Card::modelHandle = MV1LoadModel("Assets/model/Cards/Cards.mv1");
 	modelHandle = MV1LoadModel("Assets/model/Table/Table.mv1");
+	if (dice != nullptr) dice->ManualLoad();
 
 	// テーブの座標は固定のため、初期化時に設定
 	MV1SetPosition(modelHandle, { 950,500,500 });
@@ -151,6 +168,7 @@ bool Board::CanPlace(const Card& card)
 void Board::DrawingEvent()
 {
 	// ダイスロールアニメーション
+	// !HWにライブラリがあるらしい
 	std::random_device seed_gen;
 	std::mt19937 engine(seed_gen());
 

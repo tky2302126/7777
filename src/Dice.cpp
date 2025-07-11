@@ -1,42 +1,65 @@
-#include "dice.h"
+Ôªø#include "dice.h"
 
-dice::dice()
+Dice::Dice()
 {
-	modelHandle = MV1LoadModel(_T("C:/Users/student2/Desktop/Dice.mv1"));
+	modelHandle = -1;
+	isRolling = false;
+	scale = { 0.7, 0.7, 0.7 };
+	position = { 720, 850, -350 };
+	rotate = { 0, 0, 0 };
+	num = 0;
 }
 
-void dice::Roll()
+void Dice::ManualLoad()
 {
-	// ÉTÉCÉRÉçèàóù
-	if (rolling) {
-		rotXA += 0.3f + (rand() % 100) / 500.0f;
-		rotYA += 0.4f + (rand() % 100) / 500.0f;
-		rotZA += 0.2f + (rand() % 100) / 500.0f;
-		timerA--;
-
-		rotXB += 0.3f + (rand() % 100) / 500.0f;
-		rotYB += 0.4f + (rand() % 100) / 500.0f;
-		rotZB += 0.2f + (rand() % 100) / 500.0f;
-		timerB--;
-
-		if (timerA <= 0 && timerB <= 0) {
-			rolling = false;
-			resultA = 1 + rand() % 6;
-			resultB = 1 + rand() % 6;
-			SetRotationByResult(resultA, rotXA, rotYA, rotZA);
-			SetRotationByResult(resultB, rotXB, rotYB, rotZB);
-		}
-	}
+	modelHandle = MV1LoadModel("Assets/model/Dice/Dice.mv1");
 }
 
-void dice::SetRotationByResult(int value, float& x, float& y, float& z)
+void Dice::Update()
+{
+	if (!isRolling) return;
+	auto ret = MV1SetPosition(modelHandle, position);
+	ret = MV1SetRotationXYZ(modelHandle, rotate);
+	ret = MV1SetScale(modelHandle, scale);
+	ret =  MV1DrawModel(modelHandle);
+	
+}
+
+void Dice::Roll(const int& result)
+{
+	num = result;
+
+	isRolling = true;
+
+	int duration = 90;
+	rotate = { 0, 0, 0 };
+
+
+	// „Çµ„Ç§„Ç≥„É≠Âá¶ÁêÜ
+	VECTOR target = VGet(
+		rotate.x + (0.3 + Random::GetRandomInt(0, 100) /500.f) * duration,
+		rotate.y + (0.4 + Random::GetRandomInt(0, 100) /500.f) * duration,
+		rotate.z + (0.2 + Random::GetRandomInt(0, 100) /500.f) * duration
+	);
+
+	HWDotween::DoAction(&rotate, target, duration)->OnComplete([&] {
+		SetRotationByResult(num, rotate.x, rotate.y, rotate.z);
+		HWDotween::DoDelay(600)->OnComplete([&] {
+			isRolling = false;
+			rotate = VGet(0, 0, 0);
+			});
+		});		
+	
+}
+
+void Dice::SetRotationByResult(int value, float& x, float& y, float& z)
 {
 	switch (value) {
-	case 1: x = 0.0f;              y = 0.0f;         z = 0.0f; break;
-	case 4: x = DX_PI_F / 2;  y = 0.0f;         z = 0.0f; break;
-	case 5: x = DX_PI_F / 2;  y = 0.0f;         z = DX_PI_F / 2; break;
-	case 2: x = DX_PI_F / 2;  y = 0.0f;         z = -DX_PI_F / 2; break;
-	case 3: x = -DX_PI_F / 2; y = 0.0f;         z = 0.0f; break;
-	case 6: x = DX_PI_F;       y = 0.0f;        z = 0.0f; break;
+	case 1: x = -DX_PI_F / 2;     y = 0.0f;          z = 0.0f;   break;
+	case 2: x = 0;		          y = -DX_PI_F / 2;  z = 0.0;    break;
+	case 3: x = DX_PI_F ;	      y = 0.0f;          z = 0.0f;   break;
+	case 4: x = 0;				  y = 0.0f;          z = 0.0f;   break;
+	case 5: x = -DX_PI_F ;		  y = DX_PI_F / 2;   z = 0.0;    break;
+	case 6: x = DX_PI_F / 2;      y = 0.0f;          z = 0.0f;   break;
 	}
 }
