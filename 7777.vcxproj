@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AudioManager.cpp" />
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Card.cpp" />
     <ClCompile Include="src\Dice.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AudioManager.h" />
     <ClInclude Include="src\Board.h" />
     <ClInclude Include="src\Card.h" />
     <ClInclude Include="src\Cursor.h" />
