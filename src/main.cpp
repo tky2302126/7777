@@ -15,9 +15,9 @@ int GameManager::networkHandle[3] = { -1, -1, -1 };
 int GameManager::connectNum = -1;
 int GameManager::playerId = -1;
 IPDATA GameManager::IPAdress[3] = { 
-	{-1, -1, -1, -1}, 
-	{-1, -1, -1, -1}, 
-	{-1, -1, -1, -1},  
+	{255, 255, 255, 255}, 
+	{255, 255, 255, 255}, 
+	{255, 255, 255, 255},  
 };
 int GameManager::portNum = -1;
 
