@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Card.h"
+#include "Dice.h"
 #include "define.h"
 
 struct CardInfo
@@ -33,6 +34,15 @@ public:
 	/// </summary>
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(const Card& card);
+
+#pragma region イベント関連
+	//イベント抽選の関数
+	// サーバーで実行→クライアントに送信する予定
+	void DrawingEvent();
+
+#pragma endregion
+
+
 #pragma endregion
 
 #pragma region privateメンバ変数
@@ -52,6 +62,13 @@ public:
 	std::vector<std::vector<std::shared_ptr<Card>>> handData;
 	//! スコア
 	int score;
+
+	// イベント用の実行時間カウントタイマー
+	int eventCountTimer;
+	// 実行しているイベント
+	Event currentEvent;
+
+	Dice* dice;
 #pragma endregion
 #pragma region privateメソッド
 	
@@ -80,6 +97,43 @@ public:
 	/// </summary>
 	/// <param name="playerArea"></param>
 	void SortHand(Area playerArea);
+
+	/// <summary>
+	/// スコア計算
+	/// </summary>
+	/// <param name="card">置かれたカード</param>
+	void CalculateScore(std::shared_ptr<Card>& card);
+
+	/// <summary>
+	/// 爆弾イベント
+	/// </summary>
+	void Bomb();
+
+	/// <summary>
+	/// フィーバータイムイベント
+	/// </summary>
+	void FeverTime();
+
+	/// <summary>
+	/// ラッキーナンバーイベント
+	/// </summary>
+	/// <param name="num">対象の数字</param>
+	void LuckyNumber();
+
+	/// <summary>
+	/// エリア制限
+	/// </summary>
+	void LimitArea();
+
+	/// <summary>
+	/// エリア移動
+	/// </summary>
+	void SlideArea();
+
+	/// <summary>
+	/// 手札入れ替え
+	/// </summary>
+	void ShuffleHand();
 #pragma endregion
 };
 

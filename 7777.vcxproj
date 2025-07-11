@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Card.cpp" />
+    <ClCompile Include="src\Dice.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mouse.cpp" />
     <ClCompile Include="src\MovieManager.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="src\Card.h" />
     <ClInclude Include="src\Cursor.h" />
     <ClInclude Include="src\define.h" />
+    <ClInclude Include="src\Dice.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\MovieManager.h" />
