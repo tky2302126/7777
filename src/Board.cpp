@@ -9,6 +9,7 @@ Board::Board()
 	areaR = -1;
 	edgeNumLeft = -1;
 	score = 0;
+	eventCountTimer = -1;
 
 	memset(boardData, 0, sizeof(boardData));
 
@@ -94,6 +95,16 @@ void Board::Update()
 				GetColor(255, 255, 255), FALSE);
 		}
 	}
+	if(eventCountTimer ==0)
+	{
+		
+		eventCountTimer = -1;
+	}
+
+	if(eventCountTimer >0)
+	{
+		eventCountTimer--;
+	}
 }
 
 void Board::ManualLoad()
@@ -135,6 +146,43 @@ bool Board::CanPlace(const Card& card)
 	if (boardData[suit][right] == '1') return true;
 
 	return false;
+}
+
+void Board::DrawingEvent()
+{
+	// ダイスロールアニメーション
+	std::random_device seed_gen;
+	std::mt19937 engine(seed_gen());
+
+	std::uniform_int_distribution<> dist(0, 5);
+
+	auto dice = dist(engine);
+	// 抽選結果に応じて関数を実行
+	switch (dice)
+	{
+	case 0:
+		Bomb();
+		break;
+	case 1:
+		FeverTime();
+		break;
+	case 2:
+		LuckyNumber();
+		break;
+	case 3:
+		LimitArea();
+		break;
+	case 4:
+		SlideArea();
+		break;
+	case 5:
+		ShuffleHand();
+		break;
+	default:
+		break;
+	}
+
+	eventCountTimer = EVENT_TIME;
 }
 
 void Board::Shuffle()
@@ -233,4 +281,47 @@ void Board::SortHand(Area playerArea)
 	{
 		handVec[i]->areaNumber = i;
 	}
+}
+
+void Board::CalculateScore(std::shared_ptr<Card>& card)
+{
+}
+
+void Board::Bomb()
+{
+	/// 導火線の長さを決める
+	/// カードを置いたときに導火線を進める処理()
+	/// 爆発する処理
+	/// フラグを落とす処理
+}
+
+void Board::FeverTime()
+{
+	/// クールタイム大幅短縮
+	auto coolTime = PLACE_COOL_TIME / 2;
+
+
+}
+
+void Board::LuckyNumber()
+{
+	/// フラグを立てる
+	/// 盤面の数字を見て意味のない数字をいれない
+}
+
+void Board::LimitArea()
+{
+	/// 盤面の状況からあまり意味のないエリア制限を無いようにしたい
+
+}
+
+void Board::SlideArea()
+{
+	/// 右または左に何マスずらすか決定する
+	/// HWDotweenで動かす?
+}
+
+void Board::ShuffleHand()
+{
+	/// 手札情報を更新する
 }
