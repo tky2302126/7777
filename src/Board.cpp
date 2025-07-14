@@ -352,7 +352,7 @@ void Board::FeverTime()
 
 }
 
-void Board::LuckyNumber(int num = -1)
+void Board::LuckyNumber(int num)
 {
 	/// 盤面の数字を見て意味のない数字をいれない
 	if(GameManager::role == Role::Server)
@@ -379,13 +379,13 @@ void Board::LuckyNumber(int num = -1)
 	}
 }
 
-void Board::LimitArea(int left = -1, int right = -1)
+void Board::LimitArea(int left, int right)
 {
 	/// 盤面の状況からあまり意味のないエリア制限を無いようにしたい
 
 }
 
-void Board::SlideArea(bool left = true, int num = -1)
+void Board::SlideArea(bool left, int num)
 {
 	if(GameManager::role == Role::Server)
 	{
