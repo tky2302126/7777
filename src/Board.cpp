@@ -337,6 +337,7 @@ void Board::SortHand(Area playerArea)
 
 int Board::CalculateScore(std::shared_ptr<Card>& card)
 {
+	/// 各クライアントで処理後に計算
 	int add = PLACE_CARD;
 
 	if(IsCompleteRow(card->number))
@@ -359,13 +360,28 @@ int Board::CalculateScore(std::shared_ptr<Card>& card)
 
 bool Board::IsCompleteRow(const int& num)
 {
-	if()
-	return false;
+	for(int i = 0; i < SUIT_NUM; ++i)
+	{
+		auto index = num + i * DECK_RANGE - 1;
+		if(cards[index]->area != Area::Area_Board)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 bool Board::IsCompleteLine(const Suit& suit)
 {
-	return false;
+	for (int i = 0; i < DECK_RANGE; ++i)
+	{
+		auto index = i +  static_cast<int>(suit) * DECK_RANGE;
+		if (cards[index]->area != Area::Area_Board)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 void Board::Bomb()
