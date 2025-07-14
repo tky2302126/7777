@@ -56,10 +56,7 @@ constexpr float CARD_COLLISION_HEIGHT = 90.0f;
 // 通信で使うイベント
 enum Event
 {
-	Event_None,		   // イベント実行なし
 	Event_CountDown,   // スタート時のカウントダウン
-	Event_MouseEnable, // マウス入力を許可
-	Event_DiceRoll,    // ダイスロール
 	Event_IsAgari,	   // あがり
 	Event_Bomb,		   // 爆弾
 	Event_Fever,	   // フィーバータイム

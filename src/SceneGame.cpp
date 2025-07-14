@@ -68,6 +68,8 @@ void SceneGame::LoadComplete()
 		SendInitData();
 		isGame = true;
 	}
+	///
+	CountDown();
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
