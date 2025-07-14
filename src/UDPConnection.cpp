@@ -114,3 +114,7 @@ void UDPConnection::RecvSyncData()
 			&ip, &portNum, &sendCount, sizeof(int), FALSE);
 
 }
+
+void UDPConnection::SendEventData(EventData&)
+{
+}

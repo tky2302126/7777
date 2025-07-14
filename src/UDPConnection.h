@@ -30,6 +30,17 @@ struct CardData
 };
 #pragma pack()
 
+/// <summary>
+/// EventData
+/// イベントデータ送信用の構造体
+/// event type : 実行するイベントタイプ
+/// data	   : イベントごとに使うデータ
+/// </summary>
+struct EventData
+{
+	unsigned char eventType;
+	unsigned char data;
+};
 
 class UDPConnection
 {
@@ -58,6 +69,12 @@ public:
 	 * @param[in]	SendData 送信するデータ
 	 */
 	static void RecvSyncData();
+
+	/// <summary>
+	/// イベントデータをサーバーがクライアントに送信する
+	/// </summary>
+	/// <param name="">EventData 送信するデータ</param>
+	static void SendEventData(EventData&);
 
 private:
 };

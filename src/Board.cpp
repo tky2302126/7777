@@ -300,11 +300,19 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 		std::remove(handData[Area::Area_Player1 - 2].begin(), handData[Area::Area_Player1 - 2].end(), _card),
 		handData[Area::Area_Player1 - 2].end());
 	SortHand(Area::Area_Player1);
+	if (handData[Area::Area_Player1 - 2].size() <= 0)
+	{
+		
+	}
 #else
 	handData[GameManager::playerId].erase(
 		std::remove(handData[GameManager::playerId].begin(), handData[GameManager::playerId].end(), _card),
 		handData[GameManager::playerId].end());
 	SortHand((Area)(GameManager::playerId + 2));
+	if (handData[GameManager::playerId].size() <= 0)
+	{
+
+	}
 #endif // DEBUG
 }
 
@@ -347,19 +355,19 @@ void Board::FeverTime()
 
 }
 
-void Board::LuckyNumber()
+void Board::LuckyNumber(int num)
 {
 	/// フラグを立てる
 	/// 盤面の数字を見て意味のない数字をいれない
 }
 
-void Board::LimitArea()
+void Board::LimitArea(int left, int right)
 {
 	/// 盤面の状況からあまり意味のないエリア制限を無いようにしたい
 
 }
 
-void Board::SlideArea()
+void Board::SlideArea(bool left, int num)
 {
 	/// 右または左に何マスずらすか決定する
 	/// HWDotweenで動かす?

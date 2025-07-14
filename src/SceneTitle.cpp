@@ -9,7 +9,7 @@
 #define DEBUG
 
 SceneTitle::SceneTitle()
-	: selectIndex(0), isSelect(false), inputHandle(-1),portId(-1),
+	: selectIndex(0), isSelect(false), inputHandle(-1), 
 	ipBuffer{ -1, -1, -1, -1 }
 {
 	// 実行中のシーンタグ
@@ -31,21 +31,24 @@ SceneTitle::SceneTitle()
 	cursor.ManualInitialize({300,300,0}, {100,20,0});
 	cursor.SetTargetPosition({ 300,300,0 });
 
-	inputHandle = MakeKeyInput(4, TRUE, FALSE, TRUE);
+	inputHandle = MakeKeyInput(3, TRUE, FALSE, FALSE);
 
-	SetKeyInputStringColor(inputHandle,
+	SetKeyInputStringColor(inputHandle, 
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0),
 		GetColor(0, 0, 0), GetColor(0, 0, 0)
 		); // カラーを設定
 
+	// タイトル画面の読み込み
+	gh_title = LoadGraph("Assets/Sprite/title8.png");
+	gh_titleBack = LoadGraph("Assets/Sprite/title_back2.png");
+	gh_titleLogo = LoadGraph("Assets/Sprite/title_Logo3.png");
 
 #ifdef DEBUG
 	ipData.d1 = ipBuffer[0] = 10;
 	ipData.d2 = ipBuffer[1] = 204;
 	ipData.d3 = ipBuffer[2] = 6;
 	ipData.d4 = ipBuffer[3] = 89;
-	portId = 7777;
 #endif // DEBUG
 
 	if(GameManager::role == Role::Server)
@@ -116,7 +119,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		{
 			++selectIndex;
 
-			if(GameManager::role == Role::Client)
+			if (GameManager::role == Role::Client)
 			{
 				if ((ipBuffer[3] == -1 || portId == -1) &&
 					selectIndex > 2)
@@ -129,7 +132,7 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 					selectIndex = 0;
 				}
 			}
-			if(GameManager::role == Role::Server)
+			if (GameManager::role == Role::Server)
 			{
 				if (portId == -1 && selectIndex > 1)
 				{
@@ -149,6 +152,29 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneTitle::Update()
 {
+	// 画面背景描画
+	DrawGraph(0, 0, gh_titleBack, TRUE);
+	//　背景の柄を動かす
+	offsetX--;
+	if (offsetX <= -tileSize) {
+		offsetX = 0;
+	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);  // 描画ブレンドモードをアルファブレンドにする
+	for (int y = 0; y < tilesY; ++y) {
+		for (int x = 0; x <= tilesX; ++x) {
+			// 画面柄描画
+			DrawGraph(x * tileSize + offsetX, y * tileSize, gh_title, TRUE);
+
+		}
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 描画モードをノーブレンドにする
+	// ロゴを画面中央に描画する
+	int screenWidth = 1920;
+	int logoX, logoY;
+	GetGraphSize(gh_titleLogo, &logoX, &logoY);
+	DrawGraph((screenWidth-logoX)/2, 200, gh_titleLogo, TRUE);
+	
+
 	if (connectParameter == ConnectParameter::Wait)
 	{
 		DrawFormatString(450, 800, GetColor(0, 0, 0), "Connecting");
@@ -212,12 +238,11 @@ void SceneTitle::LateUpdate()
 
 	// テキスト表示座標
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
-
-	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
-		text.c_str());
-
+#ifdef DEBUG
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Title");
+#endif // DEBUG
+
 
 	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
@@ -249,7 +274,7 @@ void SceneTitle::SelectInput()
 	cursor.SetColor(GetColor(100, 100, 100));
 	cursor.SetTargetScale({ 150,15,0 });
 
-	if(selectIndex == 0)
+	if (selectIndex == 0)
 	{
 		GameManager::role == Role::Server ? GameManager::role = Role::Client : GameManager::role = Role::Server;
 		isSelect = false;
@@ -257,14 +282,14 @@ void SceneTitle::SelectInput()
 		cursor.SetTargetScale({ 100,20,0 });
 		return;
 	}
-	else if(selectIndex == 1)
+	else if (selectIndex == 1)
 	{
 		for (int i = 0; i < 4; ++i)
 			ipBuffer[i] = -1;
 		SetActiveKeyInput(inputHandle);
 		SetKeyInputString("", inputHandle);
 	}
-	else if(selectIndex == 2)
+	else if (selectIndex == 2)
 	{
 		if (GameManager::role == Role::Server)
 		{
@@ -277,7 +302,7 @@ void SceneTitle::SelectInput()
 			SetKeyInputString("", inputHandle);
 		}
 	}
-	else if(selectIndex == 3)
+	else if (selectIndex == 3)
 	{
 		connectParameter = ConnectParameter::Wait;
 		Connect();
@@ -318,7 +343,7 @@ void SceneTitle::ServerInputForm()
 
 	// IPアドレスとポート番号が入力されている場合
 	int num = 0;
-	for(int i = 0; i < MAX_PLAYER - 1; ++i)
+	for (int i = 0; i < MAX_PLAYER - 1; ++i)
 		if (GameManager::networkHandle[i] != -1)
 			++num;
 	GameManager::connectNum = num + 1;
@@ -478,3 +503,6 @@ void SceneTitle::Connect()
 		connectParameter = ConnectParameter::Connected;
 	}
 }
+
+
+
