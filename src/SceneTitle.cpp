@@ -6,6 +6,7 @@
 * @note		SceneTitleの実装ファイル
 */
 
+#define DEBUG
 
 SceneTitle::SceneTitle()
 	: selectIndex(0), isSelect(false), inputHandle(-1), 
@@ -42,10 +43,19 @@ SceneTitle::SceneTitle()
 	gh_title = LoadGraph("Assets/Sprite/title8.png");
 	gh_titleBack = LoadGraph("Assets/Sprite/title_back2.png");
 	gh_titleLogo = LoadGraph("Assets/Sprite/title_Logo3.png");
+
+#ifdef DEBUG
+	ipData.d1 = ipBuffer[0] = 10;
+	ipData.d2 = ipBuffer[1] = 204;
+	ipData.d3 = ipBuffer[2] = 6;
+	ipData.d4 = ipBuffer[3] = 89;
+#endif // DEBUG
+	portId = 7777;
 }
 
 SceneTitle::~SceneTitle()
 {
+	input->DeleteCallBack("cursor", callBackId);
 }
 
 void SceneTitle::LoadComplete()
@@ -70,14 +80,64 @@ void SceneTitle::KeyInputCallback(InputAction::CallBackContext _c)
 		// カーソル移動と参照項目移動の処理
 		if (it->keyCode == PAD_INPUT_UP)
 		{
-			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0; 
+			if (GameManager::role == Role::Server)
+			{
+				if (--selectIndex < 0)
+				{
+					if (portId == -1)
+					{
+						selectIndex = 1;
+					}
+					else
+					{
+						selectIndex = 2;
+					}
+				}
+			}
+			else if (GameManager::role == Role::Client)
+			{
+				if (--selectIndex < 0)
+				{
+					if (ipBuffer[3] == -1 || portId == -1)
+					{
+						selectIndex = 2;
+					}
+					else
+					{
+						selectIndex = 3;
+					}
+				}
+			}
 		}
 
 		if (it->keyCode == PAD_INPUT_DOWN)
 		{
-			if (selectIndex == 0)	selectIndex = 1;
-			else if (selectIndex == 1)	selectIndex = 0;
+			++selectIndex;
+
+			if (GameManager::role == Role::Client)
+			{
+				if ((ipBuffer[3] == -1 || portId == -1) &&
+					selectIndex > 2)
+				{
+					selectIndex = 0;
+				}
+				else if ((ipBuffer[3] != -1 && portId != -1) &&
+					selectIndex > 3)
+				{
+					selectIndex = 0;
+				}
+			}
+			if (GameManager::role == Role::Server)
+			{
+				if (portId == -1 && selectIndex > 1)
+				{
+					selectIndex = 0;
+				}
+				else if (portId != -1 && selectIndex > 2)
+				{
+					selectIndex = 0;
+				}
+			}
 		}
 
 
@@ -109,6 +169,48 @@ void SceneTitle::Update()
 	GetGraphSize(gh_titleLogo, &logoX, &logoY);
 	DrawGraph((screenWidth-logoX)/2, 200, gh_titleLogo, TRUE);
 	
+
+	if (connectParameter == ConnectParameter::Wait)
+	{
+		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connecting");
+	}
+	else if (connectParameter == ConnectParameter::Complete)
+	{
+		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
+
+		if (GameManager::role == Role::Server)
+		{
+			GameManager::playerId = 0;
+
+			// clientに接続人数とPlayerIDを送信
+			// !タイミングがよくなさそう
+			for (int i = 0; i < GameManager::connectNum; ++i)
+			{
+				unsigned char sendData = GameManager::connectNum * 10 + i + 1;
+				NetWorkSend(GameManager::networkHandle[i],
+					&sendData, sizeof(sendData));
+				GetNetWorkIP(GameManager::networkHandle[i], &GameManager::IPAdress[i]);
+			}
+
+			GameManager::portNum = portId;
+			SceneChangeAsync(SceneTag::Game);
+		}
+		else if (GameManager::role == Role::Client)
+		{
+			unsigned char recvData = 0;
+			NetWorkRecv(GameManager::networkHandle[0],
+				&recvData, sizeof(char));
+
+			if (recvData != 0)
+			{
+				GameManager::connectNum = (int)(recvData / 10);
+				GameManager::playerId = (int)(recvData % 10);
+				GetNetWorkIP(GameManager::networkHandle[0], &GameManager::IPAdress[0]);
+				GameManager::portNum = portId;
+				SceneChangeAsync(SceneTag::Game);
+			}
+		}
+	}
 }
 
 void SceneTitle::LateUpdate()
@@ -119,70 +221,24 @@ void SceneTitle::LateUpdate()
 
 	// テキスト表示座標
 	float posX = 1920 / 2 - (50 * (text.size() / 4));
-
-	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
-		 text.c_str());
-
-
+#ifdef DEBUG
 	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
 		"Title");
+#endif // DEBUG
 
 
-	DrawFormatString(300, 300 - GetFontSize() / 2, 
+	DrawFormatString(300, 300 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"項目1");
+		"Role       : ");
+	if (GameManager::role == Role::Server)
+		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
+	else
+		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
 
-	DrawFormatString(300, 400 - GetFontSize() / 2,
-		GetColor(0, 0, 0),
-		"項目2");
-
-
-	if (isSelect)
-	{
-		// 入力中のグループを設定
-		int inputIndex = 0;
-		for (int i = 0; i < 4; ++i)
-		{
-			if (ipBuffer[i] != -1) continue;
-			inputIndex = i;
-			break;
-		}
-
-		for(int i = 0; i < inputIndex; ++i)
-		{			
-			DrawFormatString(100 + GetFontSize() * 3 * i,
-				100, GetColor(0, 0, 0), 
-				"%d.", ipBuffer[i]);
-		}
-
-		DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 100, inputHandle);
-
-		if (CheckKeyInput(inputHandle))
-		{
-			// 入力された文字列を数列に変換
-			int num = GetKeyInputNumber(inputHandle);
-			ipBuffer[inputIndex] = num;
-
-			// 入力が完了した場合
-			if (ipBuffer[3] != -1)
-			{
-				IPDATA ip;
-				ip.d1 = ipBuffer[0];
-				ip.d2 = ipBuffer[1];
-				ip.d3 = ipBuffer[2];
-				ip.d4 = ipBuffer[3];
-
-				isSelect = false;
-				cursor.SetColor(GetColor(100, 100, 255));
-				cursor.SetTargetScale({ 100,20,0 });
-			}
-			else
-			{
-				SetActiveKeyInput(inputHandle);
-				SetKeyInputString("", inputHandle);
-			}
-		}
-	}
+	if (GameManager::role == Role::Server)
+		ServerInputForm();
+	if (GameManager::role == Role::Client)
+		ClientInputForm();
 }
 
 void SceneTitle::SelectInput()
@@ -199,18 +255,229 @@ void SceneTitle::SelectInput()
 	cursor.SetColor(GetColor(100, 100, 100));
 	cursor.SetTargetScale({ 150,15,0 });
 
-	SetActiveKeyInput(inputHandle);
-	SetKeyInputString("", inputHandle);
+	if (selectIndex == 0)
+	{
+		GameManager::role == Role::Server ? GameManager::role = Role::Client : GameManager::role = Role::Server;
+		isSelect = false;
+		cursor.SetColor(GetColor(100, 100, 255));
+		cursor.SetTargetScale({ 100,20,0 });
+		return;
+	}
+	else if (selectIndex == 1)
+	{
+		for (int i = 0; i < 4; ++i)
+			ipBuffer[i] = -1;
+		SetActiveKeyInput(inputHandle);
+		SetKeyInputString("", inputHandle);
+	}
+	else if (selectIndex == 2)
+	{
+		if (GameManager::role == Role::Server)
+		{
+			PreparationListenNetWork(portId);
+			connectParameter = ConnectParameter::Wait;
+		}
+		else if (GameManager::role == Role::Client)
+		{
+			SetActiveKeyInput(inputHandle);
+			SetKeyInputString("", inputHandle);
+		}
+	}
+	else if (selectIndex == 3)
+	{
+		connectParameter = ConnectParameter::Wait;
+		Connect();
+	}
+}
+
+void SceneTitle::ServerInputForm()
+{
+	if (selectIndex == 1)
+	{
+		if (isSelect)
+		{
+			DrawKeyInputString(100, 350, inputHandle);
+
+			// �|�[�g�ԍ��̓��͏���
+			if (CheckKeyInput(inputHandle))
+			{
+				// ���͂��ꂽ������𐔗�ɕϊ�
+				portId = GetKeyInputNumber(inputHandle);
+				SetKeyInputString("", inputHandle);
+
+				isSelect = false;
+				cursor.SetColor(GetColor(100, 100, 255));
+				cursor.SetTargetScale({ 100,20,0 });
+			}
+		}
+	}
+
+	DrawFormatString(300, 400 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"ポート番号 : ");
+	if (portId != -1)
+	{
+		DrawFormatString(450, 400 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d", portId);
+	}
+
+	// IPアドレスとポート番号が入力されている場合
+	int num = 0;
+	for (int i = 0; i < MAX_PLAYER - 1; ++i)
+		if (GameManager::networkHandle[i] != -1)
+			++num;
+	GameManager::connectNum = num + 1;
+	DrawFormatString(300, 700 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"参加人数 : %d/4", GameManager::connectNum);
+
+
+	if (portId != -1)
+	{
+		DrawFormatString(300, 500 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"Connect");
+	}
+
+	//! 接続人数の表示
+
+
+	// 接続中の処理
+	if (connectParameter == ConnectParameter::Wait)
+	{
+		int index = 0;
+		for (index = 0; index < 3; ++index)
+			if (GameManager::networkHandle[index] == -1)
+				break;
+
+		// 新しい接続があったらそのネットワークハンドルを得る
+		GameManager::networkHandle[index] = GetNewAcceptNetWork();
+		if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
+			connectParameter = ConnectParameter::Complete;
+	}
+}
+
+void SceneTitle::ClientInputForm()
+{
+	if (selectIndex == 1)
+	{
+		if (isSelect)
+		{
+			// ���͒��̃O���[�v��ݒ�
+			int inputIndex = 0;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (ipBuffer[i] != -1) continue;
+				inputIndex = i;
+				break;
+			}
+
+			for (int i = 0; i < inputIndex; ++i)
+			{
+				DrawFormatString(100 + GetFontSize() * 3 * i,
+					350, GetColor(0, 0, 0),
+					"%d.", ipBuffer[i]);
+			}
+
+			DrawKeyInputString(100 + GetFontSize() * 3 * inputIndex, 350, inputHandle);
+
+
+			// IP�A�h���X�̓��͏���
+			if (CheckKeyInput(inputHandle))
+			{
+				// ���͂��ꂽ������𐔗�ɕϊ�
+				int num = GetKeyInputNumber(inputHandle);
+				ipBuffer[inputIndex] = num;
+
+				// ���͂����������ꍇ
+				if (ipBuffer[3] != -1)
+				{
+					ipData.d1 = ipBuffer[0];
+					ipData.d2 = ipBuffer[1];
+					ipData.d3 = ipBuffer[2];
+					ipData.d4 = ipBuffer[3];
+
+					isSelect = false;
+					cursor.SetColor(GetColor(100, 100, 255));
+					cursor.SetTargetScale({ 100,20,0 });
+				}
+				else
+				{
+					SetActiveKeyInput(inputHandle);
+					SetKeyInputString("", inputHandle);
+				}
+			}
+		}
+	}
+	else if (selectIndex == 2)
+	{
+		if (isSelect)
+		{
+			DrawKeyInputString(100, 450, inputHandle);
+
+			// �|�[�g�ԍ��̓��͏���
+			if (CheckKeyInput(inputHandle))
+			{
+				// ���͂��ꂽ������𐔗�ɕϊ�
+				portId = GetKeyInputNumber(inputHandle);
+				SetKeyInputString("", inputHandle);
+
+				isSelect = false;
+				cursor.SetColor(GetColor(100, 100, 255));
+				cursor.SetTargetScale({ 100,20,0 });
+			}
+		}
+	}
+
+
+	DrawFormatString(300, 400 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"IPアドレス : ");
+	if (ipBuffer[3] != -1)
+	{
+		DrawFormatString(450, 400 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d.%d.%d.%d", ipData.d1, ipData.d2, ipData.d3, ipData.d4);
+	}
+
+	DrawFormatString(300, 500 - GetFontSize() / 2,
+		GetColor(0, 0, 0),
+		"ポート番号 : ");
+	if (portId != -1)
+	{
+		DrawFormatString(450, 500 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"%d", portId);
+	}
+
+	// IPアドレスとポート番号が入力されている場合
+
+	if (ipBuffer[3] != -1 && portId != -1)
+	{
+		DrawFormatString(300, 600 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"Connect");
+	}
 }
 
 void SceneTitle::Connect()
 {
-	int portNum = 7777;
-	PreparationListenNetWork(portNum);
-	for(int NetHandle : NetWorkHandles)
+	GameManager::networkHandle[0] = ConnectNetWork(ipData, portId);
+	static HWDotween::TweenCallback* tweenCallback = nullptr;
+
+	// �ڑ��Ɏ��s�����ꍇ�A��莞�Ԍ�ɍēx�ڑ�����݂�
+	if (GameManager::networkHandle[0] == -1)
 	{
-		if (NetHandle != -1) continue;
-		NetHandle = GetNewAcceptNetWork();
+		tweenCallback = HWDotween::DoDelay(60);
+		tweenCallback->OnComplete([&]()
+			{
+				Connect();
+			});
+	}
+	else
+	{
+		connectParameter = ConnectParameter::Complete;
 	}
 }
 
