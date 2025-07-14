@@ -340,12 +340,12 @@ int Board::CalculateScore(std::shared_ptr<Card>& card)
 	/// 各クライアントで処理後に計算
 	int add = PLACE_CARD;
 
-	if(IsCompleteRow(card->number))
+	if(IsCompleteRowOfSuit(card->number))
 	{
 		add += ROW_COMPLETE;
 	}
 
-	if(IsCompleteLine(card->suit))
+	if(IsCompleteColumnAt(card->suit))
 	{
 		add += LINE_COMPLETE;
 	}
@@ -358,7 +358,7 @@ int Board::CalculateScore(std::shared_ptr<Card>& card)
 	return add;
 }
 
-bool Board::IsCompleteRow(const int& num)
+bool Board::IsCompleteRowOfSuit(int num)
 {
 	for(int i = 0; i < SUIT_NUM; ++i)
 	{
@@ -371,11 +371,11 @@ bool Board::IsCompleteRow(const int& num)
 	return true;
 }
 
-bool Board::IsCompleteLine(const Suit& suit)
+bool Board::IsCompleteColumnAt(const Suit& suit)
 {
 	for (int i = 0; i < DECK_RANGE; ++i)
 	{
-		auto index = i +  static_cast<int>(suit) * DECK_RANGE;
+		auto index = i +  static_cast<int>(suit) * DECK_RANGE -1;
 		if (cards[index]->area != Area::Area_Board)
 		{
 			return false;

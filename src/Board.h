@@ -142,7 +142,7 @@ public:
 	/// </summary>
 	/// <param name="num"></param>
 	/// <returns></returns>
-	bool IsCompleteRow(const int& num);
+	bool IsCompleteRow(int num);
 
 	/// <summary>
 	/// 横にそろったか
