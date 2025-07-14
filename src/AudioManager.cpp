@@ -9,10 +9,7 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
-	if (asyncThread.joinable())
-	{
-		asyncThread.join();
-	}
+	
 }
 
 void AudioManager::Init()
@@ -61,15 +58,16 @@ void AudioManager::Load()
 {
 }
 
-
-
-
-
-void AudioManager::Release(SEList)
+void AudioManager::Load(SceneTag sceneName)
 {
 }
 
-void AudioManager::Release(BGMList)
+
+void AudioManager::ReleaseSE(SEList)
+{
+}
+
+void AudioManager::ReleaseBGM(BGMList)
 {
 }
 
@@ -102,41 +100,4 @@ void AudioManager::PlayBGM(BGMList name, bool loop)
 void AudioManager::PlaySE(SEList name)
 {
 	PlaySoundMem(SETrack[name], DX_PLAYTYPE_BACK);
-}
-
-void AudioManager::PlaySECustom(SEList seName, BGMList bgmName, bool loop)
-{
-	for (int i = 0; i < BGMList::BGM_ALL; i++)
-	{
-		auto it = BGMTrack.find((BGMList)i);
-		// 見つからなかった場合
-		if (it == BGMTrack.end() || it->second == -1)
-		{
-			continue;
-		}
-		int handle = it->second;
-		auto result = StopSoundMem(handle);
-	}
-	auto future = std::async(std::launch::async, &AudioManager::SurveySEAsync, this, seName);
-	future.get();
-	PlayBGM(bgmName, loop);
-}
-
-void AudioManager::SetLoop(bool)
-{
-}
-
-void AudioManager::SurveySEAsync(SEList name)
-{
-	std::lock_guard<std::mutex> lock(seMutex);
-	PlaySE(name);
-	while (true)
-	{
-		if (CheckSoundMem(SETrack[name]) == 0)
-		{
-			break;
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(16));
-	}
-
 }
