@@ -1,6 +1,6 @@
 ﻿#include "Board.h"
 
-//#define DEBUG
+#define DEBUG
 
 Board::Board()
 {
@@ -247,18 +247,47 @@ void Board::ShowHand(Area playerArea)
 
 	float merginX = -8;
 	float merginY = -25;
+
+	//
+	// 中央を基準にして手札を表示する
+	//
+
+	std::vector<std::shared_ptr<Card>>::iterator centerCard;
+
 	for (auto it = handVec.begin(); it != handVec.end(); ++it)
 	{
-		HWDotween::DoAction(&(*it)->position, { merginX * (*it)->areaNumber, merginY, 0 }, 30);
+		if ((*it)->areaNumber == (int)(handVec.size() / 2))
+		{
+			centerCard = it;
+			break;
+		}
+	}
+
+	for (auto it = handVec.begin(); it != handVec.end(); ++it)
+	{
+		HWDotween::DoAction(&(*it)->position, { 
+			merginX* ((*it)->areaNumber - (*centerCard)->areaNumber + 7),
+			merginY, 0 }, 30);
 		HWDotween::DoAction(&(*it)->rotate, { 0, 0, 180 }, 30);
 	}
 
-	HWDotween::DoDelay(60)->OnComplete([&] {
-		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
-		{
-			if (cards[i]->number == 7)
-				CardOnBoard(cards[i]);
-		}});
+	static bool isFirst = true;
+	if(isFirst)
+	{
+		HWDotween::DoDelay(60)->OnComplete([&] {
+			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+			{
+				if (cards[i]->number == 7)
+					CardOnBoard(cards[i]);
+			}
+#ifdef DEBUG
+			ShowHand(Area::Area_Player1);
+#else
+			ShowHand((Area)(GameManager::playerId + 2));
+#endif // DEBUG			
+			});
+			isFirst = false;
+	}
 }
 
 void Board::CardOnBoard(std::shared_ptr<Card> _card)

@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-//#define DEBUG
+#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -204,6 +204,11 @@ void SceneGame::CheckMouseInput()
 			{
 				// カードが置けるかどうかチェック
 				//if (!boardCp->CanPlace(*card)) continue;
+#ifdef DEBUG
+				if (card->area != Area_Player1) continue;
+#elif
+				if (card->area != (Area)(GameManager::playerId + 2)) continue;
+#endif // DEBUG
 
 				// カードを置いた場合、一定時間経つまで置けなくする
 				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
@@ -212,6 +217,13 @@ void SceneGame::CheckMouseInput()
 				}
 
 				boardCp->CardOnBoard(card);
+				// 手札の並べなおし
+#ifdef DEBUG
+				boardCp->ShowHand(Area::Area_Player1);
+#else
+				boardCp->ShowHand((Area)(GameManager::playerId + 2));
+#endif // DEBUG
+
 				SendData data =
 				{
 					boardCp->score,
