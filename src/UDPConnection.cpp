@@ -78,3 +78,7 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 		outputfile << ret;
 	}
 }
+
+void UDPConnection::SendEventData(EventData&)
+{
+}
