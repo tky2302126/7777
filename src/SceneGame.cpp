@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-//#define DEBUG
+#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -68,6 +68,8 @@ void SceneGame::LoadComplete()
 		SendInitData();
 		isGame = true;
 	}
+	///
+	CountDown();
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
