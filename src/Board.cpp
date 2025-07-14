@@ -10,6 +10,7 @@ Board::Board()
 	edgeNumLeft = -1;
 	score = 0;
 	eventCountTimer = -1;
+	luckyNum = -1;
 
 	memset(boardData, 0, sizeof(boardData));
 
@@ -101,7 +102,10 @@ void Board::Update()
 	}
 	if(eventCountTimer ==0)
 	{
-		
+		// イベントを終了
+		luckyNum = -1;
+		areaL = -1;
+		areaR = -1;
 		eventCountTimer = -1;
 	}
 
@@ -172,6 +176,7 @@ void Board::DrawingEvent()
 	std::uniform_int_distribution<> dist(0, 5);
 
 	auto dice = dist(engine);
+
 	// 抽選結果に応じて関数を実行
 	switch (dice)
 	{
@@ -347,22 +352,50 @@ void Board::FeverTime()
 
 }
 
-void Board::LuckyNumber()
+void Board::LuckyNumber(int num = -1)
 {
-	/// フラグを立てる
 	/// 盤面の数字を見て意味のない数字をいれない
+	if(GameManager::role == Role::Server)
+	{
+		/// 埋まっていないカードを探す
+		std::vector<std::shared_ptr<Card>> unfilledCards;
+		for(auto& card : cards)
+		{
+			if (card->area != Area::Area_Board) unfilledCards.push_back(card);
+		}
+		auto index = Random::GetRandomInt(0, unfilledCards.size());
+		luckyNum = unfilledCards[index]->number;
+
+		EventData eventData;
+		int eventIndex = static_cast<int>(Event::Event_LuckyNumber);
+		eventData.eventType = static_cast<unsigned char>(eventIndex);
+		eventData.data = static_cast<unsigned char>(luckyNum);
+
+		UDPConnection::SendEventData(eventData);
+	}
+	else
+	{
+		luckyNum = num;
+	}
 }
 
-void Board::LimitArea()
+void Board::LimitArea(int left = -1, int right = -1)
 {
 	/// 盤面の状況からあまり意味のないエリア制限を無いようにしたい
 
 }
 
-void Board::SlideArea()
+void Board::SlideArea(bool left = true, int num = -1)
 {
-	/// 右または左に何マスずらすか決定する
-	/// HWDotweenで動かす?
+	if(GameManager::role == Role::Server)
+	{
+		auto IsLeft = Random::GetRandomInt(0, 1);
+		auto num = Random::GetRandomInt(1, DECK_RANGE);
+		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
+
+		EventData eventData;
+
+	}
 }
 
 void Board::ShuffleHand()
