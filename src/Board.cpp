@@ -442,7 +442,13 @@ void Board::SlideArea(bool left, int num)
 		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
 
 		EventData eventData;
+		
+		UDPConnection::SendEventData(eventData);
+	}
 
+	for(auto card : cards)
+	{
+		
 	}
 }
 

@@ -142,14 +142,14 @@ public:
 	/// </summary>
 	/// <param name="num"></param>
 	/// <returns></returns>
-	bool IsCompleteRow(int num);
+	bool IsCompleteRowOfSuit(int num);
 
 	/// <summary>
 	/// 横にそろったか
 	/// </summary>
 	/// <param name="suit"></param>
 	/// <returns></returns>
-	bool IsCompleteLine(const Suit& suit);
+	bool IsCompleteColumnAt(const Suit& suit);
 
 	bool IsLuckyNumber(const int& num) { return luckyNum == num; };
 #pragma endregion
