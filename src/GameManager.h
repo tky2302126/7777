@@ -25,7 +25,9 @@ enum class ConnectParameter
 	//! 接続待機
 	Wait,
 	//! 接続完了
-	Complete,
+	Connected,
+	//! 全員の接続が完了
+	Complete,	
 };
 
 
@@ -51,6 +53,8 @@ public:
 	// インゲームのudp通信で使用
 	static int portNum;
 
+	//! 時刻の同期用UDPソケットハンドル
+	static int syncUDPSocketHandle[3];
 	
 	//! 接続人数
 	static int connectNum;

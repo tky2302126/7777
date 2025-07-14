@@ -10,6 +10,7 @@
 #include "UIManager.h"
 #include "Cursor.h"
 #include "GameManager.h"
+#include "UDPConnection.h"
 
 /**
  * @class	SceneTitle
