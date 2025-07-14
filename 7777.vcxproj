@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dice.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MovieManager.cpp" />
     <ClCompile Include="src\SceneGame.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dice.h" />
     <ClInclude Include="src\Cursor.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\MovieManager.h" />
