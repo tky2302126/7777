@@ -332,8 +332,37 @@ void Board::SortHand(Area playerArea)
 	}
 }
 
-void Board::CalculateScore(std::shared_ptr<Card>& card)
+int Board::CalculateScore(std::shared_ptr<Card>& card)
 {
+	int add = PLACE_CARD;
+
+	if(IsCompleteRow(card->number))
+	{
+		add += ROW_COMPLETE;
+	}
+
+	if(IsCompleteLine(card->suit))
+	{
+		add += LINE_COMPLETE;
+	}
+
+	if(IsLuckyNumber(card->number))
+	{
+		add += PLACE_CARD * 4;
+	}
+
+	return add;
+}
+
+bool Board::IsCompleteRow(const int& num)
+{
+	if()
+	return false;
+}
+
+bool Board::IsCompleteLine(const Suit& suit)
+{
+	return false;
 }
 
 void Board::Bomb()

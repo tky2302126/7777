@@ -135,8 +135,23 @@ public:
 	/// スコア計算
 	/// </summary>
 	/// <param name="card">置かれたカード</param>
-	void CalculateScore(std::shared_ptr<Card>& card);
+	int CalculateScore(std::shared_ptr<Card>& card);
 
+	/// <summary>
+	/// 縦にそろったか
+	/// </summary>
+	/// <param name="num"></param>
+	/// <returns></returns>
+	bool IsCompleteRow(const int& num);
+
+	/// <summary>
+	/// 横にそろったか
+	/// </summary>
+	/// <param name="suit"></param>
+	/// <returns></returns>
+	bool IsCompleteLine(const Suit& suit);
+
+	bool IsLuckyNumber(const int& num) { return luckyNum == num; };
 #pragma endregion
 };
 

@@ -17,9 +17,10 @@ struct Vector2Int
 #define SUIT_NUM 4
 #define DECK_RANGE 13
 #define PLAYER_NUM 4
+// スコア関連
 #define PLACE_CARD 10
 #define LINE_COMPLETE 100
-#define SUIT_COMPLETE 25
+#define ROW_COMPLETE 25
 // 秒数
 #define PLACE_COOL_TIME 1.5f
 #define EVENT_TIME 6000
