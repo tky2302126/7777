@@ -47,6 +47,12 @@ SceneTitle::SceneTitle()
 	ipData.d4 = ipBuffer[3] = 89;
 	portId = 7777;
 #endif // DEBUG
+
+	if(GameManager::role == Role::Server)
+		for (auto& socket : GameManager::syncUDPSocketHandle)
+			socket = MakeUDPSocket(SYNC_UDP_PORT_NUM);
+	if (GameManager::role == Role::Client)
+		GameManager::syncUDPSocketHandle[0] = MakeUDPSocket(SYNC_UDP_PORT_NUM);
 }
 
 SceneTitle::~SceneTitle()
@@ -145,12 +151,10 @@ void SceneTitle::Update()
 {
 	if (connectParameter == ConnectParameter::Wait)
 	{
-		DrawFormatString(450, 1000, GetColor(0, 0, 0), "Connecting");
+		DrawFormatString(450, 800, GetColor(0, 0, 0), "Connecting");
 	}
-	else if (connectParameter == ConnectParameter::Complete)
+	else if (connectParameter == ConnectParameter::Connected)
 	{
-		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
-
 		if (GameManager::role == Role::Server)
 		{
 			GameManager::playerId = 0;
@@ -166,7 +170,8 @@ void SceneTitle::Update()
 			}
 
 			GameManager::portNum = portId;
-			SceneChangeAsync(SceneTag::Game);
+
+			connectParameter = ConnectParameter::Complete;
 		}
 		else if (GameManager::role == Role::Client)
 		{
@@ -180,9 +185,22 @@ void SceneTitle::Update()
 				GameManager::playerId = (int)(recvData % 10);
 				GetNetWorkIP(GameManager::networkHandle[0], &GameManager::IPAdress[0]);
 				GameManager::portNum = portId;
-				SceneChangeAsync(SceneTag::Game);
+
+				connectParameter = ConnectParameter::Complete;
 			}
 		}
+
+	}
+	else if (connectParameter == ConnectParameter::Complete)
+	{
+		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
+		//SceneChangeAsync(SceneTag::Game);
+
+		// 一定時間ごとに通知を飛ばす
+		if (GameManager::role == Role::Server)
+			UDPConnection::SendSyncData();
+		else if (GameManager::role == Role::Client)
+			UDPConnection::RecvSyncData();
 	}
 }
 
@@ -213,6 +231,8 @@ void SceneTitle::LateUpdate()
 		ServerInputForm();
 	if (GameManager::role == Role::Client)
 		ClientInputForm();
+
+
 }
 
 void SceneTitle::SelectInput()
@@ -327,8 +347,12 @@ void SceneTitle::ServerInputForm()
 
 		// 新しい接続があったらそのネットワークハンドルを得る
 		GameManager::networkHandle[index] = GetNewAcceptNetWork();
+		// 接続先にPlayerIDを送信
+		NetWorkSend(GameManager::networkHandle[index],
+			&index, sizeof(int));
+
 		if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
-			connectParameter = ConnectParameter::Complete;
+			connectParameter = ConnectParameter::Connected;
 	}
 }
 
@@ -451,6 +475,6 @@ void SceneTitle::Connect()
 	}
 	else
 	{
-		connectParameter = ConnectParameter::Complete;
+		connectParameter = ConnectParameter::Connected;
 	}
 }

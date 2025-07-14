@@ -39,13 +39,25 @@ public:
 	 * @brief		クライアントがサーバーにデータを送信する
 	 * @param[in]	SendData 送信するデータ
 	 */
-	static void SendServer(Card&, const int&);
+	static void SendServer(Card&, int, const int&);
 
 	/**
 	 * @brief		サーバーがクライアントにデータを送信する
 	 * @param[in]	SendData 送信するデータ
 	 */
 	static void SendClients(SendData&, int*);
+
+	/**
+	 * @brief		サーバーとクライアント間で時刻を共有するため、一定感覚でデータを送信する
+	 * @param[in]	SendData 送信するデータ
+	 */
+	static void SendSyncData();
+
+	/**
+	 * @brief		サーバーとクライアント間で時刻を共有するため、一定感覚でデータを送信する
+	 * @param[in]	SendData 送信するデータ
+	 */
+	static void RecvSyncData();
 
 private:
 };
