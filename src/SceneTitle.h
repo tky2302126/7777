@@ -73,13 +73,23 @@ private:
 	int ipBuffer[4];
 	//! サーバーで使うクライアントのネットワークハンドル
 	int NetWorkHandles[3];
+	//! サーバーで使う受信データ
 	//! 接続するサーバーのIPアドレスデータ
 	IPDATA ipData;
 	//! ポート番号
 	int portId;
 	//! 接続パラメータ
 	ConnectParameter connectParameter = ConnectParameter::None;
-	
+
+	//! タイトル画面のグラフィックハンドル
+	int gh_title;
+	int gh_titleBack;
+	int gh_titleLogo;
+
+	int offsetX = 0;
+	const int tileSize = 240;         // gh_titleの画像サイズ
+	const int tilesX = 1920/tileSize; // gh_titleを何列描画するか
+	const int tilesY = 5;             // gh_titleを何段描画するか (1080/tileSize を切り上げた数)
 
 	/**
 	 * @brief       決定キーを押した際の処理
