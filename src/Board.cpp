@@ -1,4 +1,5 @@
 ﻿#include "Board.h"
+std::mt19937 Board::engine(std::random_device{}());
 
 //#define DEBUG
 
@@ -14,6 +15,8 @@ Board::Board()
 	memset(boardData, 0, sizeof(boardData));
 
 	dice = new Dice();
+
+	InitRandomGenerator();
 
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
@@ -166,8 +169,6 @@ void Board::DrawingEvent()
 {
 	// ダイスロールアニメーション
 	// !HWにライブラリがあるらしい
-	std::random_device seed_gen;
-	std::mt19937 engine(seed_gen());
 
 	std::uniform_int_distribution<> dist(0, 5);
 
@@ -384,6 +385,22 @@ bool Board::IsCompleteColumnAt(const Suit& suit)
 	return true;
 }
 
+bool Board::IsDerangement(const std::vector<std::vector<std::shared_ptr<Card>>>& original, const std::vector<std::vector<std::shared_ptr<Card>>>& shuffled)
+{
+	for (int i = 0; i < original.size(); ++i)
+	{
+		if (original[i] == shuffled[i]) // 元の位置と同じカードならNG
+			return false;
+	}
+	return true;
+}
+
+void Board::InitRandomGenerator()
+{
+	std::random_device seed_gen;
+	engine.seed(seed_gen());
+}
+
 void Board::Bomb()
 {
 	/// 導火線の長さを決める
@@ -464,4 +481,31 @@ void Board::SlideArea(bool left, int num)
 void Board::ShuffleHand()
 {
 	/// 手札情報を更新する
+	/// サーバーのみ実行
+	if(GameManager::role == Role::Server)
+	{
+		auto playerNum = GameManager::connectNum;
+		std::vector<std::vector<std::shared_ptr<Card>>> playerHands(playerNum);
+
+		for(auto card : cards)
+		{
+			if(card->area !=Area::Area_Board )
+			{
+				auto owner = static_cast<int>(card->area) -2;
+				playerHands[owner].push_back(card);
+			}
+		}
+		// 元の配列をコピー
+		std::vector<std::vector<std::shared_ptr<Card>>> originalHands = playerHands;
+
+		do
+		{
+			std::shuffle(playerHands.begin(), playerHands.end(), engine);
+		} 
+		while (!IsDerangement(originalHands, playerHands));
+
+		//エリアを更新する処理
+
+
+	}
 }

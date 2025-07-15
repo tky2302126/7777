@@ -36,6 +36,8 @@ public:
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(const Card& card);
 
+	static std::mt19937 engine;
+
 #pragma region イベント関連
 	//イベント抽選の関数
 	// サーバーで実行→クライアントに送信する予定
@@ -102,6 +104,7 @@ public:
 	Event currentEvent;
 
 	Dice* dice;
+	
 #pragma endregion
 #pragma region privateメソッド
 	
@@ -152,6 +155,11 @@ public:
 	bool IsCompleteColumnAt(const Suit& suit);
 
 	bool IsLuckyNumber(const int& num) { return luckyNum == num; };
+
+	bool IsDerangement(const std::vector<std::vector<std::shared_ptr<Card>>>& original,
+		const std::vector<std::vector<std::shared_ptr<Card>>>& shuffled);
+
+	static void InitRandomGenerator();
 #pragma endregion
 };
 
