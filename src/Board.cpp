@@ -11,7 +11,7 @@ Board::Board()
 	edgeNumLeft = -1;
 	score = 0;
 	eventCountTimer = -1;
-
+	
 	memset(boardData, 0, sizeof(boardData));
 
 	dice = new Dice();
@@ -22,6 +22,7 @@ Board::Board()
 	{
 		cards[i] = std::make_shared<Card>();
 	}
+
 
 	// カードの初期配置(手札の配分と7のセット)
 	// ホストの場合のみ行う
@@ -279,7 +280,7 @@ void Board::ShowHand(Area playerArea)
 			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 			{
 				if (cards[i]->number == 7)
-					CardOnBoard(cards[i]);
+					CardOnBoard(cards[i], (int)(cards[i]->area - 2));
 			}
 #ifdef DEBUG
 			ShowHand(Area::Area_Player1);
@@ -291,7 +292,7 @@ void Board::ShowHand(Area playerArea)
 	}
 }
 
-void Board::CardOnBoard(std::shared_ptr<Card> _card)
+void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 {
 	_card->AreaChange(Area_Board);
 	boardData[(int)_card->suit][_card->number - 1] = '1';
@@ -306,10 +307,11 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 		
 	}
 #else
-	handData[GameManager::playerId].erase(
-		std::remove(handData[GameManager::playerId].begin(), handData[GameManager::playerId].end(), _card),
-		handData[GameManager::playerId].end());
+	handData[_index].erase(
+		std::remove(handData[_index].begin(), handData[_index].end(), _card),
+		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
+
 	if (handData[GameManager::playerId].size() <= 0)
 	{
 
@@ -412,7 +414,7 @@ void Board::Bomb()
 void Board::FeverTime()
 {
 	/// クールタイム大幅短縮
-	auto coolTime = PLACE_COOL_TIME / 2;
+	coolTime = coolTime / 2;
 
 
 }

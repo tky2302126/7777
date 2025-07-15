@@ -27,8 +27,12 @@ SceneGame::SceneGame()
 			isLoad = false;
 		});
 
+	std::ofstream a("d_1.txt");
+
 	board = std::make_shared<HWGameObject>();
 	boardCp = board->AddComponent<Board>();
+
+	std::ofstream b("d_2.txt");
 
 	countDownLeftTop = Vector2Int();
 	alpha = 0;
@@ -92,11 +96,16 @@ void SceneGame::Update()
 	{
 		if (!ReceiveInitData())return;
 	}
-	else
-		DrawFormatString(10, 20, GetColor(0, 255, 0),
-			": %d : %d", UDPSocketHandle[0], UDP_PORT_NUM);
 
-
+	for (int i = 0; i < GameManager::connectNum; ++i)
+	{
+		if (i != GameManager::playerId)
+		{
+			DrawFormatString(
+				10 + 150 * i, 100, GetColor(255, 255, 255),
+				"Player%d = %d", i, boardCp->handData[i].size());
+		}
+	}
 
 	// カードの設置関係
 	CheckMouseInput();
@@ -105,7 +114,7 @@ void SceneGame::Update()
 	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
 	{
 		DrawFormatString(
-			10, 30, GetColor(0, 255, 0),
+			10, 70, GetColor(0, 255, 0),
 			"coolTime = %d", (int)(PLACE_COOL_TIME * 1000) - (GetNowCount() - lastPlacedTime));
 	}
 
@@ -230,12 +239,12 @@ void SceneGame::CheckMouseInput()
 #endif // DEBUG
 
 				// カードを置いた場合、一定時間経つまで置けなくする
-				if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000)) break;
+				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
 				{
 					lastPlacedTime = GetNowCount();
 				}
 
-				boardCp->CardOnBoard(card);
+				boardCp->CardOnBoard(card, GameManager::playerId);
 				// 手札の並べなおし
 #ifdef DEBUG
 				boardCp->ShowHand(Area::Area_Player1);
@@ -269,14 +278,7 @@ int SceneGame::ReceiveInitData()
 	// 一度受信したら、以降はtrue
 	static int ret = FALSE;
 
-	if (ret) 
-	{
-		DrawFormatString(10, 20, GetColor(0, 255, 0),
-			"受信済み");
-		return TRUE;
-	}
-		DrawFormatString(10, 20, GetColor(0, 255, 0),
-			"受信待ち : %d : %d", UDPSocketHandle[0], UDP_PORT_NUM);
+	if (ret) return TRUE;
 
 	//! 受け取ったカードデータのデコード先
 	static Card decodeData[SUIT_NUM * DECK_RANGE];
@@ -357,6 +359,8 @@ int SceneGame::ReceiveUpdateData_Client()
 	int recvCount = 0;
 
 	static bool isRecv = false;
+
+#ifdef DEBUG
 	if (isRecv)
 		DrawFormatString(
 			10, 60, GetColor(0, 255, 0),
@@ -365,6 +369,7 @@ int SceneGame::ReceiveUpdateData_Client()
 		DrawFormatString(
 			10, 60, GetColor(0, 255, 0),
 			"なし");
+#endif // DEBUG
 
 
 
@@ -413,7 +418,7 @@ int SceneGame::ReceiveUpdateData_Client()
 			if (decodeData.suit == boardCp->cards[j]->suit &&
 				decodeData.number == boardCp->cards[j]->number)
 			{
-				boardCp->CardOnBoard(boardCp->cards[j]);
+				boardCp->CardOnBoard(boardCp->cards[j], boardCp->cards[j]->area - 2);
 			}
 		}
 	}
@@ -424,6 +429,8 @@ int SceneGame::ReceiveUpdateData_Client()
 int SceneGame::ReceiveUpdateData_Server()
 {
 	static bool isRecv = false;
+
+#ifdef DEBUG
 	if (isRecv)
 		DrawFormatString(
 			10, 60, GetColor(0, 255, 0),
@@ -432,6 +439,7 @@ int SceneGame::ReceiveUpdateData_Server()
 		DrawFormatString(
 			10, 60, GetColor(0, 255, 0),
 			"なし");
+#endif // DEBUG
 
 
 	// 受信データなし
@@ -481,7 +489,7 @@ int SceneGame::ReceiveUpdateData_Server()
 		if (decodeData[i].area == Area_Board &&
 			boardCp->cards[i]->area != Area_Board)
 		{
-			boardCp->CardOnBoard(boardCp->cards[i]);
+			boardCp->CardOnBoard(boardCp->cards[i], (int)(boardCp->cards[i]->area - 2));
 		}
 	}
 

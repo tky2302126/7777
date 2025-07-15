@@ -1,5 +1,7 @@
 ﻿#include "UDPConnection.h"
 
+int UDPConnection::sendCount = -1;
+
 void UDPConnection::SendServer(Card& _card, int _score, const int& UDPSocketHandle)
 {
 #pragma pack(1)
@@ -87,36 +89,38 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 
 void UDPConnection::SendSyncData()
 {
-	static int sendCount = 0;
 	static int sendTime = GetNowCount();
 	static int ret = -9999;
 
 	if ((GetNowCount() - sendTime) > 1000)
 	{
-		//for (int i = 0; i < MAX_PLAYER; ++i)
-		//{
-			ret = NetWorkSendUDP(GameManager::syncUDPSocketHandle[0],
-				GameManager::IPAdress[0], SYNC_UDP_PORT_NUM, &sendCount, sizeof(int));
-		//}
 		sendCount++;
+		sendTime = GetNowCount();
+
+		for (int i = 0; i < MAX_PLAYER - 1; ++i)
+		{
+			ret = NetWorkSendUDP(GameManager::syncUDPSocketHandle[i],
+				GameManager::IPAdress[0], SYNC_UDP_PORT_NUM, &sendCount, sizeof(int));
+		}
 	}
-	DrawFormatString(450, 600, GetColor(0, 0, 0), "sendCount %d : %d",
-		sendCount, ret);
+	DrawFormatString(10, 20, GetColor(0, 255, 0), "sendCount : %d",sendCount);
 }
 
 void UDPConnection::RecvSyncData()
 {
-	static int sendCount = -1;
 	int portNum = SYNC_UDP_PORT_NUM;
 	IPDATA ip = GameManager::IPAdress[0];
 
-	DrawFormatString(450, 600, GetColor(0, 0, 0), "SendCount : %d : %d", sendCount, GameManager::syncUDPSocketHandle[0]);
+	if(sendCount != -1)
+		DrawFormatString(10, 20, GetColor(0, 255, 0), "SendCount : %d", sendCount);
 
-	if (CheckNetWorkRecvUDP(GameManager::syncUDPSocketHandle[0]) != TRUE) return;
-
-	NetWorkRecvUDP(GameManager::syncUDPSocketHandle[0],
-			&ip, &portNum, &sendCount, sizeof(int), FALSE);
-
+	if (CheckNetWorkRecvUDP(GameManager::syncUDPSocketHandle[0]) == TRUE)
+	{
+		int buff;
+		NetWorkRecvUDP(GameManager::syncUDPSocketHandle[0],
+			&ip, &portNum, &buff, sizeof(int), FALSE);
+		sendCount = buff;
+	}
 }
 
 void UDPConnection::SendEventData(EventData&)
