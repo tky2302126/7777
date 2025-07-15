@@ -75,6 +75,11 @@ public:
 	 */
 	void AreaChange(Area _newArea);
 
+	/// <summary>
+	///				盤面のカードをスライドする
+	/// </summary>
+	void Slide();
+
 #pragma endregion
 
 #pragma region Privateメンバ変数
