@@ -75,6 +75,11 @@ void Board::Update()
 {
 	Draw();
 
+	if (handData[GameManager::playerId].size() <= 0)
+	{
+		DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
+	}
+
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
@@ -311,11 +316,6 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 		std::remove(handData[_index].begin(), handData[_index].end(), _card),
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
-
-	if (handData[GameManager::playerId].size() <= 0)
-	{
-
-	}
 #endif // DEBUG
 }
 
