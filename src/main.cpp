@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
-	sceneManager.SceneChangeSync(SceneTag::Game);
+	sceneManager.SceneChangeSync(SceneTag::Title);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
 		//sceneManager.SceneChangeAsync(SceneTag::Game);
@@ -108,19 +108,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		sceneManager.Update();
 
-
-		//DrawCapsule3D(
-		//	pos, pos + VGet(0,400,0), 50.0f * scale.x,
-		//	12, 
-		//	GetColor(255, 0, 0),GetColor(255, 0, 0), 
-		//	FALSE);
-
-
 		sceneManager.LateUpdate();
 		UIManager::ManualLateUpdate();
 		// 非同期でシーンを読み込んでいる最中
 		if (sceneManager.atomicLoadState.load() == SceneLoadState::Loading)
 			UIManager::LoadingAnimation();
+
+		// 一定時間ごとに通知を飛ばす	
+		if (GameManager::role == Role::Server)
+			UDPConnection::SendSyncData();
+		else if (GameManager::role == Role::Client)
+			UDPConnection::RecvSyncData();
 
 		ScreenFlip();
 	}

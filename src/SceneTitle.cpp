@@ -49,6 +49,8 @@ SceneTitle::SceneTitle()
 	ipData.d2 = ipBuffer[1] = 204;
 	ipData.d3 = ipBuffer[2] = 6;
 	ipData.d4 = ipBuffer[3] = 89;
+
+	portId = 7777;
 #endif // DEBUG
 
 	if(GameManager::role == Role::Server)
@@ -220,13 +222,7 @@ void SceneTitle::Update()
 	else if (connectParameter == ConnectParameter::Complete)
 	{
 		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
-		//SceneChangeAsync(SceneTag::Game);
-
-		// 一定時間ごとに通知を飛ばす
-		if (GameManager::role == Role::Server)
-			UDPConnection::SendSyncData();
-		else if (GameManager::role == Role::Client)
-			UDPConnection::RecvSyncData();
+		SceneChangeAsync(SceneTag::Game);
 	}
 }
 
@@ -234,17 +230,6 @@ void SceneTitle::LateUpdate()
 {
 	{
 		cursor.ManualUpdate();
-
-		std::string text = "スタート";
-
-		// テキスト表示座標
-		float posX = 1920 / 2 - (50 * (text.size() / 4));
-
-		DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
-			text.c_str());
-
-		DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
-			"Title");
 
 		DrawFormatString(300, 300 - GetFontSize() / 2,
 			GetColor(0, 0, 0),
@@ -259,8 +244,6 @@ void SceneTitle::LateUpdate()
 		ServerInputForm();
 	if (GameManager::role == Role::Client)
 		ClientInputForm();
-
-
 }
 
 void SceneTitle::SelectInput()
@@ -352,7 +335,7 @@ void SceneTitle::ServerInputForm()
 	GameManager::connectNum = num + 1;
 	DrawFormatString(300, 700 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
-		"参加人数 : %d/4", GameManager::connectNum);
+		"参加人数 : %d/%d", GameManager::connectNum, MAX_PLAYER);
 
 
 	if (portId != -1)
@@ -380,7 +363,7 @@ void SceneTitle::ServerInputForm()
 			&index, sizeof(int));
 
 		if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
-			connectParameter = ConnectParameter::Complete;
+			connectParameter = ConnectParameter::Connected;
 	}
 }
 

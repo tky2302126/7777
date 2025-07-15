@@ -77,5 +77,8 @@ public:
 	static void SendEventData(EventData&);
 
 private:
+
+	// 一定間隔でclientとサーバーで共有される値
+	static int sendCount;
 };
 

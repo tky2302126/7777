@@ -18,6 +18,8 @@ public:
 	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
 	//! ゲームの開始時間(最初のカード情報を受信した時刻を開始時刻とする)
 	int statTime = -1;
+	//! 配置のクールタイム
+	float coolTime = 1.5f;
 #pragma endregion
 
 #pragma region publicメソッド
@@ -123,7 +125,8 @@ public:
 	/// カードを盤面に配置する
 	/// </summary>
 	/// <param name="_card">配置するカード</param>
-	void CardOnBoard(std::shared_ptr<Card> _card);
+	/// <param name="_index">変更するHandDataのインデックス</param>
+	void CardOnBoard(std::shared_ptr<Card> _card, int _index);
 
 	/// <summary>
 	/// 手札をソートする
