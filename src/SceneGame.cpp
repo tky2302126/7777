@@ -77,6 +77,8 @@ void SceneGame::LoadComplete()
 		SendInitData();
 		isGame = true;
 	}
+	///
+	CountDown();
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -114,13 +116,15 @@ void SceneGame::Update()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #ifdef _DEBUG
-	if(CheckHitKey(KEY_INPUT_C))
+	if(CheckHitKey(KEY_INPUT_A))
 	{
-		if(!isCountDown)
-		{
-			CountDown();
-		}
+		boardCp->SlideArea(true, 1);
 	}
+	if(CheckHitKey(KEY_INPUT_D))
+	{
+		boardCp->SlideArea(false, 1);
+	}
+
 #endif // _DEBUG
 
 }
@@ -237,14 +241,9 @@ void SceneGame::CheckMouseInput()
 				boardCp->ShowHand((Area)(GameManager::playerId + 2));
 #endif // DEBUG
 
-				SendData data =
-				{
-					boardCp->score,
-					boardCp->cards
-				};
 				if (GameManager::role == Role::Client)
 				{
-					UDPConnection::SendServer(*card, UDPSocketHandle[0]);
+					UDPConnection::SendServer(*card, boardCp->score,UDPSocketHandle[0]);
 				}
 				if (GameManager::role == Role::Server)
 				{
@@ -383,18 +382,22 @@ int SceneGame::ReceiveUpdateData_Client()
 		Card decodeData;
 		//! 送信時刻
 		int sendTime = -1;
+		int score = -1;
 
 		int portNum = UDP_PORT_NUM;
-		unsigned char recvData[12];
+		unsigned char recvData[15];
 
 		int ret = NetWorkRecvUDP(UDPSocketHandle[i], NULL, NULL,
-			recvData, 12, FALSE);
+			recvData, 15, FALSE);
 
 		// 送信時刻を書き込み
 		sendTime = *(int*)recvData;
+		// 送信時刻を書き込み
+		score = *(int*)(recvData + sizeof(int) * 2);
+
 
 		//! 受け取ったカードデータ
-		CardData* cdp = (CardData*)(recvData + sizeof(int) * 2);
+		CardData* cdp = (CardData*)(recvData + sizeof(int) * 3);
 
 		// カードデータをデコードする
 		decodeData.suit = (Suit)(cdp->data / 13);

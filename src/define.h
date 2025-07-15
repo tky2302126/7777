@@ -17,14 +17,16 @@ struct Vector2Int
 #define SUIT_NUM 4
 #define DECK_RANGE 13
 #define PLAYER_NUM 4
+// スコア関連
 #define PLACE_CARD 10
 #define LINE_COMPLETE 100
-#define SUIT_COMPLETE 25
+#define ROW_COMPLETE 25
 // 秒数
 #define PLACE_COOL_TIME 1.5f
 #define EVENT_TIME 6000
 
 #define UDP_PORT_NUM 9999
+#define SYNC_UDP_PORT_NUM 8888
 #define MAX_PLAYER 2
 // #define
 
@@ -54,17 +56,14 @@ constexpr float CARD_COLLISION_WIDTH = 60.0f;
 constexpr float CARD_COLLISION_HEIGHT = 90.0f;
 
 // 通信で使うイベント
-enum Event
+enum Event : unsigned char
 {
-	Event_None,		   // イベント実行なし
-	Event_CountDown,   // スタート時のカウントダウン
-	Event_MouseEnable, // マウス入力を許可
-	Event_DiceRoll,    // ダイスロール
-	Event_IsAgari,	   // あがり
-	Event_Bomb,		   // 爆弾
-	Event_Fever,	   // フィーバータイム
-	Event_LuckyNumber, // ラッキーナンバー
-	Event_LimitArea,   // エリア制限
-	Event_MoveArea,    // エリア移動
-	Event_ShuffleHand, // 手札交換
+	Event_CountDown		= 1,							// スタート時のカウントダウン
+	Event_IsAgari		= Event_CountDown << 1,			// あがり
+	Event_Bomb			= Event_IsAgari << 1,			// 爆弾
+	Event_Fever			= Event_Bomb << 1,				// フィーバータイム
+	Event_LuckyNumber	= Event_Fever << 1,				// ラッキーナンバー
+	Event_LimitArea		= Event_LuckyNumber << 1,		// エリア制限
+	Event_MoveArea		= Event_LimitArea << 1,			// エリア移動
+	Event_ShuffleHand	= Event_MoveArea << 1,			// 手札交換
 };

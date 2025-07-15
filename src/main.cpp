@@ -19,6 +19,7 @@ IPDATA GameManager::IPAdress[3] = {
 	{255, 255, 255, 255}, 
 	{255, 255, 255, 255},  
 };
+int GameManager::syncUDPSocketHandle[3] = { -1, -1, -1 };
 int GameManager::portNum = -1;
 
 
@@ -37,8 +38,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #ifdef _DEBUG
 
 	// 幅: 1920, 高さ: 1080, ビット深度: 32
-	//SetGraphMode(1920, 1080, 32);
-	SetGraphMode(1920 / 2, 1000, 32);
+	SetGraphMode(1920, 1080, 32);
+	// SetGraphMode(1920 / 2, 1000, 32);
 	ChangeWindowMode(TRUE);
 	// デバッグモードで起動
 	HandlerWaltan::debugMode = true;
@@ -65,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
-	sceneManager.SceneChangeSync(SceneTag::Title);
+	sceneManager.SceneChangeSync(SceneTag::Game);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
 		//sceneManager.SceneChangeAsync(SceneTag::Game);

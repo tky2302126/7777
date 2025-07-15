@@ -42,6 +42,8 @@ public:
 	static int modelHandle;
 	//! 生成されたカードインスタンスの数(自身のナンバー決めに使っている)
 	static int instanceCount;
+	//! 左端の数
+	static int leftEdgeNum;
 	//! 座標
 	VECTOR position = VECTOR();
 	//! 回転

@@ -300,11 +300,19 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card)
 		std::remove(handData[Area::Area_Player1 - 2].begin(), handData[Area::Area_Player1 - 2].end(), _card),
 		handData[Area::Area_Player1 - 2].end());
 	SortHand(Area::Area_Player1);
+	if (handData[Area::Area_Player1 - 2].size() <= 0)
+	{
+		
+	}
 #else
 	handData[GameManager::playerId].erase(
 		std::remove(handData[GameManager::playerId].begin(), handData[GameManager::playerId].end(), _card),
 		handData[GameManager::playerId].end());
 	SortHand((Area)(GameManager::playerId + 2));
+	if (handData[GameManager::playerId].size() <= 0)
+	{
+
+	}
 #endif // DEBUG
 }
 
@@ -327,8 +335,53 @@ void Board::SortHand(Area playerArea)
 	}
 }
 
-void Board::CalculateScore(std::shared_ptr<Card>& card)
+int Board::CalculateScore(std::shared_ptr<Card>& card)
 {
+	/// 各クライアントで処理後に計算
+	int add = PLACE_CARD;
+
+	if(IsCompleteRowOfSuit(card->number))
+	{
+		add += ROW_COMPLETE;
+	}
+
+	if(IsCompleteColumnAt(card->suit))
+	{
+		add += LINE_COMPLETE;
+	}
+
+	if(IsLuckyNumber(card->number))
+	{
+		add += PLACE_CARD * 4;
+	}
+
+	return add;
+}
+
+bool Board::IsCompleteRowOfSuit(int num)
+{
+	for(int i = 0; i < SUIT_NUM; ++i)
+	{
+		auto index = num + i * DECK_RANGE - 1;
+		if(cards[index]->area != Area::Area_Board)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Board::IsCompleteColumnAt(const Suit& suit)
+{
+	for (int i = 0; i < DECK_RANGE; ++i)
+	{
+		auto index = i +  static_cast<int>(suit) * DECK_RANGE -1;
+		if (cards[index]->area != Area::Area_Board)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 void Board::Bomb()
@@ -347,22 +400,56 @@ void Board::FeverTime()
 
 }
 
-void Board::LuckyNumber()
+void Board::LuckyNumber(int num)
 {
-	/// フラグを立てる
 	/// 盤面の数字を見て意味のない数字をいれない
+	if(GameManager::role == Role::Server)
+	{
+		/// 埋まっていないカードを探す
+		std::vector<std::shared_ptr<Card>> unfilledCards;
+		for(auto& card : cards)
+		{
+			if (card->area != Area::Area_Board) unfilledCards.push_back(card);
+		}
+		auto index = Random::GetRandomInt(0, unfilledCards.size());
+		luckyNum = unfilledCards[index]->number;
+
+		EventData eventData;
+		int eventIndex = static_cast<int>(Event::Event_LuckyNumber);
+		eventData.eventType = static_cast<unsigned char>(eventIndex);
+		eventData.data = static_cast<unsigned char>(luckyNum);
+
+		UDPConnection::SendEventData(eventData);
+	}
+	else
+	{
+		luckyNum = num;
+	}
 }
 
-void Board::LimitArea()
+void Board::LimitArea(int left, int right)
 {
 	/// 盤面の状況からあまり意味のないエリア制限を無いようにしたい
 
 }
 
-void Board::SlideArea()
+void Board::SlideArea(bool left, int num)
 {
-	/// 右または左に何マスずらすか決定する
-	/// HWDotweenで動かす?
+	if(GameManager::role == Role::Server)
+	{
+		auto IsLeft = Random::GetRandomInt(0, 1);
+		auto num = Random::GetRandomInt(1, DECK_RANGE);
+		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
+
+		EventData eventData;
+		
+		UDPConnection::SendEventData(eventData);
+	}
+	//cards[0]->
+	for(auto card : cards)
+	{
+		
+	}
 }
 
 void Board::ShuffleHand()

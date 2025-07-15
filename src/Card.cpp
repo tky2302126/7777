@@ -3,6 +3,7 @@
 #define DEBUG
 int Card::modelHandle = -1;
 int Card::instanceCount = 0;
+int Card::leftEdgeNum = 1;
 VECTOR Card::position_model = VGet(400, 200, -300);
 VECTOR Card::rotate_model = VGet(0, (float)Deg2Rad(180), 0);
 VECTOR Card::scale_model = VGet(10, 10, 10);

@@ -1,0 +1,32 @@
+diff a/src/Board.cpp b/src/Board.cpp	(rejected hunks)
+@@ -357,29 +357,8 @@
+ 
+ void Board::LuckyNumber(int num)
+ {
++	/// フラグを立てる
+ 	/// 盤面の数字を見て意味のない数字をいれない
+-	if(GameManager::role == Role::Server)
+-	{
+-		/// 埋まっていないカードを探す
+-		std::vector<std::shared_ptr<Card>> unfilledCards;
+-		for(auto& card : cards)
+-		{
+-			if (card->area != Area::Area_Board) unfilledCards.push_back(card);
+-		}
+-		auto index = Random::GetRandomInt(0, unfilledCards.size());
+-		luckyNum = unfilledCards[index]->number;
+-
+-		EventData eventData;
+-		int eventIndex = static_cast<int>(Event::Event_LuckyNumber);
+-		eventData.eventType = static_cast<unsigned char>(eventIndex);
+-		eventData.data = static_cast<unsigned char>(luckyNum);
+-
+-		UDPConnection::SendEventData(eventData);
+-	}
+-	else
+-	{
+-		luckyNum = num;
+-	}
+ }
+ 
+ void Board::LimitArea(int left, int right)

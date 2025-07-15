@@ -2,6 +2,7 @@
 #include "Card.h"
 #include "Dice.h"
 #include "define.h"
+#include "UDPConnection.h"
 
 struct CardInfo
 {
@@ -40,6 +41,36 @@ public:
 	// サーバーで実行→クライアントに送信する予定
 	void DrawingEvent();
 
+	/// <summary>
+	/// 爆弾イベント
+	/// </summary>
+	void Bomb();
+
+	/// <summary>
+	/// フィーバータイムイベント
+	/// </summary>
+	void FeverTime();
+
+	/// <summary>
+	/// ラッキーナンバーイベント
+	/// </summary>
+	/// <param name="num">対象の数字</param>
+	void LuckyNumber(int num = -1);
+
+	/// <summary>
+	/// エリア制限
+	/// </summary>
+	void LimitArea(int left = -1, int right = -1);
+
+	/// <summary>
+	/// エリア移動
+	/// </summary>
+	void SlideArea(bool left = true, int num = -1);
+
+	/// <summary>
+	/// 手札入れ替え
+	/// </summary>
+	void ShuffleHand();
 #pragma endregion
 
 
@@ -62,6 +93,8 @@ public:
 	std::vector<std::vector<std::shared_ptr<Card>>> handData;
 	//! スコア
 	int score;
+
+	int luckyNum;
 
 	// イベント用の実行時間カウントタイマー
 	int eventCountTimer;
@@ -102,38 +135,23 @@ public:
 	/// スコア計算
 	/// </summary>
 	/// <param name="card">置かれたカード</param>
-	void CalculateScore(std::shared_ptr<Card>& card);
+	int CalculateScore(std::shared_ptr<Card>& card);
 
 	/// <summary>
-	/// 爆弾イベント
+	/// 縦にそろったか
 	/// </summary>
-	void Bomb();
+	/// <param name="num"></param>
+	/// <returns></returns>
+	bool IsCompleteRowOfSuit(int num);
 
 	/// <summary>
-	/// フィーバータイムイベント
+	/// 横にそろったか
 	/// </summary>
-	void FeverTime();
+	/// <param name="suit"></param>
+	/// <returns></returns>
+	bool IsCompleteColumnAt(const Suit& suit);
 
-	/// <summary>
-	/// ラッキーナンバーイベント
-	/// </summary>
-	/// <param name="num">対象の数字</param>
-	void LuckyNumber();
-
-	/// <summary>
-	/// エリア制限
-	/// </summary>
-	void LimitArea();
-
-	/// <summary>
-	/// エリア移動
-	/// </summary>
-	void SlideArea();
-
-	/// <summary>
-	/// 手札入れ替え
-	/// </summary>
-	void ShuffleHand();
+	bool IsLuckyNumber(const int& num) { return luckyNum == num; };
 #pragma endregion
 };
 

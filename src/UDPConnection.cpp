@@ -1,6 +1,6 @@
 ﻿#include "UDPConnection.h"
 
-void UDPConnection::SendServer(Card& _card,const int& UDPSocketHandle)
+void UDPConnection::SendServer(Card& _card, int _score, const int& UDPSocketHandle)
 {
 #pragma pack(1)
 	CardData data;
@@ -11,11 +11,11 @@ void UDPConnection::SendServer(Card& _card,const int& UDPSocketHandle)
 	//! 送信データID
 	static unsigned int sendDataId = 10000 * GameManager::playerId;
 	sendDataId++;
-		data.data = _card.suit * 13 + _card.number - 1;
-		data.area = (int)_card.area;
-		data.areaNumber = _card.areaNumber;
+	data.data = _card.suit * 13 + _card.number - 1;
+	data.area = (int)_card.area;
+	data.areaNumber = _card.areaNumber;
 
-	unsigned char block[12];
+	unsigned char block[15];
 
 	unsigned char* b = block;
 
@@ -23,13 +23,15 @@ void UDPConnection::SendServer(Card& _card,const int& UDPSocketHandle)
 	b += sizeof(int);
 	std::memcpy(b, &sendDataId, sizeof(int));
 	b += sizeof(int);
+	std::memcpy(b, &_score, sizeof(int));
+	b += sizeof(int);
 	std::memcpy(b, &data, sizeof(data));
 
 	// UDPで送信
 	// クライアントのみ送信
 	auto portNum = UDP_PORT_NUM;
 	auto Ip = GameManager::IPAdress[0];
-	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, 12);
+	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, 15);
 
 	std::ofstream outputfile("client_2.txt");
 	outputfile << "送信 -> \n";
@@ -81,4 +83,42 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 			<< (int)Ip.d3 << "." << (int)Ip.d4 << ":" << portNum;
 		outputfile << "\n";
 	}
+}
+
+void UDPConnection::SendSyncData()
+{
+	static int sendCount = 0;
+	static int sendTime = GetNowCount();
+	static int ret = -9999;
+
+	if ((GetNowCount() - sendTime) > 1000)
+	{
+		//for (int i = 0; i < MAX_PLAYER; ++i)
+		//{
+			ret = NetWorkSendUDP(GameManager::syncUDPSocketHandle[0],
+				GameManager::IPAdress[0], SYNC_UDP_PORT_NUM, &sendCount, sizeof(int));
+		//}
+		sendCount++;
+	}
+	DrawFormatString(450, 600, GetColor(0, 0, 0), "sendCount %d : %d",
+		sendCount, ret);
+}
+
+void UDPConnection::RecvSyncData()
+{
+	static int sendCount = -1;
+	int portNum = SYNC_UDP_PORT_NUM;
+	IPDATA ip = GameManager::IPAdress[0];
+
+	DrawFormatString(450, 600, GetColor(0, 0, 0), "SendCount : %d : %d", sendCount, GameManager::syncUDPSocketHandle[0]);
+
+	if (CheckNetWorkRecvUDP(GameManager::syncUDPSocketHandle[0]) != TRUE) return;
+
+	NetWorkRecvUDP(GameManager::syncUDPSocketHandle[0],
+			&ip, &portNum, &sendCount, sizeof(int), FALSE);
+
+}
+
+void UDPConnection::SendEventData(EventData&)
+{
 }
