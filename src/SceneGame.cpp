@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-#define DEBUG
+//#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -33,7 +33,7 @@ SceneGame::SceneGame()
 	countDownLeftTop = Vector2Int();
 	alpha = 0;
 
-	auto portNum = GameManager::portNum;
+	GameManager::portNum = UDP_PORT_NUM;
 
 	if(GameManager::role == Role::Client)
 	{
@@ -50,6 +50,15 @@ SceneGame::SceneGame()
 
 	outputfile_c = std::ofstream("client.txt");
 	outputfile_s = std::ofstream("server.txt");
+	
+	std::ofstream f("connect.txt");
+
+	f << "socket : " << UDPSocketHandle[0] << "\n";
+	f <<"IP Address [" << 0 << "] : " << (int)GameManager::IPAdress[0].d1 << "."
+		<< (int)GameManager::IPAdress[0].d2 << "."
+		<< (int)GameManager::IPAdress[0].d3 << "."
+		<< (int)GameManager::IPAdress[0].d4 << "\n";
+	f << "Port Number : " << GameManager::portNum << "\n";
 }
 
 SceneGame::~SceneGame()
@@ -81,6 +90,10 @@ void SceneGame::Update()
 	{
 		if (!ReceiveInitData())return;
 	}
+	else
+		DrawFormatString(10, 20, GetColor(0, 255, 0),
+			": %d : %d", UDPSocketHandle[0], UDP_PORT_NUM);
+
 
 
 	// カードの設置関係
@@ -206,7 +219,7 @@ void SceneGame::CheckMouseInput()
 				//if (!boardCp->CanPlace(*card)) continue;
 #ifdef DEBUG
 				if (card->area != Area_Player1) continue;
-#elif
+#else
 				if (card->area != (Area)(GameManager::playerId + 2)) continue;
 #endif // DEBUG
 
@@ -255,7 +268,14 @@ int SceneGame::ReceiveInitData()
 	// 一度受信したら、以降はtrue
 	static int ret = FALSE;
 
-	if (ret) return TRUE;
+	if (ret) 
+	{
+		DrawFormatString(10, 20, GetColor(0, 255, 0),
+			"受信済み");
+		return TRUE;
+	}
+		DrawFormatString(10, 20, GetColor(0, 255, 0),
+			"受信待ち : %d : %d", UDPSocketHandle[0], UDP_PORT_NUM);
 
 	//! 受け取ったカードデータのデコード先
 	static Card decodeData[SUIT_NUM * DECK_RANGE];

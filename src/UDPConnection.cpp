@@ -76,5 +76,9 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 		int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 250);
 
 		outputfile << ret;
+		outputfile << "\n";
+		outputfile << " 送信先: " << (int)Ip.d1 << "." << (int)Ip.d2 << "."
+			<< (int)Ip.d3 << "." << (int)Ip.d4 << ":" << portNum;
+		outputfile << "\n";
 	}
 }

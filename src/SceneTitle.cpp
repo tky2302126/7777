@@ -157,7 +157,7 @@ void SceneTitle::Update()
 
 			// clientに接続人数とPlayerIDを送信
 			// !タイミングがよくなさそう
-			for (int i = 0; i < GameManager::connectNum; ++i)
+			for (int i = 0; i < GameManager::connectNum; i++)
 			{
 				unsigned char sendData = GameManager::connectNum * 10 + i + 1;
 				NetWorkSend(GameManager::networkHandle[i],
@@ -188,26 +188,28 @@ void SceneTitle::Update()
 
 void SceneTitle::LateUpdate()
 {
-	cursor.ManualUpdate();
+	{
+		cursor.ManualUpdate();
 
-	std::string text = "スタート";
+		std::string text = "スタート";
 
-	// テキスト表示座標
-	float posX = 1920 / 2 - (50 * (text.size() / 4));
+		// テキスト表示座標
+		float posX = 1920 / 2 - (50 * (text.size() / 4));
 
-	DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
-		text.c_str());
+		DrawFormatString((int)posX, 900, GetColor(0, 0, 0),
+			text.c_str());
 
-	DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
-		"Title");
+		DrawFormatString((int)posX, 500, GetColor(0, 0, 0),
+			"Title");
 
-	DrawFormatString(300, 300 - GetFontSize() / 2,
-		GetColor(0, 0, 0),
-		"Role       : ");
-	if (GameManager::role == Role::Server)
-		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
-	else
-		DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
+		DrawFormatString(300, 300 - GetFontSize() / 2,
+			GetColor(0, 0, 0),
+			"Role       : ");
+		if (GameManager::role == Role::Server)
+			DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Sever");
+		else
+			DrawFormatString(450, 300 - GetFontSize() / 2, GetColor(0, 0, 0), "Client");
+	}
 
 	if (GameManager::role == Role::Server)
 		ServerInputForm();
@@ -328,7 +330,9 @@ void SceneTitle::ServerInputForm()
 		// 新しい接続があったらそのネットワークハンドルを得る
 		GameManager::networkHandle[index] = GetNewAcceptNetWork();
 		if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
+		{
 			connectParameter = ConnectParameter::Complete;
+		}
 	}
 }
 

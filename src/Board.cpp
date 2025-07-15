@@ -1,6 +1,6 @@
 ﻿#include "Board.h"
 
-#define DEBUG
+//#define DEBUG
 
 Board::Board()
 {

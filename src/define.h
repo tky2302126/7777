@@ -25,7 +25,7 @@ struct Vector2Int
 #define EVENT_TIME 6000
 
 #define UDP_PORT_NUM 9999
-#define MAX_PLAYER 3
+#define MAX_PLAYER 2
 // #define
 
 
