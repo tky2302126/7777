@@ -37,13 +37,18 @@ public:
 	/// </summary>
 	/// <param name="cardPtr">判定するカード</param>
 	bool CanPlace(const Card& card);
-
+	// 乱数生成器
 	static std::mt19937 engine;
 
+	float GetCoolTime() { return coolTime; }
 #pragma region イベント関連
 	//イベント抽選の関数
 	// サーバーで実行→クライアントに送信する予定
 	void DrawingEvent();
+
+	// イベント関連の変数の初期化
+	//! サーバー・クライアントどちらも通る場所で呼ぶ
+	void InitEventMember();
 
 	/// <summary>
 	/// 爆弾イベント
@@ -69,7 +74,7 @@ public:
 	/// <summary>
 	/// エリア移動
 	/// </summary>
-	void SlideArea(bool left = true, int num = -1);
+	void MoveArea(bool left = true, int num = -1);
 
 	/// <summary>
 	/// 手札入れ替え
@@ -97,14 +102,13 @@ public:
 	std::vector<std::vector<std::shared_ptr<Card>>> handData;
 	//! スコア
 	int score;
-
+	//! ラッキーナンバー
 	int luckyNum;
-
 	// イベント用の実行時間カウントタイマー
 	int eventCountTimer;
 	// 実行しているイベント
 	Event currentEvent;
-
+	// イベント抽選用のさいころ
 	Dice* dice;
 	
 #pragma endregion
@@ -159,6 +163,12 @@ public:
 
 	bool IsLuckyNumber(const int& num) { return luckyNum == num; };
 
+	/// <summary>
+	/// 完全順列かどうかを判定
+	/// </summary>
+	/// <param name="original">元のカード情報</param>
+	/// <param name="shuffled">シャッフル後の情報</param>
+	/// <returns></returns>
 	bool IsDerangement(const std::vector<std::vector<std::shared_ptr<Card>>>& original,
 		const std::vector<std::vector<std::shared_ptr<Card>>>& shuffled);
 
