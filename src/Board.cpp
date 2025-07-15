@@ -190,7 +190,7 @@ void Board::DrawingEvent()
 		LimitArea();
 		break;
 	case 4:
-		SlideArea();
+		MoveArea();
 		break;
 	case 5:
 		ShuffleHand();
@@ -312,6 +312,7 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
 
+	// あがり判定
 	if (handData[GameManager::playerId].size() <= 0)
 	{
 
@@ -452,7 +453,7 @@ void Board::LimitArea(int left, int right)
 
 }
 
-void Board::SlideArea(bool left, int num)
+void Board::MoveArea(bool left, int num)
 {
 	if(GameManager::role == Role::Server)
 	{
@@ -461,10 +462,13 @@ void Board::SlideArea(bool left, int num)
 		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
 
 		EventData eventData;
-		
-		UDPConnection::SendEventData(eventData);
 		auto add = num * IsLeft ? 1 : -1;
 		cards[0]->leftEdgeNum += add;
+		int eventIndex = static_cast<int>(Event::Event_MoveArea);
+		eventData.eventType = static_cast<unsigned char>(eventIndex);
+		eventData.data = static_cast<unsigned char>(data);
+
+		UDPConnection::SendEventData(eventData);
 	}
 	else
 	{
@@ -508,6 +512,21 @@ void Board::ShuffleHand()
 
 		//エリアを更新する処理
 
+		for(int i = 0; i < playerNum; ++i)
+		{
+			for(auto card: playerHands[i])
+			{
+				card->area = (Area)(i + 2);
+			}
+		}
 
+		EventData eventData;
+		int eventIndex = static_cast<int>(Event::Event_ShuffleHand);
+		eventData.eventType = static_cast<unsigned char>(eventIndex);
+		eventData.data = '1'; // フラグ
+
+		UDPConnection::SendEventData(eventData);
 	}
+
+	/// エリア更新に合わせて手札を移動する処理
 }
