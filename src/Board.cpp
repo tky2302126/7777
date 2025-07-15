@@ -75,7 +75,7 @@ void Board::Update()
 {
 	Draw();
 
-	if (handData[GameManager::playerId].size() <= 0)
+	if (GameManager::isClear)
 	{
 		DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
 	}
@@ -316,6 +316,11 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 		std::remove(handData[_index].begin(), handData[_index].end(), _card),
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
+
+	if (handData[GameManager::playerId].size() <= 0)
+	{
+		GameManager::isClear = true;
+	}
 #endif // DEBUG
 }
 

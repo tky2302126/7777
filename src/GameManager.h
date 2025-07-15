@@ -60,4 +60,6 @@ public:
 	static int connectNum;
 	//! 自身のプレイヤーID
 	static int playerId;
+
+	static bool isClear;
 };
