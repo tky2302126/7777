@@ -55,6 +55,8 @@ public:
 
 	//! 時刻の同期用UDPソケットハンドル
 	static int syncUDPSocketHandle[3];
+	//! 時刻の同期用UDPソケットハンドル
+	static int score[3];
 	
 	//! 接続人数
 	static int connectNum;

@@ -103,7 +103,7 @@ void SceneGame::Update()
 		{
 			DrawFormatString(
 				10 + 150 * i, 100, GetColor(255, 255, 255),
-				"Player%d = %d", i, boardCp->handData[i].size());
+				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), GameManager::score[i]);
 		}
 	}
 
@@ -245,6 +245,7 @@ void SceneGame::CheckMouseInput()
 				}
 
 				boardCp->CardOnBoard(card, GameManager::playerId);
+				boardCp->AddScore(card->number);
 				// 手札の並べなおし
 #ifdef DEBUG
 				boardCp->ShowHand(Area::Area_Player1);
@@ -389,7 +390,6 @@ int SceneGame::ReceiveUpdateData_Client()
 		Card decodeData;
 		//! 送信時刻
 		int sendTime = -1;
-		int score = -1;
 
 		int portNum = UDP_PORT_NUM;
 		unsigned char recvData[15];
@@ -400,7 +400,7 @@ int SceneGame::ReceiveUpdateData_Client()
 		// 送信時刻を書き込み
 		sendTime = *(int*)recvData;
 		// 送信時刻を書き込み
-		score = *(int*)(recvData + sizeof(int) * 2);
+		GameManager::score[i] = *(int*)(recvData + sizeof(int) * 2);
 
 
 		//! 受け取ったカードデータ
