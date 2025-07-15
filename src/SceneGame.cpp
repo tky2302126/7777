@@ -127,11 +127,11 @@ void SceneGame::Update()
 #ifdef _DEBUG
 	if(CheckHitKey(KEY_INPUT_A))
 	{
-		boardCp->SlideArea(true, 1);
+		boardCp->MoveArea(true, 1);
 	}
 	if(CheckHitKey(KEY_INPUT_D))
 	{
-		boardCp->SlideArea(false, 1);
+		boardCp->MoveArea(false, 1);
 	}
 	auto edge = boardCp->cards[0]->leftEdgeNum;
 	DrawFormatString(0, 900, 65535, "leftEdgeNum : %d", edge);

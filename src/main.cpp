@@ -21,7 +21,11 @@ IPDATA GameManager::IPAdress[3] = {
 };
 int GameManager::syncUDPSocketHandle[3] = { -1, -1, -1 };
 int GameManager::portNum = -1;
+<<<<<<< HEAD
 int GameManager::score[3] = { 0, 0, 0 };
+=======
+bool GameManager::isClear = false;
+>>>>>>> df3987ff480a7e3738389c7bd86ed33a619cad7f
 
 
 // プログラムは WinMain から始まります

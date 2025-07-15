@@ -75,7 +75,7 @@ void Board::Update()
 {
 	Draw();
 
-	if (handData[GameManager::playerId].size() <= 0)
+	if (GameManager::isClear)
 	{
 		DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
 	}
@@ -173,17 +173,16 @@ bool Board::CanPlace(const Card& card)
 
 void Board::DrawingEvent()
 {
+	std::uniform_int_distribution<> dist(0, 4);
+
+	auto diceNum = dist(engine);
 	// ダイスロールアニメーション
-	// !HWにライブラリがあるらしい
-
-	std::uniform_int_distribution<> dist(0, 5);
-
-	auto dice = dist(engine);
+	dice->Roll(diceNum);
 	// 抽選結果に応じて関数を実行
-	switch (dice)
+	switch (diceNum)
 	{
 	case 0:
-		Bomb();
+		ShuffleHand();
 		break;
 	case 1:
 		FeverTime();
@@ -195,16 +194,23 @@ void Board::DrawingEvent()
 		LimitArea();
 		break;
 	case 4:
-		SlideArea();
-		break;
-	case 5:
-		ShuffleHand();
+		MoveArea();
 		break;
 	default:
+		Bomb();
 		break;
 	}
 
 	eventCountTimer = EVENT_TIME;
+}
+
+void Board::InitEventMember()
+{
+	// イベントで使う変数のイニシャライズ
+	coolTime = PLACE_COOL_TIME;
+	areaL = -1;
+	areaR = -1;
+	luckyNum = -1;
 }
 
 void Board::Shuffle()
@@ -316,6 +322,12 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 		std::remove(handData[_index].begin(), handData[_index].end(), _card),
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
+
+	// あがり判定
+	if (handData[GameManager::playerId].size() <= 0)
+	{
+		GameManager::isClear = true;
+	}
 #endif // DEBUG
 }
 
@@ -415,8 +427,6 @@ void Board::FeverTime()
 {
 	/// クールタイム大幅短縮
 	coolTime = coolTime / 2;
-
-
 }
 
 void Board::LuckyNumber(int num)
@@ -449,10 +459,56 @@ void Board::LuckyNumber(int num)
 void Board::LimitArea(int left, int right)
 {
 	/// 盤面の状況からあまり意味のないエリア制限を無いようにしたい
+	if(GameManager::role == Role::Server)
+	{
+		/// 埋まっていないカードを探す
+		std::vector<std::shared_ptr<Card>> unfilledCards;
+		for (auto& card : cards)
+		{
+			if (card->area != Area::Area_Board) unfilledCards.push_back(card);
+		}
+		int number1 = -1;
+		int number2 = -1;
 
+		// 同じ数字じゃなくなるまで抽選
+		do
+		{
+			auto index1 = Random::GetRandomInt(0, unfilledCards.size());
+			auto number1 = unfilledCards[index1]->number;
+			
+			auto index2 = Random::GetRandomInt(0, unfilledCards.size());
+			auto number2 = unfilledCards[index2]->number;
+		} while (number1 != number2);
+		
+		if (number1 > number2)
+		{
+			areaL = number2;
+			areaR = number1;
+		}
+		else
+		{
+			areaL = number1;
+			areaR = number2;
+		}
+
+		auto limit = (areaR-1) * DECK_RANGE + areaL;
+
+		EventData data;
+		int eventIndex = static_cast<int>(Event::Event_LimitArea);
+		data.eventType = static_cast<unsigned char>(eventIndex);
+		data.data = static_cast<unsigned char>(limit);
+
+		UDPConnection::SendEventData(data);
+
+	}
+	else
+	{
+		areaL = left;
+		areaR = right;
+	}
 }
 
-void Board::SlideArea(bool left, int num)
+void Board::MoveArea(bool left, int num)
 {
 	if(GameManager::role == Role::Server)
 	{
@@ -461,10 +517,13 @@ void Board::SlideArea(bool left, int num)
 		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
 
 		EventData eventData;
-		
-		UDPConnection::SendEventData(eventData);
 		auto add = num * IsLeft ? 1 : -1;
 		cards[0]->leftEdgeNum += add;
+		int eventIndex = static_cast<int>(Event::Event_MoveArea);
+		eventData.eventType = static_cast<unsigned char>(eventIndex);
+		eventData.data = static_cast<unsigned char>(data);
+
+		UDPConnection::SendEventData(eventData);
 	}
 	else
 	{
@@ -508,6 +567,22 @@ void Board::ShuffleHand()
 
 		//エリアを更新する処理
 
+		for(int i = 0; i < playerNum; ++i)
+		{
+			for(auto card: playerHands[i])
+			{
+				card->area = (Area)(i + 2);
+			}
+		}
 
+		EventData eventData;
+		int eventIndex = static_cast<int>(Event::Event_ShuffleHand);
+		eventData.eventType = static_cast<unsigned char>(eventIndex);
+		eventData.data = '1'; // フラグ
+
+		UDPConnection::SendEventData(eventData);
 	}
+
+	/// エリア更新に合わせて手札を移動する処理
+
 }
