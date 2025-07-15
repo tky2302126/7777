@@ -37,7 +37,8 @@ void UDPConnection::SendServer(Card& _card, int _score, const int& UDPSocketHand
 
 	std::ofstream outputfile("client_2.txt");
 	outputfile << "送信 -> \n";
-	outputfile << ret;
+	outputfile << ret << "\n";
+	outputfile << "score = " << _score << "\n";
 }
 
 void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
@@ -67,6 +68,16 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 	b += sizeof(int);
 	std::memcpy(b, &sendDataId, sizeof(int));
 	b += sizeof(int);
+
+	std::memcpy(b, &GameManager::score[0], sizeof(int));
+	b += sizeof(int);
+	std::memcpy(b, &GameManager::score[1], sizeof(int));
+	b += sizeof(int);
+	std::memcpy(b, &GameManager::score[2], sizeof(int));
+	b += sizeof(int);
+	std::memcpy(b, &GameManager::score[3], sizeof(int));
+	b += sizeof(int);
+
 	std::memcpy(b, data, sizeof(data));
 
 
@@ -84,6 +95,8 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 		outputfile << " 送信先: " << (int)Ip.d1 << "." << (int)Ip.d2 << "."
 			<< (int)Ip.d3 << "." << (int)Ip.d4 << ":" << portNum;
 		outputfile << "\n";
+		outputfile << "score" << GameManager::score[0] << " : " << 
+			GameManager::score[1] << " : " << GameManager::score[2] << "\n";
 	}
 }
 
