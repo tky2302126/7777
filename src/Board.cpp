@@ -75,6 +75,11 @@ void Board::Update()
 {
 	Draw();
 
+	if (GameManager::isClear)
+	{
+		DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
+	}
+
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
@@ -321,7 +326,7 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 	// あがり判定
 	if (handData[GameManager::playerId].size() <= 0)
 	{
-
+		GameManager::isClear = true;
 	}
 #endif // DEBUG
 }
