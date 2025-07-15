@@ -97,10 +97,14 @@ void Card::AreaChange(Area _newArea)
 
 	area = _newArea;
 
+	// leftEdgeNumを加えた位置に補正
+	auto bezelPosX = (DECK_RANGE - number + leftEdgeNum) % DECK_RANGE;
+	if (bezelPosX <= 0)bezelPosX += DECK_RANGE; // マイナス補正
+	bezelPosX--; // 配列の数値に補正
 	if(_newArea == Area_Board)
 	{
 		VECTOR boardPos = {
-			DEFAULT_CARD_POSITION_LOCAL.x + (12 - (number - 1)) * FIELD_BEZEL_LOCAL.x,
+			DEFAULT_CARD_POSITION_LOCAL.x + bezelPosX * FIELD_BEZEL_LOCAL.x,
 			DEFAULT_CARD_POSITION_LOCAL.y + suit				* FIELD_BEZEL_LOCAL.y,
 		};
 
@@ -110,4 +114,19 @@ void Card::AreaChange(Area _newArea)
 		if (rotate.z != 180.0f)
 			HWDotween::DoAction(&rotate, { 0, 0, 180 }, 30);
 	}
+}
+
+void Card::Slide()
+{
+	if (area != Area_Board) return;
+	// leftEdgeNumを加えた位置に補正
+	auto bezelPosX = (DECK_RANGE - number + leftEdgeNum) % DECK_RANGE;
+	if (bezelPosX <= 0)bezelPosX += DECK_RANGE; // マイナス補正
+	bezelPosX--; // 配列の数値に補正
+	VECTOR newPos = {
+		DEFAULT_CARD_POSITION_LOCAL.x + bezelPosX * FIELD_BEZEL_LOCAL.x,
+		DEFAULT_CARD_POSITION_LOCAL.y + suit * FIELD_BEZEL_LOCAL.y,
+	};
+
+	HWDotween::DoAction(&position, { newPos.x, newPos.y, 0 }, 10);
 }

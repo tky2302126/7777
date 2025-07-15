@@ -446,11 +446,20 @@ void Board::SlideArea(bool left, int num)
 		EventData eventData;
 		
 		UDPConnection::SendEventData(eventData);
+		auto add = num * IsLeft ? 1 : -1;
+		cards[0]->leftEdgeNum += add;
 	}
-	//cards[0]->
+	else
+	{
+		auto add = num * left ? 1 : -1;
+		cards[0]->leftEdgeNum += add;
+	}
+	cards[0]->leftEdgeNum = (cards[0]->leftEdgeNum - 1 + DECK_RANGE) % DECK_RANGE + 1;
+
+
 	for(auto card : cards)
 	{
-		
+		card->Slide();
 	}
 }
 

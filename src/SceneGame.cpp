@@ -133,6 +133,8 @@ void SceneGame::Update()
 	{
 		boardCp->SlideArea(false, 1);
 	}
+	auto edge = boardCp->cards[0]->leftEdgeNum;
+	DrawFormatString(0, 900, 65535, "leftEdgeNum : %d", edge);
 
 #endif // _DEBUG
 
