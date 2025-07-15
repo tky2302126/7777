@@ -103,13 +103,15 @@ void SceneGame::Update()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #ifdef _DEBUG
-	if(CheckHitKey(KEY_INPUT_C))
+	if(CheckHitKey(KEY_INPUT_A))
 	{
-		if(!isCountDown)
-		{
-			CountDown();
-		}
+		boardCp->SlideArea(true, 1);
 	}
+	if(CheckHitKey(KEY_INPUT_D))
+	{
+		boardCp->SlideArea(false, 1);
+	}
+
 #endif // _DEBUG
 
 }

@@ -445,7 +445,7 @@ void Board::SlideArea(bool left, int num)
 		
 		UDPConnection::SendEventData(eventData);
 	}
-
+	//cards[0]->
 	for(auto card : cards)
 	{
 		
