@@ -81,6 +81,9 @@ public:
 #pragma endregion
 
 #pragma region privateメンバ変数
+	int rank;
+	int currentrank;
+	int winHandle;
 	// イベントタイマー
 	int timer;
 	// 制限エリア左端
