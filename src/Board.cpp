@@ -142,7 +142,7 @@ void Board::ManualLoad()
 }
 void Board::AddScore(int value)
 {
-	score += value;
+	GameManager::score[GameManager::playerId] = score += value;
 }
 bool Board::CanPlace(const Card& card)
 {

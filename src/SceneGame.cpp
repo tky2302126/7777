@@ -92,19 +92,22 @@ void SceneGame::Update()
 	{
 		if (!ReceiveInitData())return;
 	}
+			DrawFormatString(
+				10, 60, GetColor(255, 255, 255),
+				"接続人数 = %d : %d", GameManager::connectNum, boardCp->handData.size());
 
-	for (int i = 0; i < GameManager::connectNum; ++i)
+			for (int i = 0; i < GameManager::connectNum; ++i)
 	{
 		if (i != GameManager::playerId)
 		{
 			DrawFormatString(
-				10 + 150 * i, 100, GetColor(255, 255, 255),
+				10, 100 + 30 * i, GetColor(255, 255, 255),
 				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), GameManager::score[i]);
 		}
 		else
 		{
 			DrawFormatString(
-				10, 150, GetColor(255, 255, 255),
+				10, 100 + 30 * i, GetColor(0, 255, 0),
 				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), boardCp->score);
 		}
 	}

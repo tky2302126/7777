@@ -12,7 +12,7 @@
 // 静的メンバ変数の初期化
 Role GameManager::role = Role::Server;
 int GameManager::networkHandle[3] = { -1, -1, -1 };
-int GameManager::connectNum = -1;
+int GameManager::connectNum = 1;
 int GameManager::playerId = -1;
 IPDATA GameManager::IPAdress[3] = { 
 	{255, 255, 255, 255}, 
@@ -40,8 +40,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #ifdef _DEBUG
 
 	// 幅: 1920, 高さ: 1080, ビット深度: 32
-	SetGraphMode(1920, 1080, 32);
-	// SetGraphMode(1920 / 2, 1000, 32);
+	//SetGraphMode(1920, 1080, 32);
+	 SetGraphMode(1920 / 2, 1000, 32);
 	ChangeWindowMode(TRUE);
 	// デバッグモードで起動
 	HandlerWaltan::debugMode = true;

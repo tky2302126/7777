@@ -189,7 +189,7 @@ void SceneTitle::Update()
 
 			// clientに接続人数とPlayerIDを送信
 			// !タイミングがよくなさそう
-			for (int i = 0; i < GameManager::connectNum; i++)
+			for (int i = 0; i < GameManager::connectNum - 1; i++)
 			{
 				unsigned char sendData = GameManager::connectNum * 10 + i + 1;
 				NetWorkSend(GameManager::networkHandle[i],
@@ -327,12 +327,6 @@ void SceneTitle::ServerInputForm()
 			"%d", portId);
 	}
 
-	// IPアドレスとポート番号が入力されている場合
-	int num = 0;
-	for (int i = 0; i < MAX_PLAYER - 1; ++i)
-		if (GameManager::networkHandle[i] != -1)
-			++num;
-	GameManager::connectNum = num + 1;
 	DrawFormatString(300, 700 - GetFontSize() / 2,
 		GetColor(0, 0, 0),
 		"参加人数 : %d/%d", GameManager::connectNum, MAX_PLAYER);
@@ -351,19 +345,24 @@ void SceneTitle::ServerInputForm()
 	// 接続中の処理
 	if (connectParameter == ConnectParameter::Wait)
 	{
-		int index = 0;
-		for (index = 0; index < 3; ++index)
-			if (GameManager::networkHandle[index] == -1)
+		int netHandle = GetNewAcceptNetWork();
+		if (netHandle != -1)
+		{
+			for (int i = 0; i < MAX_PLAYER - 1; ++i)
+			{
+				if (GameManager::networkHandle[i] != -1) continue;
+
+				// 新しい接続があったらそのネットワークハンドルを得る
+				GameManager::networkHandle[i] = netHandle;
+				GameManager::connectNum++;
+				// 接続先にPlayerIDを送信
+				NetWorkSend(GameManager::networkHandle[i],
+					&i, sizeof(int));
+				if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
+					connectParameter = ConnectParameter::Connected;
 				break;
-
-		// 新しい接続があったらそのネットワークハンドルを得る
-		GameManager::networkHandle[index] = GetNewAcceptNetWork();
-		// 接続先にPlayerIDを送信
-		NetWorkSend(GameManager::networkHandle[index],
-			&index, sizeof(int));
-
-		if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
-			connectParameter = ConnectParameter::Connected;
+			}
+		}
 	}
 }
 
