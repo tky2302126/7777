@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
-	sceneManager.SceneChangeSync(SceneTag::Title);
+	sceneManager.SceneChangeSync(SceneTag::Result);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
 		//sceneManager.SceneChangeAsync(SceneTag::Game);
