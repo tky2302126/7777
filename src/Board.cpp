@@ -171,6 +171,11 @@ bool Board::CanPlace(const Card& card)
 	return false;
 }
 
+void Board::SubscribeEventCallback(const std::function<void(EventData&)>& _eventCallback)
+{
+	eventOccurrenceCallback = _eventCallback;
+}
+
 void Board::DrawingEvent()
 {
 	std::uniform_int_distribution<> dist(0, 4);
@@ -182,19 +187,19 @@ void Board::DrawingEvent()
 	switch (diceNum)
 	{
 	case 0:
-		ShuffleHand();
-		break;
-	case 1:
 		FeverTime();
 		break;
-	case 2:
+	case 1:
 		LuckyNumber();
 		break;
-	case 3:
+	case 2:
 		LimitArea();
 		break;
-	case 4:
+	case 3:
 		MoveArea();
+		break;
+	case 4:
+		ShuffleHand();
 		break;
 	default:
 		Bomb();
@@ -448,7 +453,6 @@ void Board::LuckyNumber(int num)
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
 		eventData.data = static_cast<unsigned char>(luckyNum);
 
-		UDPConnection::SendEventData(eventData);
 	}
 	else
 	{
@@ -498,8 +502,8 @@ void Board::LimitArea(int left, int right)
 		data.eventType = static_cast<unsigned char>(eventIndex);
 		data.data = static_cast<unsigned char>(limit);
 
-		UDPConnection::SendEventData(data);
-
+		//UDPConnection::SendEventData(data);
+		eventOccurrenceCallback(data);
 	}
 	else
 	{
@@ -514,16 +518,21 @@ void Board::MoveArea(bool left, int num)
 	{
 		auto IsLeft = Random::GetRandomInt(0, 1);
 		auto num = Random::GetRandomInt(1, DECK_RANGE);
-		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
+
+		//auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
+		unsigned char data = IsLeft << 7;
+		data += num;
 
 		EventData eventData;
 		auto add = num * IsLeft ? 1 : -1;
 		cards[0]->leftEdgeNum += add;
+
 		int eventIndex = static_cast<int>(Event::Event_MoveArea);
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
-		eventData.data = static_cast<unsigned char>(data);
+		eventData.data = data;
 
-		UDPConnection::SendEventData(eventData);
+		//UDPConnection::SendEventData(eventData);
+		eventOccurrenceCallback(eventData);
 	}
 	else
 	{
@@ -580,7 +589,8 @@ void Board::ShuffleHand()
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
 		eventData.data = '1'; // フラグ
 
-		UDPConnection::SendEventData(eventData);
+		//UDPConnection::SendEventData(eventData);
+		eventOccurrenceCallback(eventData);
 	}
 
 	/// エリア更新に合わせて手札を移動する処理

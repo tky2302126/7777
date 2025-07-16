@@ -47,6 +47,8 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 	CardData data[SUIT_NUM * DECK_RANGE];
 #pragma pack()
 
+	//! 送信データの種別
+	SendDataType sendType = SendDataType::GameData;
 	//! 送信時刻
 	int sendTime = GetNowCount();
 	//! 送信データID
@@ -63,6 +65,9 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 	unsigned char block[250];
 
 	unsigned char* b = block;
+
+	std::memcpy(b, &sendType, sizeof(SendDataType));
+	b += sizeof(SendDataType);
 
 	std::memcpy(b, &sendTime, sizeof(int));
 	b += sizeof(int);
@@ -136,38 +141,36 @@ void UDPConnection::RecvSyncData()
 	}
 }
 
-void UDPConnection::SendEventData(EventData& data)
+void UDPConnection::SendEventData(EventData& data, int* UDPSocketHandle)
 {
 	// 送信する情報
-	//  EventType : イベントの種類
-	//  data      : イベントごとで使うデータ
-	//! 送信時刻
-	int sendTime = GetNowCount();
-	//! 送信データID
-	static unsigned int sendDataId = 10000 * GameManager::playerId;
-	sendDataId++;
-	
-	unsigned char block[2];
+	//  SendDataType : 送信データの種別
+	//  EventType    : イベントの種類
+	//  data         : イベントごとで使うデータ
+
+	SendDataType sendType = SendDataType::EventData;
+
+	unsigned char block[3];
 
 	unsigned char* b = block;
 
-	std::memcpy(b, &sendTime, sizeof(int));
-	b += sizeof(int);
-	std::memcpy(b, &sendDataId, sizeof(int));
-	b += sizeof(int);
-	//std::memcpy(b, data, sizeof(data));
+	std::memcpy(b, &sendType, sizeof(SendDataType));
+	b += sizeof(SendDataType);
+	std::memcpy(b, &data, sizeof(EventData));
 
 
 	std::ofstream outputfile("sever_Event.txt");
 	outputfile << "送信 -> \n";
+	outputfile << (int)data.eventType << "\n";
+	outputfile << (int)data.data << "\n\n";
 
 	for (int i = 0; i < MAX_PLAYER; ++i)
 	{
 		auto portNum = UDP_PORT_NUM;
 		auto Ip = GameManager::IPAdress[i];
-		// int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 250);
+		int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 3);
 
-		// outputfile << ret;
+		outputfile << ret;
 		outputfile << "\n";
 		outputfile << " 送信先: " << (int)Ip.d1 << "." << (int)Ip.d2 << "."
 			<< (int)Ip.d3 << "." << (int)Ip.d4 << ":" << portNum;

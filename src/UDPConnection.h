@@ -74,7 +74,7 @@ public:
 	/// イベントデータをサーバーがクライアントに送信する
 	/// </summary>
 	/// <param name="">EventData 送信するデータ</param>
-	static void SendEventData(EventData&);
+	static void SendEventData(EventData&, int*);
 
 private:
 

@@ -67,3 +67,12 @@ enum Event : unsigned char
 	Event_MoveArea		= Event_LimitArea << 1,			// エリア移動
 	Event_ShuffleHand	= Event_MoveArea << 1,			// 手札交換
 };
+
+// 送信データID
+// ゲームの同期データとイベント告知のデータを判別するため
+enum class SendDataType : unsigned char
+{
+	UnDefine,
+	GameData,
+	EventData
+};

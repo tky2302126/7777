@@ -30,6 +30,9 @@ SceneGame::SceneGame()
 	board = std::make_shared<HWGameObject>();
 	boardCp = board->AddComponent<Board>();
 
+	// イベント告知用のコールバック関数を登録
+	boardCp->SubscribeEventCallback(std::bind(&SceneGame::SendEventData, this, std::placeholders::_1));
+
 	countDownLeftTop = Vector2Int();
 	alpha = 0;
 
@@ -79,6 +82,13 @@ void SceneGame::LoadComplete()
 	}
 	///
 	CountDown();
+
+	if(GameManager::role == Role::Server)
+	{
+		// 暗転解除
+		HWDotween::DoDelay(300)->OnComplete([&]{
+				boardCp->DrawingEvent();});
+	}
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -170,6 +180,11 @@ void SceneGame::LateUpdate()
 	DrawFormatString(
 		550, 20, GetColor(0, 255, 0),
 		"PlayerID = %d", GameManager::playerId);
+}
+
+void SceneGame::SendEventData(EventData& _sendData)
+{
+	UDPConnection::SendEventData(_sendData, UDPSocketHandle);
 }
 
 void SceneGame::CountDown()
@@ -300,11 +315,11 @@ int SceneGame::ReceiveInitData()
 			recvData, 250, FALSE);
 
 		// 送信時刻を書き込み
-		sendTime = *(int*)recvData;
-		sendId = *(int*)(recvData + sizeof(int));
+		sendTime = *(int*)recvData + sizeof(SendDataType);
+		sendId = *(int*)(recvData + sizeof(SendDataType) + sizeof(int));
 
 		//! 受け取ったカードデータ
-		CardData* cdp = (CardData*)(recvData + sizeof(int) * 6);
+		CardData* cdp = (CardData*)(recvData + sizeof(SendDataType) + sizeof(int) * 6);
 
 		// カードデータをデコードする
 		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
@@ -454,12 +469,8 @@ int SceneGame::ReceiveUpdateData_Server()
 	isRecv = true;
 	HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
 
-	//! 受け取ったカードデータのデコード先
-	static Card decodeData[SUIT_NUM * DECK_RANGE];
-	//! 送信時刻
-	int sendTime = -1;
-	//! 送信ID
-	int sendId = -1;
+	//! 送信データ種別
+	SendDataType dataType = SendDataType::UnDefine;
 
 	int portNum = UDP_PORT_NUM;
 	unsigned char recvData[250];
@@ -470,18 +481,41 @@ int SceneGame::ReceiveUpdateData_Server()
 	outputfile_c << "受信 -> \n";
 	outputfile_c << ret;	
 
+	// 受信したデータ種別
+	dataType = *(SendDataType*)recvData;
 
-	// 送信時刻を書き込み
-	sendTime = *(int*)recvData;
-	sendId = *(int*)(recvData + sizeof(int));
+	switch (dataType)
+	{
+	case SendDataType::GameData:
+		ReceivingGameData(recvData + 1);
+		break;
+	case SendDataType::EventData:
+		ReceivingEventData(recvData + 1);
+		break;
+	}
 
-	GameManager::score[0] = *(int*)(recvData + sizeof(int) * 2);
-	GameManager::score[1] = *(int*)(recvData + sizeof(int) * 3);
-	GameManager::score[2] = *(int*)(recvData + sizeof(int) * 4);
-	GameManager::score[3] = *(int*)(recvData + sizeof(int) * 5);
+	return 1;
+}
+
+void SceneGame::ReceivingGameData(unsigned char* _recvData)
+{
+	//! 受け取ったカードデータのデコード先
+	static Card decodeData[SUIT_NUM * DECK_RANGE];
+	//! 送信時刻
+	int sendTime = -1;
+	//! 送信ID
+	int sendId = -1;
+
+	sendTime = *(int*)_recvData;
+	sendId = *(int*)(_recvData + sizeof(int));
+
+	GameManager::score[0] = *(int*)(_recvData + sizeof(int) * 2);
+	GameManager::score[1] = *(int*)(_recvData + sizeof(int) * 3);
+	GameManager::score[2] = *(int*)(_recvData + sizeof(int) * 4);
+	GameManager::score[3] = *(int*)(_recvData + sizeof(int) * 5);
 
 	//! 受け取ったカードデータ
-	CardData* cdp = (CardData*)(recvData + sizeof(int) * 6);
+	CardData* cdp = (CardData*)(_recvData + sizeof(int) * 6);
 
 	// カードデータをデコードする
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
@@ -504,6 +538,72 @@ int SceneGame::ReceiveUpdateData_Server()
 			boardCp->CardOnBoard(boardCp->cards[i], (int)(boardCp->cards[i]->area - 2));
 		}
 	}
+}
 
-	return 1;
+void SceneGame::ReceivingEventData(unsigned char* _recvData)
+{
+	//! 受け取ったイベントデータ
+	EventData* eventData = (EventData*)(_recvData);
+
+
+	std::ofstream outputfile("client_Event.txt");
+	outputfile << (int)eventData->eventType << "\n";
+	outputfile << (int)eventData->data << "\n";
+	outputfile.close();
+
+	// ダイスロール
+	switch ((int)eventData->eventType)
+	{
+	case (int)Event::Event_CountDown:
+	{
+		break;
+	}
+	case (int)Event::Event_IsAgari:
+	{
+		break;
+	}
+	case (int)Event::Event_Bomb:
+	{
+		break;
+	}
+	case (int)Event::Event_Fever:
+	{
+		boardCp->dice->Roll(0);
+		boardCp->FeverTime();
+	}
+		break;
+	case (int)Event::Event_LuckyNumber:
+	{
+		boardCp->dice->Roll(1);
+		boardCp->LuckyNumber((int)(*(unsigned char*)eventData));
+		break;
+	}
+	case (int)Event::Event_LimitArea:
+	{
+		boardCp->dice->Roll(2);
+		int areaL = (int)eventData->data % DECK_RANGE;
+		int areaR = (int)eventData->data / DECK_RANGE;
+		boardCp->LimitArea(areaL, areaR);
+		break;
+	}
+	case (int)Event::Event_MoveArea:
+	{
+		outputfile << "D = 3\n";
+		outputfile << (eventData->data >> 7) << "\n";
+		outputfile << ((int)eventData->data & 0x7F) << "\n";
+		outputfile.close();
+
+		boardCp->dice->Roll(3);
+		bool isLeft = eventData->data >> 7;
+		int num = (int)eventData->data & 0x7F;
+		boardCp->MoveArea(isLeft, num);
+		break;
+	}
+	case (int)Event::Event_ShuffleHand:
+	{
+		boardCp->dice->Roll(4);
+		boardCp->ShuffleHand();
+		break;
+	}
+	}
 }

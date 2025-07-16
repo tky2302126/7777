@@ -40,6 +40,10 @@ public:
 	// 乱数生成器
 	static std::mt19937 engine;
 
+	/// </summary>
+	/// <param name="cardPtr">判定するカード</param>
+	void SubscribeEventCallback(const std::function<void(EventData&)>&);
+
 	float GetCoolTime() { return coolTime; }
 #pragma region イベント関連
 	//イベント抽選の関数
@@ -110,6 +114,8 @@ public:
 	Event currentEvent;
 	// イベント抽選用のさいころ
 	Dice* dice;
+	//! イベント発生時のコールバック関数
+	std::function<void(EventData&)> eventOccurrenceCallback;
 	
 #pragma endregion
 #pragma region privateメソッド
