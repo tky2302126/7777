@@ -21,7 +21,7 @@ IPDATA GameManager::IPAdress[3] = {
 };
 int GameManager::syncUDPSocketHandle[3] = { -1, -1, -1 };
 int GameManager::portNum = -1;
-int GameManager::score[3] = { 0, 0, 0 };
+int GameManager::score[4] = { 0, 0, 0, 0 };
 bool GameManager::isClear = false;
 
 
