@@ -5,6 +5,8 @@ std::mt19937 Board::engine(std::random_device{}());
 
 Board::Board()
 {
+	rank = -1;
+	currentrank = 1;
 	timer = -1;
 	areaL = -1;
 	areaR = -1;
@@ -74,10 +76,15 @@ void Board::Move(Card& card)
 void Board::Update()
 {
 	Draw();
-
+	
 	if (GameManager::isClear)
 	{
-		DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
+		for (int i = 0; i < 4; i++)
+		{
+		
+		}
+		//DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
+		//DrawGraph(0,0,winHandle,TRUE);
 	}
 
 	for (auto& card : cards)
@@ -133,6 +140,7 @@ void Board::ManualLoad()
 {
 	Card::modelHandle = MV1LoadModel("Assets/model/Cards/Cards.mv1");
 	modelHandle = MV1LoadModel("Assets/model/Table/Table.mv1");
+	winHandle = LoadGraph("Assets/Sprite/playerWin.png");
 	if (dice != nullptr) dice->ManualLoad();
 
 	// テーブの座標は固定のため、初期化時に設定
