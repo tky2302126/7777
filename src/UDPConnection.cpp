@@ -136,6 +136,42 @@ void UDPConnection::RecvSyncData()
 	}
 }
 
-void UDPConnection::SendEventData(EventData&)
+void UDPConnection::SendEventData(EventData& data)
 {
+	// 送信する情報
+	//  EventType : イベントの種類
+	//  data      : イベントごとで使うデータ
+	//! 送信時刻
+	int sendTime = GetNowCount();
+	//! 送信データID
+	static unsigned int sendDataId = 10000 * GameManager::playerId;
+	sendDataId++;
+	
+	unsigned char block[2];
+
+	unsigned char* b = block;
+
+	std::memcpy(b, &sendTime, sizeof(int));
+	b += sizeof(int);
+	std::memcpy(b, &sendDataId, sizeof(int));
+	b += sizeof(int);
+	//std::memcpy(b, data, sizeof(data));
+
+
+	std::ofstream outputfile("sever_Event.txt");
+	outputfile << "送信 -> \n";
+
+	for (int i = 0; i < MAX_PLAYER; ++i)
+	{
+		auto portNum = UDP_PORT_NUM;
+		auto Ip = GameManager::IPAdress[i];
+		// int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 250);
+
+		// outputfile << ret;
+		outputfile << "\n";
+		outputfile << " 送信先: " << (int)Ip.d1 << "." << (int)Ip.d2 << "."
+			<< (int)Ip.d3 << "." << (int)Ip.d4 << ":" << portNum;
+		outputfile << "\n";
+	}
 }
+
