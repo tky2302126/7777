@@ -1,7 +1,7 @@
 ﻿#include "Board.h"
 std::mt19937 Board::engine(std::random_device{}());
 
-#define DEBUG
+//#define DEBUG
 
 Board::Board()
 {
@@ -44,8 +44,6 @@ Board::Board()
 		SortHand((Area)(GameManager::playerId + 2));
 		ShowHand((Area)(GameManager::playerId + 2));
 #endif // DEBUG
-
-		ShuffleHand();
 	}
 }
 
@@ -202,7 +200,7 @@ void Board::DrawingEvent()
 	// ダイスロールアニメーション
 	dice->Roll(diceNum);
 	// 抽選結果に応じて関数を実行
-	switch (diceNum)
+	switch (4)
 	{
 	case 0:
 		FeverTime();
@@ -283,6 +281,14 @@ void Board::ShowHand(Area playerArea)
 
 	float merginX = -8;
 	float merginY = -25;
+
+	// 対戦相手の手札は全てdefault座標に戻す
+	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
+	{
+		if (cards[i]->area != Area_Board &&
+			cards[i]->area != (Area)(Area::Area_Player1 + GameManager::playerId))
+			cards[i]->position = { -55,50,cards[i]->frameId * 0.0f};
+	}
 
 	//
 	// 中央を基準にして手札を表示する
@@ -620,13 +626,18 @@ void Board::ShuffleHand(unsigned char _recvData)
 		while (!IsDerangement(originalHands, playerHands));
 
 		// 全ユーザーの手札情報の更新
-		for (int i = 0; i < playerNum; ++i)
+		for (int i = 0; i < playerHands.size(); ++i)
 		{
 			for (auto& card : handData[i])
 			{
 				card->area = (Area)(Area::Area_Player1 + (int)playerHands[i]);
 			}
 		}
+
+
+		for (int i = 0; i < playerHands.size(); ++i)
+			handData[0].swap(handData[1]);
+
 
 		EventData eventData;
 		eventData.data = 0;
@@ -641,6 +652,17 @@ void Board::ShuffleHand(unsigned char _recvData)
 
 		//UDPConnection::SendEventData(eventData);
 		eventOccurrenceCallback(eventData);
+
+
+		std::ofstream outputfile("shuffle.txt");
+		for (int j = 0; j < GameManager::connectNum; ++j)
+		{
+			outputfile << handData[j].size() << "\n";
+			for (int i = 0; i < handData[j].size(); ++i)
+				outputfile << "SUIT = " << handData[j][i]->suit <<
+				" :  NUMBER = " << handData[j][i]->number << "\n";
+		}
+		outputfile.close();
 	}
 	/// エリア更新に合わせて手札を移動する処理
 	else if(GameManager::role == Role::Client)
@@ -648,13 +670,9 @@ void Board::ShuffleHand(unsigned char _recvData)
 		std::vector<char> decodeData;
 
 		// 受信したデータのデコード
-		for (int i = 0; i < GameManager::connectNum; ++i)
+		for(int i = 0; i < MAX_PLAYER; ++i)
 		{
-			decodeData.push_back(i);
-		}
-		for(int i = 0; i < decodeData.size(); ++i)
-		{
-			decodeData[i] = (_recvData >> (i * 2)) & 0b11;
+			decodeData.push_back((_recvData >> (i * 2)) & 0b11);
 		}
 
 
@@ -666,8 +684,31 @@ void Board::ShuffleHand(unsigned char _recvData)
 				card->area = (Area)(Area::Area_Player1 + (int)decodeData[i]);
 			}
 		}
+
+
+		bool isSwap[MAX_PLAYER] = { false };
+		for (int i = 0; i < decodeData.size(); ++i)
+		{
+			if (isSwap[decodeData[i]]) continue;
+
+			handData[i].swap(handData[decodeData[i]]);
+			isSwap[i] = true;
+		}
+
+
+			std::ofstream outputfile("shuffle.txt");
+			for(int j = 0; j < GameManager::connectNum; ++j)
+			{
+				outputfile << handData[j].size() << "\n";
+				for (int i = 0; i < handData[j].size(); ++i)
+					outputfile << "SUIT = " << handData[j][i]->suit <<
+					" :  NUMBER = " << handData[j][i]->number << "\n";
+			}
+			outputfile.close();
 	}
 
+	SortHand((Area)(GameManager::playerId + 2));
+	ShowHand((Area)(GameManager::playerId + 2));
 
 	EventSummary = "手札が入れ替わった!";
 	HWDotween::DoDelay(100)->OnComplete([&] {

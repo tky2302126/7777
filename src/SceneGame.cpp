@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-#define DEBUG
+//#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -36,18 +36,18 @@ SceneGame::SceneGame()
 	countDownLeftTop = Vector2Int();
 	alpha = 0;
 
-	GameManager::portNum = UDP_PORT_NUM;
+	GameManager::portNum = UDP_PORT_NUM - GameManager::playerId;
 
 	if(GameManager::role == Role::Client)
 	{
 		//UDPSocketHandle[0] = MakeUDPSocket(-1);
-		UDPSocketHandle[0] = MakeUDPSocket(UDP_PORT_NUM);
+		UDPSocketHandle[0] = MakeUDPSocket(GameManager::portNum);
 	}
 	if(GameManager::role == Role::Server)
 	{
-		for(auto& socket : UDPSocketHandle)
+		for(int i = 1; i < MAX_PLAYER; i++)
 		{
-			socket = MakeUDPSocket(UDP_PORT_NUM);
+			UDPSocketHandle[i - 1] = MakeUDPSocket(UDP_PORT_NUM - i);
 		}
 	}
 
@@ -87,8 +87,8 @@ void SceneGame::LoadComplete()
 
 	if(GameManager::role == Role::Server)
 	{
-		HWDotween::DoDelay(300)->OnComplete([&]{
-				boardCp->DrawingEvent();});
+		//HWDotween::DoDelay(300)->OnComplete([&]{
+		//		boardCp->DrawingEvent();});
 	}
 }
 
@@ -98,6 +98,11 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
+	DrawFormatString(
+		550, 20, GetColor(0, 255, 0),
+		"PlayerID = %d", GameManager::playerId);
+
+
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
@@ -169,10 +174,6 @@ void SceneGame::LateUpdate()
 
 	// カードの設置関係
 	CheckMouseInput();
-
-	DrawFormatString(
-		550, 20, GetColor(0, 255, 0),
-		"PlayerID = %d", GameManager::playerId);
 
 	if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000))
 	{
@@ -253,6 +254,9 @@ void SceneGame::CheckMouseInput()
 				card->collisionCenter.y - CARD_COLLISION_HEIGHT <= mousePos.y &&
 				card->collisionCenter.y + CARD_COLLISION_HEIGHT >= mousePos.y)
 			{
+				DrawFormatString(1000, 20, GetColor(255, 0, 0),
+					"Area = %d : Suit = %d : Number = %d", card->area, card->suit, card->number);
+
 				// カードが置けるかどうかチェック
 				
 #ifdef DEBUG
@@ -311,11 +315,13 @@ int SceneGame::ReceiveInitData()
 
 	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) == TRUE)
 	{
-		int portNum = UDP_PORT_NUM;
 		unsigned char recvData[250];
 
-		NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
 			recvData, 250, FALSE);
+
+
+		outputfile_c << "受信 -> "  << ret << "\n";
 
 		// 送信時刻を書き込み
 		sendTime = *(int*)recvData + sizeof(SendDataType);
@@ -416,7 +422,6 @@ int SceneGame::ReceiveUpdateData_Client()
 			//! 送信時刻
 			int sendTime = -1;
 
-			int portNum = UDP_PORT_NUM;
 			unsigned char recvData[15];
 
 			int ret = NetWorkRecvUDP(UDPSocketHandle[i], NULL, NULL,
@@ -469,35 +474,38 @@ int SceneGame::ReceiveUpdateData_Server()
 
 
 	// 受信データなし
-	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) != TRUE) return 0;
-
-	isRecv = true;
-	HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
-
-	//! 送信データ種別
-	SendDataType dataType = SendDataType::UnDefine;
-
-	int portNum = UDP_PORT_NUM;
-	unsigned char recvData[250];
-
-	int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
-		recvData, 250, FALSE);
-
-	outputfile_c << "受信 -> \n";
-	outputfile_c << ret;	
-
-	// 受信したデータ種別
-	dataType = *(SendDataType*)recvData;
-
-	switch (dataType)
+	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) == TRUE)
 	{
-	case SendDataType::GameData:
-		ReceivingGameData(recvData + 1);
-		break;
-	case SendDataType::EventData:
-		ReceivingEventData(recvData + 1);
-		break;
+		isRecv = true;
+		HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
+
+		//! 送信データ種別
+		SendDataType dataType = SendDataType::UnDefine;
+
+		unsigned char recvData[250];
+
+		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+			recvData, 250, FALSE);
+
+		// 受信したデータ種別
+		dataType = *(SendDataType*)recvData;
+
+		outputfile_c << "UpdateData受信 -> \n";
+		outputfile_c << ret << "\n";
+		outputfile_c << (int)dataType << "\n";
+
+		switch (dataType)
+		{
+		case SendDataType::GameData:
+			ReceivingGameData(recvData + 1);
+			break;
+		case SendDataType::EventData:
+			ReceivingEventData(recvData + 1);
+			break;
+		}
 	}
+	else
+		return FALSE;
 
 	return 1;
 }

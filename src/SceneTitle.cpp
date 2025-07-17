@@ -356,8 +356,8 @@ void SceneTitle::ServerInputForm()
 				GameManager::networkHandle[i] = netHandle;
 				GameManager::connectNum++;
 				// 接続先にPlayerIDを送信
-				NetWorkSend(GameManager::networkHandle[i],
-					&i, sizeof(int));
+				//NetWorkSend(GameManager::networkHandle[i],
+				//	&i, sizeof(int));
 				if (GameManager::networkHandle[MAX_PLAYER - 2] != -1)
 					connectParameter = ConnectParameter::Connected;
 				break;

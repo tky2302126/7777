@@ -31,11 +31,11 @@ void UDPConnection::SendServer(Card& _card, int _score, const int& UDPSocketHand
 
 	// UDPで送信
 	// クライアントのみ送信
-	auto portNum = UDP_PORT_NUM;
+	auto portNum = GameManager::portNum;
 	auto Ip = GameManager::IPAdress[0];
 	int ret = NetWorkSendUDP(UDPSocketHandle, Ip, portNum, block, 15);
 
-	std::ofstream outputfile("client_2.txt");
+	static std::ofstream outputfile("client_2.txt");
 	outputfile << "送信 -> \n";
 	outputfile << ret << "\n";
 	outputfile << "score = " << _score << "\n";
@@ -86,12 +86,12 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 	std::memcpy(b, data, sizeof(data));
 
 
-	std::ofstream outputfile("sever_2.txt");
+	static std::ofstream outputfile("sever_2.txt");
 	outputfile << "送信 -> \n";
 
-	for(int i  = 0; i < MAX_PLAYER; ++i)
+	for(int i  = 0; i < MAX_PLAYER - 1; ++i)
 	{
-		auto portNum = UDP_PORT_NUM;
+		auto portNum = UDP_PORT_NUM - (i + 1);
 		auto Ip = GameManager::IPAdress[i];
 		int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 250);
 
@@ -102,6 +102,8 @@ void UDPConnection::SendClients(SendData& _sendData, int* UDPSocketHandle)
 		outputfile << "\n";
 		outputfile << "score" << GameManager::score[0] << " : " << 
 			GameManager::score[1] << " : " << GameManager::score[2] << "\n";
+		outputfile  << "SOCKET -> " << UDPSocketHandle[i] << "\n";
+		outputfile << sizeof(block) << "\n\n";
 	}
 }
 
@@ -164,9 +166,9 @@ void UDPConnection::SendEventData(EventData& data, int* UDPSocketHandle)
 	outputfile << (int)data.eventType << "\n";
 	outputfile << (int)data.data << "\n\n";
 
-	for (int i = 0; i < MAX_PLAYER; ++i)
+	for (int i = 0; i < MAX_PLAYER - 1; ++i)
 	{
-		auto portNum = UDP_PORT_NUM;
+		auto portNum = UDP_PORT_NUM - (i + 1);
 		auto Ip = GameManager::IPAdress[i];
 		int ret = NetWorkSendUDP(UDPSocketHandle[i], Ip, portNum, block, 3);
 
