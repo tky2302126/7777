@@ -123,9 +123,6 @@ void SceneGame::Update()
 		}
 	}
 
-	// カードの設置関係
-	CheckMouseInput();
-
 	// カウントダウンのスプライトの描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRectExtendGraph(760, 340, 1160, 740, countDownLeftTop.x, countDownLeftTop.y, 512, 512, CountDouwnGH, TRUE);
@@ -150,7 +147,7 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
-	if (!isGame)return;
+	if (!isGame || isCountDown)return;
 
 	if (GameManager::role == Role::Server)
 	{
@@ -169,6 +166,9 @@ void SceneGame::LateUpdate()
 	{
 		ReceiveUpdateData_Server();
 	}
+
+	// カードの設置関係
+	CheckMouseInput();
 
 	DrawFormatString(
 		550, 20, GetColor(0, 255, 0),
