@@ -450,7 +450,9 @@ void Board::FeverTime()
 	coolTime = coolTime / 2;
 
 	EventSummary = "クールタイム短縮中！";
-	IsShowSummary = true;
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 }
 
 void Board::LuckyNumber(int num)
@@ -480,7 +482,9 @@ void Board::LuckyNumber(int num)
 	std::stringstream ss;
 	ss << luckyNum << "を置くとスコアボーナス!";
 	EventSummary = ss.str();
-	IsShowSummary = true;
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 
 }
 
@@ -538,7 +542,9 @@ void Board::LimitArea(int left, int right)
 	std::stringstream ss;
 	ss << areaL << "～" << areaR << "に制限中";
 	EventSummary = ss.str();
-	IsShowSummary = true;
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 }
 
 void Board::MoveArea(bool left, int num)
@@ -576,7 +582,10 @@ void Board::MoveArea(bool left, int num)
 		card->Slide();
 	}	
 	EventSummary = "エリアが移動！";
-	IsShowSummary = true;
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
+	
 }
 
 void Board::ShuffleHand()
@@ -628,5 +637,7 @@ void Board::ShuffleHand()
 
 
 	EventSummary = "手札が入れ替わった!";
-	IsShowSummary = true;
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 }
