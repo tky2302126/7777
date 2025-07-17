@@ -501,16 +501,17 @@ void Board::LimitArea(int left, int right)
 		}
 		int number1 = -1;
 		int number2 = -1;
-
+		// 2枚以下なので抽選不可
+		if (unfilledCards.size() < 2) return;
 		// 同じ数字じゃなくなるまで抽選
 		do
 		{
 			auto index1 = Random::GetRandomInt(0, unfilledCards.size());
-			auto number1 = unfilledCards[index1]->number;
+			number1 = unfilledCards[index1]->number;
 			
 			auto index2 = Random::GetRandomInt(0, unfilledCards.size());
-			auto number2 = unfilledCards[index2]->number;
-		} while (number1 != number2);
+			number2 = unfilledCards[index2]->number;
+		} while (number1 == number2);
 		
 		if (number1 > number2)
 		{
