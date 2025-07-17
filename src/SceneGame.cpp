@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-//#define DEBUG
+#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -59,12 +59,14 @@ SceneGame::SceneGame()
 		<< (int)GameManager::IPAdress[0].d3 << "."
 		<< (int)GameManager::IPAdress[0].d4 << "\n";
 	f << "Port Number : " << GameManager::portNum << "\n";
+
 }
 
 SceneGame::~SceneGame()
 {
 	board.reset();
 	input->DeleteCallBack("cursor", callBackId);
+	audio.UnInit();
 }
 
 void SceneGame::LoadComplete()
@@ -79,6 +81,7 @@ void SceneGame::LoadComplete()
 	}
 	///
 	CountDown();
+	audio.PlayBGM(BGM_BGM, TRUE);
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -87,6 +90,8 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
+	//PlaySoundFile("Assets/Sound/BGM.mp3", DX_PLAYTYPE_BACK);
+	
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
@@ -111,10 +116,9 @@ void SceneGame::Update()
 				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), boardCp->score);
 		}
 	}
-
+	
 	// カードの設置関係
 	CheckMouseInput();
-
 
 	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
 	{
@@ -226,6 +230,7 @@ void SceneGame::CheckMouseInput()
 
 	if (mouse.IsMouseRightButtonClicked())
 	{
+		
 		for (auto& card : boardCp->cards)
 		{
 			auto mousePos = mouse.GetMouseInfo().position;
@@ -247,6 +252,7 @@ void SceneGame::CheckMouseInput()
 				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
 				{
 					lastPlacedTime = GetNowCount();
+					audio.PlaySE(SE_CARD_FLIP);
 				}
 
 				boardCp->CardOnBoard(card, GameManager::playerId);

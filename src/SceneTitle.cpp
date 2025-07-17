@@ -223,7 +223,7 @@ void SceneTitle::Update()
 	{
 		DrawFormatString(450, 800, GetColor(0, 0, 0), "Complete!");
 		SceneChangeAsync(SceneTag::Game);
-	}
+	}	
 }
 
 void SceneTitle::LateUpdate()

@@ -12,6 +12,8 @@
 #include "Mouse.h"
 #include "UDPConnection.h"
 
+#include"AudioManager.h"
+
 /**
  * @class	SceneTitle
  * @brief   タイトルシーン
@@ -60,6 +62,7 @@ public:
 	 */
 	void LateUpdate() override;
 
+	AudioManager& audio = AudioManager::GetInstance();
 
 private:
 
