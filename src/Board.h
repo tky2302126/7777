@@ -84,7 +84,7 @@ public:
 	/// <summary>
 	/// 手札入れ替え
 	/// </summary>
-	void ShuffleHand();
+	void ShuffleHand(unsigned char _recvData = 0);
 #pragma endregion
 
 
@@ -160,7 +160,7 @@ public:
 	/// スコア計算
 	/// </summary>
 	/// <param name="card">置かれたカード</param>
-	int CalculateScore(std::shared_ptr<Card>& card);
+	int CalculateScore(std::shared_ptr<Card> card);
 
 	/// <summary>
 	/// 縦にそろったか
@@ -184,8 +184,7 @@ public:
 	/// <param name="original">元のカード情報</param>
 	/// <param name="shuffled">シャッフル後の情報</param>
 	/// <returns></returns>
-	bool IsDerangement(const std::vector<std::vector<std::shared_ptr<Card>>>& original,
-		const std::vector<std::vector<std::shared_ptr<Card>>>& shuffled);
+	bool IsDerangement(const std::vector<char>& original, const std::vector<char>& shuffled);
 
 	static void InitRandomGenerator();
 #pragma endregion

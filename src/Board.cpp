@@ -44,6 +44,8 @@ Board::Board()
 		SortHand((Area)(GameManager::playerId + 2));
 		ShowHand((Area)(GameManager::playerId + 2));
 #endif // DEBUG
+
+		ShuffleHand();
 	}
 }
 
@@ -371,7 +373,7 @@ void Board::SortHand(Area playerArea)
 	}
 }
 
-int Board::CalculateScore(std::shared_ptr<Card>& card)
+int Board::CalculateScore(std::shared_ptr<Card> card)
 {
 	/// 各クライアントで処理後に計算
 	int add = PLACE_CARD;
@@ -411,7 +413,14 @@ bool Board::IsCompleteColumnAt(const Suit& suit)
 {
 	for (int i = 0; i < DECK_RANGE; ++i)
 	{
-		auto index = i +  static_cast<int>(suit) * DECK_RANGE -1;
+		if (boardData[(int)suit][i] == 0)
+			return false;
+	}
+	return true;
+
+	for (int i = 0; i < DECK_RANGE; ++i)
+	{
+		auto index = i + static_cast<int>(suit) * DECK_RANGE -1;
 		if (cards[index]->area != Area::Area_Board)
 		{
 			return false;
@@ -420,7 +429,7 @@ bool Board::IsCompleteColumnAt(const Suit& suit)
 	return true;
 }
 
-bool Board::IsDerangement(const std::vector<std::vector<std::shared_ptr<Card>>>& original, const std::vector<std::vector<std::shared_ptr<Card>>>& shuffled)
+bool Board::IsDerangement(const std::vector<char>& original, const std::vector<char>& shuffled)
 {
 	for (int i = 0; i < original.size(); ++i)
 	{
@@ -589,25 +598,20 @@ void Board::MoveArea(bool left, int num)
 	
 }
 
-void Board::ShuffleHand()
+void Board::ShuffleHand(unsigned char _recvData)
 {
 	/// 手札情報を更新する
 	/// サーバーのみ実行
 	if(GameManager::role == Role::Server)
 	{
 		auto playerNum = GameManager::connectNum;
-		std::vector<std::vector<std::shared_ptr<Card>>> playerHands(playerNum);
-
-		for(auto card : cards)
-		{
-			if(card->area !=Area::Area_Board )
-			{
-				auto owner = static_cast<int>(card->area) -2;
-				playerHands[owner].push_back(card);
-			}
-		}
-		// 元の配列をコピー
-		std::vector<std::vector<std::shared_ptr<Card>>> originalHands = playerHands;
+		// 手札情報
+		std::vector<char> originalHands;
+		for (int i = 0; i < playerNum; ++i)
+			originalHands.push_back(i);
+		// 複製
+		std::vector<char> playerHands(originalHands.size());
+		std::copy(originalHands.begin(), originalHands.end(), playerHands.begin());
 
 		do
 		{
@@ -615,26 +619,54 @@ void Board::ShuffleHand()
 		} 
 		while (!IsDerangement(originalHands, playerHands));
 
-		//エリアを更新する処理
-
-		for(int i = 0; i < playerNum; ++i)
+		// 全ユーザーの手札情報の更新
+		for (int i = 0; i < playerNum; ++i)
 		{
-			for(auto card: playerHands[i])
+			for (auto& card : handData[i])
 			{
-				card->area = (Area)(i + 2);
+				card->area = (Area)(Area::Area_Player1 + (int)playerHands[i]);
 			}
 		}
 
 		EventData eventData;
+		eventData.data = 0;
 		int eventIndex = static_cast<int>(Event::Event_ShuffleHand);
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
-		eventData.data = '1'; // フラグ
+
+		// 送信データのエンコーディング
+		for (int i = 0; i < playerHands.size(); ++i)
+		{
+			eventData.data |= ((playerHands[i] & 0b11) << (i * 2));
+		}
 
 		//UDPConnection::SendEventData(eventData);
 		eventOccurrenceCallback(eventData);
 	}
-
 	/// エリア更新に合わせて手札を移動する処理
+	else if(GameManager::role == Role::Client)
+	{
+		std::vector<char> decodeData;
+
+		// 受信したデータのデコード
+		for (int i = 0; i < GameManager::connectNum; ++i)
+		{
+			decodeData.push_back(i);
+		}
+		for(int i = 0; i < decodeData.size(); ++i)
+		{
+			decodeData[i] = (_recvData >> (i * 2)) & 0b11;
+		}
+
+
+		// 全ユーザーの手札情報の更新
+		for (int i = 0; i < GameManager::connectNum; ++i)
+		{
+			for (auto& card : handData[i])
+			{
+				card->area = (Area)(Area::Area_Player1 + (int)decodeData[i]);
+			}
+		}
+	}
 
 
 	EventSummary = "手札が入れ替わった!";

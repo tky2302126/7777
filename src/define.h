@@ -27,7 +27,7 @@ struct Vector2Int
 
 #define UDP_PORT_NUM 9999
 #define SYNC_UDP_PORT_NUM 8888
-#define MAX_PLAYER 3
+#define MAX_PLAYER 2
 // #define
 
 
