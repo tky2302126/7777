@@ -24,7 +24,6 @@ Board::Board()
 
 	InitRandomGenerator();
 
-	audio.Load();
 
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
@@ -55,8 +54,6 @@ Board::~Board()
 	{
 		card.reset();
 	}
-
-	audio.UnInit();
 
 	delete dice;
 }
@@ -308,7 +305,7 @@ void Board::ShowHand(Area playerArea)
 	{
 		
 		HWDotween::DoDelay(60)->OnComplete([&] {
-			audio.PlaySE(SE_CARD_EXTRACT);
+			AudioManager::GetInstance().PlaySE(SE_CARD_EXTRACT);
 			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 			{
 				if (cards[i]->number == 7)

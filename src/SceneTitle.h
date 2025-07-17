@@ -61,7 +61,6 @@ public:
 	 */
 	void LateUpdate() override;
 
-	AudioManager audio;
 private:
 
 	//! カーソル

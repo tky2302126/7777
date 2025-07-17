@@ -69,7 +69,6 @@ SceneGame::~SceneGame()
 {
 	board.reset();
 	input->DeleteCallBack("cursor", callBackId);
-	audio.UnInit();
 }
 
 void SceneGame::LoadComplete()
@@ -87,7 +86,7 @@ void SceneGame::LoadComplete()
 	///
 	CountDown();
 
-	audio.PlayBGM(BGM_BGM, TRUE);
+	AudioManager::GetInstance().PlayBGM(BGM_BGM, TRUE);
 
 	if(GameManager::role == Role::Server)
 	{
@@ -281,7 +280,7 @@ void SceneGame::CheckMouseInput()
 				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
 				{
 					lastPlacedTime = GetNowCount();
-					audio.PlaySE(SE_CARD_FLIP);
+					AudioManager::GetInstance().PlaySE(SE_CARD_FLIP);
 				}
 
 				lastPlacedTime = GetNowCount();

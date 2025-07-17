@@ -14,7 +14,6 @@ struct CardInfo
 class Board : public HWComponent
 {
 public:
-	AudioManager audio;
 #pragma region publicメンバ変数
 	// 手札
 	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];

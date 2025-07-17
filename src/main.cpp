@@ -129,6 +129,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ScreenFlip();
 	}
 
+	AudioManager::GetInstance().UnInit();
+
 	// ソフトの終了 
 	HandlerWaltan::End();
 

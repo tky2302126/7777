@@ -62,8 +62,6 @@ public:
 	 */
 	void LateUpdate() override;
 
-	AudioManager& audio = AudioManager::GetInstance();
-
 private:
 
 	//! テキストのフォント
