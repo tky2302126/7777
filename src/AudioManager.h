@@ -6,12 +6,15 @@
 
 enum SEList
 {
-	SE_ALL
+	SE_ALL,
+	SE_CARD_FLIP,
+	SE_CARD_EXTRACT,
 };
 
 enum BGMList
 {
-	BGM_ALL
+	BGM_ALL,
+	BGM_BGM,
 };
 
 class AudioManager
@@ -38,6 +41,8 @@ public:
 	void ReleaseBGM(BGMList);
 	void PlayBGM(BGMList name, bool loop = true);
 	void PlaySE(SEList);
+
+	int OnCard;
 
 private:
 	static std::unique_ptr<AudioManager> Instance;

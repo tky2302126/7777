@@ -24,11 +24,11 @@ Board::Board()
 
 	InitRandomGenerator();
 
+
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 	{
 		cards[i] = std::make_shared<Card>();
 	}
-
 
 	// カードの初期配置(手札の配分と7のセット)
 	// ホストの場合のみ行う
@@ -83,12 +83,7 @@ void Board::Update()
 	
 	if (GameManager::isClear)
 	{
-		for (int i = 0; i < 4; i++)
-		{
 		
-		}
-		//DrawFormatString(100, 120, GetColor(255, 255, 255), "aaaaaa");
-		//DrawGraph(0,0,winHandle,TRUE);
 	}
 
 	for (auto& card : cards)
@@ -316,12 +311,15 @@ void Board::ShowHand(Area playerArea)
 	static bool isFirst = true;
 	if(isFirst)
 	{
+		
 		HWDotween::DoDelay(60)->OnComplete([&] {
+			AudioManager::GetInstance().PlaySE(SE_CARD_EXTRACT);
 			for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
 			{
 				if (cards[i]->number == 7)
 					CardOnBoard(cards[i], (int)(cards[i]->area - 2));
 			}
+			
 #ifdef DEBUG
 			ShowHand(Area::Area_Player1);
 #else
@@ -346,11 +344,13 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 	{
 		
 	}
+	
 #else
 	handData[_index].erase(
 		std::remove(handData[_index].begin(), handData[_index].end(), _card),
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
+
 
 	// あがり判定
 	if (handData[GameManager::playerId].size() <= 0)

@@ -62,6 +62,7 @@ SceneGame::SceneGame()
 		<< (int)GameManager::IPAdress[0].d3 << "."
 		<< (int)GameManager::IPAdress[0].d4 << "\n";
 	f << "Port Number : " << GameManager::portNum << "\n";
+
 }
 
 SceneGame::~SceneGame()
@@ -85,6 +86,8 @@ void SceneGame::LoadComplete()
 	///
 	CountDown();
 
+	AudioManager::GetInstance().PlayBGM(BGM_BGM, TRUE);
+
 	if(GameManager::role == Role::Server)
 	{
 		//HWDotween::DoDelay(300)->OnComplete([&]{
@@ -98,11 +101,16 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
+<<<<<<< HEAD
 	DrawFormatString(
 		550, 20, GetColor(0, 255, 0),
 		"PlayerID = %d", GameManager::playerId);
 
 
+=======
+	//PlaySoundFile("Assets/Sound/BGM.mp3", DX_PLAYTYPE_BACK);
+	
+>>>>>>> 1564643ba70b35ec693c9bcf8fc5c91067110c6d
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
@@ -126,6 +134,15 @@ void SceneGame::Update()
 				10, 100 + 30 * i, GetColor(0, 255, 0),
 				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), boardCp->score);
 		}
+	}
+	// カードの設置関係
+	CheckMouseInput();
+
+	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
+	{
+		DrawFormatString(
+			10, 70, GetColor(0, 255, 0),
+			"coolTime = %d", (int)(PLACE_COOL_TIME * 1000) - (GetNowCount() - lastPlacedTime));
 	}
 
 	// カウントダウンのスプライトの描画
@@ -245,6 +262,7 @@ void SceneGame::CheckMouseInput()
 
 	if (mouse.IsMouseRightButtonClicked())
 	{
+		
 		for (auto& card : boardCp->cards)
 		{
 			auto mousePos = mouse.GetMouseInfo().position;
@@ -268,9 +286,12 @@ void SceneGame::CheckMouseInput()
 
 				// カードを置いた場合、一定時間経つまで置けなくする
 				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
+				{
+					lastPlacedTime = GetNowCount();
+					AudioManager::GetInstance().PlaySE(SE_CARD_FLIP);
+				}
 
 				lastPlacedTime = GetNowCount();
-
 				boardCp->CardOnBoard(card, GameManager::playerId);
 				boardCp->AddScore(boardCp->CalculateScore(card));
 				// 手札の並べなおし

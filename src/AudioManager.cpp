@@ -56,6 +56,9 @@ AudioManager& AudioManager::GetInstance()
 
 void AudioManager::Load()
 {
+	SETrack[SEList::SE_CARD_FLIP] = LoadSoundMem("Assets/Sound/card_flip.mp3");
+	SETrack[SEList::SE_CARD_EXTRACT] = LoadSoundMem("Assets/Sound/card_extract.mp3");
+	BGMTrack[BGMList::BGM_BGM] = LoadSoundMem("Assets/Sound/BGM.mp3");
 }
 
 void AudioManager::Load(SceneTag sceneName)

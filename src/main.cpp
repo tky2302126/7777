@@ -68,6 +68,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
+<<<<<<< HEAD
+=======
+	auto& audioManager = AudioManager::GetInstance();
+>>>>>>> 1564643ba70b35ec693c9bcf8fc5c91067110c6d
 	sceneManager.SceneChangeSync(SceneTag::Title);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
@@ -93,6 +97,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//callback->tweenEvent->isCancel = true;
 			});
 		});
+
+	AudioManager::GetInstance().Init();
+	AudioManager::GetInstance().Load();
 
 	// メインループ
 	while (ProcessMessage() == 0)
@@ -124,6 +131,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		ScreenFlip();
 	}
+
+	AudioManager::GetInstance().UnInit();
 
 	// ソフトの終了 
 	HandlerWaltan::End();

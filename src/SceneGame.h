@@ -12,6 +12,8 @@
 #include "Mouse.h"
 #include "UDPConnection.h"
 
+#include"AudioManager.h"
+
 /**
  * @class	SceneTitle
  * @brief   タイトルシーン
@@ -59,7 +61,6 @@ public:
 	 * @date        24/11/20
 	 */
 	void LateUpdate() override;
-
 
 private:
 

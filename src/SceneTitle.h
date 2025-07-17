@@ -11,6 +11,7 @@
 #include "Cursor.h"
 #include "GameManager.h"
 #include "UDPConnection.h"
+#include "AudioManager.h"
 #include "Dice.h"
 
 /**
@@ -59,7 +60,6 @@ public:
 	 * @date        24/11/20
 	 */
 	void LateUpdate() override;
-
 
 private:
 
