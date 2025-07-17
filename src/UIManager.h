@@ -1,6 +1,6 @@
-/**
+ï»¿/**
  * @file	UIManager.h
- * @brief	UIŠÖŒW
+ * @brief	UIé–¢ä¿‚
  * @author	NS
  * @date	2024/1/29
  */
@@ -8,65 +8,65 @@
 #pragma once
 #include "VideoPlayer.h"
 
- // ‘O•ûéŒ¾
+ // å‰æ–¹å®£è¨€
 class CharacterBase;
 
  /**
   * @class	UIManager
-  * @brief  UIŠÖŒW‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+  * @brief  UIé–¢ä¿‚ã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
   */
 class UIManager : public HWComponent
 {
 public:
 	
 	/**
-	 * @brief		ƒfƒXƒgƒ‰ƒNƒ^
+	 * @brief		ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	~UIManager();
 
 	/**
-	 * @brief		‰Šú‰»ˆ—
+	 * @brief		åˆæœŸåŒ–å‡¦ç†
 	 */
 	void Awake()override;
 
 	/**
-	 * @brief		ƒtƒF[ƒhƒCƒ“
-	 * @param[in]	ˆÃ“]‚ÉŠ|‚¯‚éŠÔ
-	 * @param[in]	ˆÃ“]‚µ‚Ä‚¢‚éŠÔ
+	 * @brief		ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
+	 * @param[in]	æš—è»¢ã«æ›ã‘ã‚‹æ™‚é–“
+	 * @param[in]	æš—è»¢ã—ã¦ã„ã‚‹æ™‚é–“
 	 */
 	static void FadeIn(int _speed, int _frame, bool _autoFadeOut = true);
 
 	/**
-	 * @brief		ƒtƒF[ƒhƒAƒEƒg
-	 * @param[in]	ˆÃ“]‚ÉŠ|‚¯‚éŠÔ
+	 * @brief		ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
+	 * @param[in]	æš—è»¢ã«æ›ã‘ã‚‹æ™‚é–“
 	 */
 	static void FadeOut(int _speed);
 
 	/**
-	 * @brief		Ã“IƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»
+	 * @brief		é™çš„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–
 	 */
 	static void ManualInitialize();
 
 	/**
-	 * @brief		ƒtƒF[ƒhƒCƒ“AƒtƒF[ƒhƒAƒEƒg’†‚Ìˆ—
+	 * @brief		ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã€ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆä¸­ã®å‡¦ç†
 	 */
 	static void ManualLateUpdate();
 
 	/**
-	 * @brief		ƒ[ƒh’†‚Ìˆ—
+	 * @brief		ãƒ­ãƒ¼ãƒ‰ä¸­ã®å‡¦ç†
 	 */
 	static void LoadingAnimation();
 
 
 private:
 
-	//! ƒtƒF[ƒhƒCƒ“AƒtƒF[ƒhƒAƒEƒg—p‰æ‘œ
+	//! ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã€ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆç”¨ç”»åƒ
 	static int fadeGraphHandle;
-	//! ƒtƒF[ƒhƒCƒ“AƒtƒF[ƒhƒAƒEƒg’†
+	//! ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã€ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆä¸­
 	static bool isFade;
-	//! ‰æ‘œ‚Ìƒ¿’l
+	//! ç”»åƒã®Î±å€¤
 	static int alpha;
-	//! ƒ¿’l‚Ì‰ÁZ’l
+	//! Î±å€¤ã®åŠ ç®—å€¤
 	static int add;
 	static int loadingGraphHandle;
 	static int 	menuFont;

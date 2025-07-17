@@ -91,6 +91,8 @@ private:
 	bool isGame = false;
 	std::ofstream outputfile_c;
 	std::ofstream outputfile_s;
+	//! 扇形ゲージの画像ハンドル
+	int gaugeHandle;
 
 
 	/**

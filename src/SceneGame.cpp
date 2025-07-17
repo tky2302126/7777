@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-//#define DEBUG
+#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -74,6 +74,8 @@ void SceneGame::LoadComplete()
 {
 	boardCp->ManualLoad();
 	CountDouwnGH = LoadGraph("Assets/UI/CountDown.png");
+	gaugeHandle = LoadGraph("Assets/UI/TestCircle.png");
+
 
 	if (GameManager::role == Role::Server)
 	{
@@ -85,7 +87,6 @@ void SceneGame::LoadComplete()
 
 	if(GameManager::role == Role::Server)
 	{
-		// 暗転解除
 		HWDotween::DoDelay(300)->OnComplete([&]{
 				boardCp->DrawingEvent();});
 	}
@@ -124,14 +125,6 @@ void SceneGame::Update()
 
 	// カードの設置関係
 	CheckMouseInput();
-
-
-	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
-	{
-		DrawFormatString(
-			10, 70, GetColor(0, 255, 0),
-			"coolTime = %d", (int)(PLACE_COOL_TIME * 1000) - (GetNowCount() - lastPlacedTime));
-	}
 
 	// カウントダウンのスプライトの描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
@@ -180,6 +173,16 @@ void SceneGame::LateUpdate()
 	DrawFormatString(
 		550, 20, GetColor(0, 255, 0),
 		"PlayerID = %d", GameManager::playerId);
+
+	if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000))
+	{
+		float percent = (float)(GetNowCount() - lastPlacedTime) / (float)(boardCp->coolTime * 1000);
+		percent *= 100;
+
+		DrawCircleGauge(1920 / 2, 900,
+			100.0 - percent,
+			gaugeHandle, 0.0);
+	}
 }
 
 void SceneGame::SendEventData(EventData& _sendData)
@@ -260,9 +263,8 @@ void SceneGame::CheckMouseInput()
 
 				// カードを置いた場合、一定時間経つまで置けなくする
 				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
-				{
-					lastPlacedTime = GetNowCount();
-				}
+
+				lastPlacedTime = GetNowCount();
 
 				boardCp->CardOnBoard(card, GameManager::playerId);
 				boardCp->AddScore(card->number);
