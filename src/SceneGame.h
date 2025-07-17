@@ -94,8 +94,15 @@ private:
 	bool isGame = false;
 	std::ofstream outputfile_c;
 	std::ofstream outputfile_s;
+	//! 扇形ゲージの画像ハンドル
+	int gaugeHandle;
 
 
+	/**
+	 * @brief       イベントの告知をクライアントに送信する
+	 * @param[in]	送信データ
+	 */
+	void SendEventData(EventData&);
 
 	/**
 	 * @brief       カウントダウン
@@ -131,4 +138,16 @@ private:
 	 * @return		0 = 受信なし, 1 = 受信あり, -1 = 問題発生
 	 */
 	int ReceiveUpdateData_Server();
+
+	/**
+	 * @brief       受信したデータがゲームデータの場合
+	 * @param[in]	受信データ
+	 */
+	void ReceivingGameData(unsigned char* _recvData);
+
+	/**
+	 * @brief       受信したデータがイベントデータの場合
+	 * @param[in]	受信データ
+	 */
+	void ReceivingEventData(unsigned char* _recvData);
 };

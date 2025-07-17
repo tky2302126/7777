@@ -27,7 +27,7 @@ struct Vector2Int
 
 #define UDP_PORT_NUM 9999
 #define SYNC_UDP_PORT_NUM 8888
-#define MAX_PLAYER 2
+#define MAX_PLAYER 3
 // #define
 
 
@@ -66,4 +66,13 @@ enum Event : unsigned char
 	Event_LimitArea		= Event_LuckyNumber << 1,		// エリア制限
 	Event_MoveArea		= Event_LimitArea << 1,			// エリア移動
 	Event_ShuffleHand	= Event_MoveArea << 1,			// 手札交換
+};
+
+// 送信データID
+// ゲームの同期データとイベント告知のデータを判別するため
+enum class SendDataType : unsigned char
+{
+	UnDefine,
+	GameData,
+	EventData
 };

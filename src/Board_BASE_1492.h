@@ -3,8 +3,7 @@
 #include "Dice.h"
 #include "define.h"
 #include "UDPConnection.h"
-#include"AudioManager.h"
-#include <sstream>
+
 struct CardInfo
 {
 	Suit suit;
@@ -14,7 +13,6 @@ struct CardInfo
 class Board : public HWComponent
 {
 public:
-	AudioManager audio;
 #pragma region publicメンバ変数
 	// 手札
 	std::shared_ptr<Card> cards[SUIT_NUM * DECK_RANGE];
@@ -41,10 +39,6 @@ public:
 	bool CanPlace(const Card& card);
 	// 乱数生成器
 	static std::mt19937 engine;
-
-	/// </summary>
-	/// <param name="cardPtr">判定するカード</param>
-	void SubscribeEventCallback(const std::function<void(EventData&)>&);
 
 	float GetCoolTime() { return coolTime; }
 #pragma region イベント関連
@@ -119,14 +113,7 @@ public:
 	Event currentEvent;
 	// イベント抽選用のさいころ
 	Dice* dice;
-	//! イベント発生時のコールバック関数
-	std::function<void(EventData&)> eventOccurrenceCallback;
-	//! イベント説明用のテキスト
-	std::string EventSummary;
-	//! テキスト表示のフラグ
-	bool IsShowSummary = false;
-	//! フォントハンドル
-	int fontHandle;
+	
 #pragma endregion
 #pragma region privateメソッド
 	

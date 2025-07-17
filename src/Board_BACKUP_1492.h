@@ -3,8 +3,12 @@
 #include "Dice.h"
 #include "define.h"
 #include "UDPConnection.h"
+<<<<<<< HEAD
 #include"AudioManager.h"
+=======
 #include <sstream>
+>>>>>>> c71611dd269e3756f90604f6114aac064f462eab
+
 struct CardInfo
 {
 	Suit suit;

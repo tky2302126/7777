@@ -68,8 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
-	auto& audioManager = AudioManager::GetInstance();
-	sceneManager.SceneChangeSync(SceneTag::Title);
+	sceneManager.SceneChangeSync(SceneTag::Game);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
 		//sceneManager.SceneChangeAsync(SceneTag::Game);
@@ -94,9 +93,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//callback->tweenEvent->isCancel = true;
 			});
 		});
-
-	AudioManager::GetInstance().Init();
-	AudioManager::GetInstance().Load();
 
 	// メインループ
 	while (ProcessMessage() == 0)

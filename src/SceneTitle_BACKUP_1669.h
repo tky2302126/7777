@@ -11,8 +11,11 @@
 #include "Cursor.h"
 #include "GameManager.h"
 #include "UDPConnection.h"
+<<<<<<< HEAD
 #include "AudioManager.h"
+=======
 #include "Dice.h"
+>>>>>>> c71611dd269e3756f90604f6114aac064f462eab
 
 /**
  * @class	SceneTitle

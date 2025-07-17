@@ -86,14 +86,16 @@ void SceneGame::LoadComplete()
 	}
 	///
 	CountDown();
-
+<<<<<<< HEAD
 	audio.PlayBGM(BGM_BGM, TRUE);
+=======
 
 	if(GameManager::role == Role::Server)
 	{
 		HWDotween::DoDelay(300)->OnComplete([&]{
 				boardCp->DrawingEvent();});
 	}
+>>>>>>> c71611dd269e3756f90604f6114aac064f462eab
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -128,6 +130,8 @@ void SceneGame::Update()
 				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), boardCp->score);
 		}
 	}
+<<<<<<< HEAD
+	
 	// カードの設置関係
 	CheckMouseInput();
 
@@ -137,6 +141,8 @@ void SceneGame::Update()
 			10, 70, GetColor(0, 255, 0),
 			"coolTime = %d", (int)(PLACE_COOL_TIME * 1000) - (GetNowCount() - lastPlacedTime));
 	}
+=======
+>>>>>>> c71611dd269e3756f90604f6114aac064f462eab
 
 	// カウントダウンのスプライトの描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
@@ -279,12 +285,16 @@ void SceneGame::CheckMouseInput()
 
 				// カードを置いた場合、一定時間経つまで置けなくする
 				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
+<<<<<<< HEAD
 				{
 					lastPlacedTime = GetNowCount();
 					audio.PlaySE(SE_CARD_FLIP);
 				}
+=======
 
 				lastPlacedTime = GetNowCount();
+>>>>>>> c71611dd269e3756f90604f6114aac064f462eab
+
 				boardCp->CardOnBoard(card, GameManager::playerId);
 				boardCp->AddScore(card->number);
 				// 手札の並べなおし

@@ -40,8 +40,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #ifdef _DEBUG
 
 	// 幅: 1920, 高さ: 1080, ビット深度: 32
-	SetGraphMode(1920, 1080, 32);
-	//SetGraphMode(1920 / 2, 1000, 32);
+	//SetGraphMode(1920, 1080, 32);
+	 SetGraphMode(1920 / 2, 1000, 32);
 	ChangeWindowMode(TRUE);
 	// デバッグモードで起動
 	HandlerWaltan::debugMode = true;
@@ -68,7 +68,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UIManager::ManualInitialize();
 	auto& sceneManager = SceneManager::Instance();
-	auto& audioManager = AudioManager::GetInstance();
 	sceneManager.SceneChangeSync(SceneTag::Title);
 
 	HWDotween::DoDelay(30)->OnComplete([&] {
@@ -94,9 +93,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//callback->tweenEvent->isCancel = true;
 			});
 		});
-
-	AudioManager::GetInstance().Init();
-	AudioManager::GetInstance().Load();
 
 	// メインループ
 	while (ProcessMessage() == 0)

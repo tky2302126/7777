@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-#define DEBUG
+//#define DEBUG
 
 /**
 * @author   Suzuki N
@@ -29,9 +29,6 @@ SceneGame::SceneGame()
 
 	board = std::make_shared<HWGameObject>();
 	boardCp = board->AddComponent<Board>();
-
-	// イベント告知用のコールバック関数を登録
-	boardCp->SubscribeEventCallback(std::bind(&SceneGame::SendEventData, this, std::placeholders::_1));
 
 	countDownLeftTop = Vector2Int();
 	alpha = 0;
@@ -62,22 +59,18 @@ SceneGame::SceneGame()
 		<< (int)GameManager::IPAdress[0].d3 << "."
 		<< (int)GameManager::IPAdress[0].d4 << "\n";
 	f << "Port Number : " << GameManager::portNum << "\n";
-
 }
 
 SceneGame::~SceneGame()
 {
 	board.reset();
 	input->DeleteCallBack("cursor", callBackId);
-	audio.UnInit();
 }
 
 void SceneGame::LoadComplete()
 {
 	boardCp->ManualLoad();
 	CountDouwnGH = LoadGraph("Assets/UI/CountDown.png");
-	gaugeHandle = LoadGraph("Assets/UI/TestCircle.png");
-
 
 	if (GameManager::role == Role::Server)
 	{
@@ -86,14 +79,6 @@ void SceneGame::LoadComplete()
 	}
 	///
 	CountDown();
-
-	audio.PlayBGM(BGM_BGM, TRUE);
-
-	if(GameManager::role == Role::Server)
-	{
-		HWDotween::DoDelay(300)->OnComplete([&]{
-				boardCp->DrawingEvent();});
-	}
 }
 
 void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
@@ -102,8 +87,6 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
-	//PlaySoundFile("Assets/Sound/BGM.mp3", DX_PLAYTYPE_BACK);
-	
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
@@ -128,8 +111,10 @@ void SceneGame::Update()
 				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), boardCp->score);
 		}
 	}
+
 	// カードの設置関係
 	CheckMouseInput();
+
 
 	if (GetNowCount() - lastPlacedTime < (int)(PLACE_COOL_TIME * 1000))
 	{
@@ -145,14 +130,14 @@ void SceneGame::Update()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #ifdef _DEBUG
-	/*if(CheckHitKey(KEY_INPUT_A))
+	if(CheckHitKey(KEY_INPUT_A))
 	{
 		boardCp->MoveArea(true, 1);
 	}
 	if(CheckHitKey(KEY_INPUT_D))
 	{
 		boardCp->MoveArea(false, 1);
-	}*/
+	}
 	auto edge = boardCp->cards[0]->leftEdgeNum;
 	DrawFormatString(0, 900, 65535, "leftEdgeNum : %d", edge);
 
@@ -162,7 +147,7 @@ void SceneGame::Update()
 
 void SceneGame::LateUpdate()
 {
-	if (!isGame || isCountDown)return;
+	if (!isGame)return;
 
 	if (GameManager::role == Role::Server)
 	{
@@ -182,27 +167,9 @@ void SceneGame::LateUpdate()
 		ReceiveUpdateData_Server();
 	}
 
-	// カードの設置関係
-	CheckMouseInput();
-
 	DrawFormatString(
 		550, 20, GetColor(0, 255, 0),
 		"PlayerID = %d", GameManager::playerId);
-
-	if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000))
-	{
-		float percent = (float)(GetNowCount() - lastPlacedTime) / (float)(boardCp->coolTime * 1000);
-		percent *= 100;
-
-		DrawCircleGauge(1920 / 2, 900,
-			100.0 - percent,
-			gaugeHandle, 0.0);
-	}
-}
-
-void SceneGame::SendEventData(EventData& _sendData)
-{
-	UDPConnection::SendEventData(_sendData, UDPSocketHandle);
 }
 
 void SceneGame::CountDown()
@@ -259,7 +226,6 @@ void SceneGame::CheckMouseInput()
 
 	if (mouse.IsMouseRightButtonClicked())
 	{
-		
 		for (auto& card : boardCp->cards)
 		{
 			auto mousePos = mouse.GetMouseInfo().position;
@@ -281,10 +247,8 @@ void SceneGame::CheckMouseInput()
 				if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000)) break;
 				{
 					lastPlacedTime = GetNowCount();
-					audio.PlaySE(SE_CARD_FLIP);
 				}
 
-				lastPlacedTime = GetNowCount();
 				boardCp->CardOnBoard(card, GameManager::playerId);
 				boardCp->AddScore(card->number);
 				// 手札の並べなおし
@@ -336,11 +300,11 @@ int SceneGame::ReceiveInitData()
 			recvData, 250, FALSE);
 
 		// 送信時刻を書き込み
-		sendTime = *(int*)recvData + sizeof(SendDataType);
-		sendId = *(int*)(recvData + sizeof(SendDataType) + sizeof(int));
+		sendTime = *(int*)recvData;
+		sendId = *(int*)(recvData + sizeof(int));
 
 		//! 受け取ったカードデータ
-		CardData* cdp = (CardData*)(recvData + sizeof(SendDataType) + sizeof(int) * 6);
+		CardData* cdp = (CardData*)(recvData + sizeof(int) * 6);
 
 		// カードデータをデコードする
 		for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
@@ -490,8 +454,12 @@ int SceneGame::ReceiveUpdateData_Server()
 	isRecv = true;
 	HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
 
-	//! 送信データ種別
-	SendDataType dataType = SendDataType::UnDefine;
+	//! 受け取ったカードデータのデコード先
+	static Card decodeData[SUIT_NUM * DECK_RANGE];
+	//! 送信時刻
+	int sendTime = -1;
+	//! 送信ID
+	int sendId = -1;
 
 	int portNum = UDP_PORT_NUM;
 	unsigned char recvData[250];
@@ -502,41 +470,18 @@ int SceneGame::ReceiveUpdateData_Server()
 	outputfile_c << "受信 -> \n";
 	outputfile_c << ret;	
 
-	// 受信したデータ種別
-	dataType = *(SendDataType*)recvData;
 
-	switch (dataType)
-	{
-	case SendDataType::GameData:
-		ReceivingGameData(recvData + 1);
-		break;
-	case SendDataType::EventData:
-		ReceivingEventData(recvData + 1);
-		break;
-	}
+	// 送信時刻を書き込み
+	sendTime = *(int*)recvData;
+	sendId = *(int*)(recvData + sizeof(int));
 
-	return 1;
-}
-
-void SceneGame::ReceivingGameData(unsigned char* _recvData)
-{
-	//! 受け取ったカードデータのデコード先
-	static Card decodeData[SUIT_NUM * DECK_RANGE];
-	//! 送信時刻
-	int sendTime = -1;
-	//! 送信ID
-	int sendId = -1;
-
-	sendTime = *(int*)_recvData;
-	sendId = *(int*)(_recvData + sizeof(int));
-
-	GameManager::score[0] = *(int*)(_recvData + sizeof(int) * 2);
-	GameManager::score[1] = *(int*)(_recvData + sizeof(int) * 3);
-	GameManager::score[2] = *(int*)(_recvData + sizeof(int) * 4);
-	GameManager::score[3] = *(int*)(_recvData + sizeof(int) * 5);
+	GameManager::score[0] = *(int*)(recvData + sizeof(int) * 2);
+	GameManager::score[1] = *(int*)(recvData + sizeof(int) * 3);
+	GameManager::score[2] = *(int*)(recvData + sizeof(int) * 4);
+	GameManager::score[3] = *(int*)(recvData + sizeof(int) * 5);
 
 	//! 受け取ったカードデータ
-	CardData* cdp = (CardData*)(_recvData + sizeof(int) * 6);
+	CardData* cdp = (CardData*)(recvData + sizeof(int) * 6);
 
 	// カードデータをデコードする
 	for (int i = 0; i < SUIT_NUM * DECK_RANGE; ++i)
@@ -559,72 +504,6 @@ void SceneGame::ReceivingGameData(unsigned char* _recvData)
 			boardCp->CardOnBoard(boardCp->cards[i], (int)(boardCp->cards[i]->area - 2));
 		}
 	}
-}
 
-void SceneGame::ReceivingEventData(unsigned char* _recvData)
-{
-	//! 受け取ったイベントデータ
-	EventData* eventData = (EventData*)(_recvData);
-
-
-	std::ofstream outputfile("client_Event.txt");
-	outputfile << (int)eventData->eventType << "\n";
-	outputfile << (int)eventData->data << "\n";
-	outputfile.close();
-
-	// ダイスロール
-	switch ((int)eventData->eventType)
-	{
-	case (int)Event::Event_CountDown:
-	{
-		break;
-	}
-	case (int)Event::Event_IsAgari:
-	{
-		break;
-	}
-	case (int)Event::Event_Bomb:
-	{
-		break;
-	}
-	case (int)Event::Event_Fever:
-	{
-		boardCp->dice->Roll(0);
-		boardCp->FeverTime();
-	}
-		break;
-	case (int)Event::Event_LuckyNumber:
-	{
-		boardCp->dice->Roll(1);
-		boardCp->LuckyNumber((int)(*(unsigned char*)eventData));
-		break;
-	}
-	case (int)Event::Event_LimitArea:
-	{
-		boardCp->dice->Roll(2);
-		int areaL = (int)eventData->data % DECK_RANGE;
-		int areaR = (int)eventData->data / DECK_RANGE;
-		boardCp->LimitArea(areaL, areaR);
-		break;
-	}
-	case (int)Event::Event_MoveArea:
-	{
-		outputfile << "D = 3\n";
-		outputfile << (eventData->data >> 7) << "\n";
-		outputfile << ((int)eventData->data & 0x7F) << "\n";
-		outputfile.close();
-
-		boardCp->dice->Roll(3);
-		bool isLeft = eventData->data >> 7;
-		int num = (int)eventData->data & 0x7F;
-		boardCp->MoveArea(isLeft, num);
-		break;
-	}
-	case (int)Event::Event_ShuffleHand:
-	{
-		boardCp->dice->Roll(4);
-		boardCp->ShuffleHand();
-		break;
-	}
-	}
+	return 1;
 }

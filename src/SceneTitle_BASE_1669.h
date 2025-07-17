@@ -11,8 +11,6 @@
 #include "Cursor.h"
 #include "GameManager.h"
 #include "UDPConnection.h"
-#include "AudioManager.h"
-#include "Dice.h"
 
 /**
  * @class	SceneTitle
@@ -61,7 +59,7 @@ public:
 	 */
 	void LateUpdate() override;
 
-	AudioManager audio;
+
 private:
 
 	//! カーソル

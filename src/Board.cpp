@@ -18,6 +18,10 @@ Board::Board()
 
 	dice = new Dice();
 
+	EventSummary = "ここにイベント概要説明(12字程度)";
+
+	fontHandle = CreateFontToHandle(NULL, 40, 3);
+
 	InitRandomGenerator();
 
 	audio.Load();
@@ -131,7 +135,11 @@ void Board::Update()
 		dice->Roll(num);
 	}
 #endif // _DEBUG
-
+	if(IsShowSummary)
+	{
+		DrawFormatStringToHandle(640, 25, GetColor(255, 255, 255), 
+			fontHandle, EventSummary.c_str());
+	}
 }
 
 void Board::ManualLoad()
@@ -177,6 +185,11 @@ bool Board::CanPlace(const Card& card)
 	return false;
 }
 
+void Board::SubscribeEventCallback(const std::function<void(EventData&)>& _eventCallback)
+{
+	eventOccurrenceCallback = _eventCallback;
+}
+
 void Board::DrawingEvent()
 {
 	std::uniform_int_distribution<> dist(0, 4);
@@ -188,19 +201,19 @@ void Board::DrawingEvent()
 	switch (diceNum)
 	{
 	case 0:
-		ShuffleHand();
-		break;
-	case 1:
 		FeverTime();
 		break;
-	case 2:
+	case 1:
 		LuckyNumber();
 		break;
-	case 3:
+	case 2:
 		LimitArea();
 		break;
-	case 4:
+	case 3:
 		MoveArea();
+		break;
+	case 4:
+		ShuffleHand();
 		break;
 	default:
 		Bomb();
@@ -438,6 +451,11 @@ void Board::FeverTime()
 {
 	/// クールタイム大幅短縮
 	coolTime = coolTime / 2;
+
+	EventSummary = "クールタイム短縮中！";
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 }
 
 void Board::LuckyNumber(int num)
@@ -459,12 +477,18 @@ void Board::LuckyNumber(int num)
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
 		eventData.data = static_cast<unsigned char>(luckyNum);
 
-		UDPConnection::SendEventData(eventData);
 	}
 	else
 	{
 		luckyNum = num;
 	}
+	std::stringstream ss;
+	ss << luckyNum << "を置くとスコアボーナス!";
+	EventSummary = ss.str();
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
+
 }
 
 void Board::LimitArea(int left, int right)
@@ -480,16 +504,17 @@ void Board::LimitArea(int left, int right)
 		}
 		int number1 = -1;
 		int number2 = -1;
-
+		// 2枚以下なので抽選不可
+		if (unfilledCards.size() < 2) return;
 		// 同じ数字じゃなくなるまで抽選
 		do
 		{
 			auto index1 = Random::GetRandomInt(0, unfilledCards.size());
-			auto number1 = unfilledCards[index1]->number;
+			number1 = unfilledCards[index1]->number;
 			
 			auto index2 = Random::GetRandomInt(0, unfilledCards.size());
-			auto number2 = unfilledCards[index2]->number;
-		} while (number1 != number2);
+			number2 = unfilledCards[index2]->number;
+		} while (number1 == number2);
 		
 		if (number1 > number2)
 		{
@@ -509,14 +534,21 @@ void Board::LimitArea(int left, int right)
 		data.eventType = static_cast<unsigned char>(eventIndex);
 		data.data = static_cast<unsigned char>(limit);
 
-		UDPConnection::SendEventData(data);
-
+		//UDPConnection::SendEventData(data);
+		eventOccurrenceCallback(data);
 	}
 	else
 	{
 		areaL = left;
 		areaR = right;
 	}
+
+	std::stringstream ss;
+	ss << areaL << "～" << areaR << "に制限中";
+	EventSummary = ss.str();
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 }
 
 void Board::MoveArea(bool left, int num)
@@ -525,16 +557,21 @@ void Board::MoveArea(bool left, int num)
 	{
 		auto IsLeft = Random::GetRandomInt(0, 1);
 		auto num = Random::GetRandomInt(1, DECK_RANGE);
-		auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
+
+		//auto data = num + IsLeft * (DECK_RANGE ); // 右の場合 1 ~ 13,左の場合 14 ~ 27 
+		unsigned char data = IsLeft << 7;
+		data += num;
 
 		EventData eventData;
 		auto add = num * IsLeft ? 1 : -1;
 		cards[0]->leftEdgeNum += add;
+
 		int eventIndex = static_cast<int>(Event::Event_MoveArea);
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
-		eventData.data = static_cast<unsigned char>(data);
+		eventData.data = data;
 
-		UDPConnection::SendEventData(eventData);
+		//UDPConnection::SendEventData(eventData);
+		eventOccurrenceCallback(eventData);
 	}
 	else
 	{
@@ -547,7 +584,12 @@ void Board::MoveArea(bool left, int num)
 	for(auto card : cards)
 	{
 		card->Slide();
-	}
+	}	
+	EventSummary = "エリアが移動！";
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
+	
 }
 
 void Board::ShuffleHand()
@@ -591,9 +633,15 @@ void Board::ShuffleHand()
 		eventData.eventType = static_cast<unsigned char>(eventIndex);
 		eventData.data = '1'; // フラグ
 
-		UDPConnection::SendEventData(eventData);
+		//UDPConnection::SendEventData(eventData);
+		eventOccurrenceCallback(eventData);
 	}
 
 	/// エリア更新に合わせて手札を移動する処理
 
+
+	EventSummary = "手札が入れ替わった!";
+	HWDotween::DoDelay(100)->OnComplete([&] {
+		IsShowSummary = true;
+		});
 }
