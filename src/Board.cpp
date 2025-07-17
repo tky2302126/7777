@@ -1,7 +1,7 @@
 ﻿#include "Board.h"
 std::mt19937 Board::engine(std::random_device{}());
 
-//#define DEBUG
+#define DEBUG
 
 Board::Board()
 {

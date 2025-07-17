@@ -11,6 +11,7 @@
 #include "Cursor.h"
 #include "GameManager.h"
 #include "UDPConnection.h"
+#include "Dice.h"
 
 /**
  * @class	SceneTitle

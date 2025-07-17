@@ -119,7 +119,7 @@ public:
 	Dice* dice;
 	//! イベント発生時のコールバック関数
 	std::function<void(EventData&)> eventOccurrenceCallback;
-	
+
 #pragma endregion
 #pragma region privateメソッド
 	
