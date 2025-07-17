@@ -3,6 +3,7 @@
 #include "Dice.h"
 #include "define.h"
 #include "UDPConnection.h"
+#include <sstream>
 
 struct CardInfo
 {
@@ -119,7 +120,12 @@ public:
 	Dice* dice;
 	//! イベント発生時のコールバック関数
 	std::function<void(EventData&)> eventOccurrenceCallback;
-	
+	//! イベント説明用のテキスト
+	std::string EventSummary;
+	//! テキスト表示のフラグ
+	bool IsShowSummary = false;
+	//! フォントハンドル
+	int fontHandle;
 #pragma endregion
 #pragma region privateメソッド
 	

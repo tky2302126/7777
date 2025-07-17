@@ -140,14 +140,14 @@ void SceneGame::Update()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #ifdef _DEBUG
-	if(CheckHitKey(KEY_INPUT_A))
+	/*if(CheckHitKey(KEY_INPUT_A))
 	{
 		boardCp->MoveArea(true, 1);
 	}
 	if(CheckHitKey(KEY_INPUT_D))
 	{
 		boardCp->MoveArea(false, 1);
-	}
+	}*/
 	auto edge = boardCp->cards[0]->leftEdgeNum;
 	DrawFormatString(0, 900, 65535, "leftEdgeNum : %d", edge);
 

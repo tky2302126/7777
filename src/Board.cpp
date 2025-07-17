@@ -1,7 +1,7 @@
 ﻿#include "Board.h"
 std::mt19937 Board::engine(std::random_device{}());
 
-//#define DEBUG
+#define DEBUG
 
 Board::Board()
 {
@@ -17,6 +17,10 @@ Board::Board()
 	memset(boardData, 0, sizeof(boardData));
 
 	dice = new Dice();
+
+	EventSummary = "ここにイベント概要説明(12字程度)";
+
+	fontHandle = CreateFontToHandle(NULL, 40, 3);
 
 	InitRandomGenerator();
 
@@ -133,7 +137,11 @@ void Board::Update()
 		dice->Roll(num);
 	}
 #endif // _DEBUG
-
+	if(IsShowSummary)
+	{
+		DrawFormatStringToHandle(640, 25, GetColor(255, 255, 255), 
+			fontHandle, EventSummary.c_str());
+	}
 }
 
 void Board::ManualLoad()
@@ -440,6 +448,9 @@ void Board::FeverTime()
 {
 	/// クールタイム大幅短縮
 	coolTime = coolTime / 2;
+
+	EventSummary = "クールタイム短縮中！";
+	IsShowSummary = true;
 }
 
 void Board::LuckyNumber(int num)
@@ -466,6 +477,11 @@ void Board::LuckyNumber(int num)
 	{
 		luckyNum = num;
 	}
+	std::stringstream ss;
+	ss << luckyNum << "を置くとスコアボーナス!";
+	EventSummary = ss.str();
+	IsShowSummary = true;
+
 }
 
 void Board::LimitArea(int left, int right)
@@ -518,6 +534,11 @@ void Board::LimitArea(int left, int right)
 		areaL = left;
 		areaR = right;
 	}
+
+	std::stringstream ss;
+	ss << areaL << "～" << areaR << "に制限中";
+	EventSummary = ss.str();
+	IsShowSummary = true;
 }
 
 void Board::MoveArea(bool left, int num)
@@ -553,7 +574,9 @@ void Board::MoveArea(bool left, int num)
 	for(auto card : cards)
 	{
 		card->Slide();
-	}
+	}	
+	EventSummary = "エリアが移動！";
+	IsShowSummary = true;
 }
 
 void Board::ShuffleHand()
@@ -603,4 +626,7 @@ void Board::ShuffleHand()
 
 	/// エリア更新に合わせて手札を移動する処理
 
+
+	EventSummary = "手札が入れ替わった!";
+	IsShowSummary = true;
 }
