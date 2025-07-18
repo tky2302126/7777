@@ -101,16 +101,12 @@ void SceneGame::KeyInputCallback(InputAction::CallBackContext _c)
 
 void SceneGame::Update()
 {
-<<<<<<< HEAD
 	DrawFormatString(
 		550, 20, GetColor(0, 255, 0),
 		"PlayerID = %d", GameManager::playerId);
 
-
-=======
 	//PlaySoundFile("Assets/Sound/BGM.mp3", DX_PLAYTYPE_BACK);
 	
->>>>>>> 1564643ba70b35ec693c9bcf8fc5c91067110c6d
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
