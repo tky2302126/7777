@@ -94,7 +94,11 @@ private:
 	std::ofstream outputfile_s;
 	//! 扇形ゲージの画像ハンドル
 	int gaugeHandle;
+	//! ゲームクリア時のグラフィックハンドル
+	int finishGH;
 
+	//! クリア時のグラフィックハンドルのフラグ
+	bool isFinish;
 
 	/**
 	 * @brief       イベントの告知をクライアントに送信する
