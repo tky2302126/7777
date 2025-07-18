@@ -106,17 +106,17 @@ void SceneGame::Update()
 		"PlayerID = %d", GameManager::playerId);
 
 	//PlaySoundFile("Assets/Sound/BGM.mp3", DX_PLAYTYPE_BACK);
-	
+
 	// clientの場合、最初のデータ受信までゲーム開始を待機
 	if (GameManager::role == Role::Client)
 	{
 		if (!ReceiveInitData())return;
 	}
-			DrawFormatString(
-				10, 60, GetColor(255, 255, 255),
-				"接続人数 = %d : %d", GameManager::connectNum, boardCp->handData.size());
+	DrawFormatString(
+		10, 60, GetColor(255, 255, 255),
+		"接続人数 = %d : %d", GameManager::connectNum, boardCp->handData.size());
 
-			for (int i = 0; i < GameManager::connectNum; ++i)
+	for (int i = 0; i < GameManager::connectNum; ++i)
 	{
 		if (i != GameManager::playerId)
 		{
@@ -334,11 +334,11 @@ int SceneGame::ReceiveInitData()
 	{
 		unsigned char recvData[250];
 
-		int ret = NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
+		NetWorkRecvUDP(UDPSocketHandle[0], NULL, NULL,
 			recvData, 250, FALSE);
 
 
-		outputfile_c << "受信 -> "  << ret << "\n";
+		outputfile_c << "InitData受信 -> " << "\n";
 
 		// 送信時刻を書き込み
 		sendTime = *(int*)recvData + sizeof(SendDataType);
@@ -407,30 +407,12 @@ int SceneGame::ReceiveUpdateData_Client()
 {
 	int recvCount = 0;
 
-	static bool isRecv = false;
-
-#ifdef DEBUG
-	if (isRecv)
-		DrawFormatString(
-			10, 60, GetColor(0, 255, 0),
-			"Recv");
-	else
-		DrawFormatString(
-			10, 60, GetColor(0, 255, 0),
-			"なし");
-#endif // DEBUG
-
-
-
 	for (int i = 0; i < MAX_PLAYER; ++i)
 	{
 		// 受信データのチェック
 		if (CheckNetWorkRecvUDP(UDPSocketHandle[i]) == TRUE) 
 		{
 			outputfile_s << "受信 -> " << i << "\n";
-
-			isRecv = true;
-			HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
 
 			// 受信データがあったらカウントアップ
 			recvCount++;
@@ -476,26 +458,9 @@ int SceneGame::ReceiveUpdateData_Client()
 
 int SceneGame::ReceiveUpdateData_Server()
 {
-	static bool isRecv = false;
-
-#ifdef DEBUG
-	if (isRecv)
-		DrawFormatString(
-			10, 60, GetColor(0, 255, 0),
-			"Recv");
-	else
-		DrawFormatString(
-			10, 60, GetColor(0, 255, 0),
-			"なし");
-#endif // DEBUG
-
-
 	// 受信データなし
 	if (CheckNetWorkRecvUDP(UDPSocketHandle[0]) == TRUE)
 	{
-		isRecv = true;
-		HWDotween::DoDelay(120)->OnComplete([&] {isRecv = false; });
-
 		//! 送信データ種別
 		SendDataType dataType = SendDataType::UnDefine;
 
