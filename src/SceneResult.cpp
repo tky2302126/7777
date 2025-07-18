@@ -3,7 +3,7 @@
 // @history : 2025-07-03 update : SceneResultの仮実装
 
 #include "SceneResult.h"
-#define DEBUG
+//#define DEBUG
 
 /// <summary>
 /// to do
@@ -19,10 +19,9 @@ SceneResult::SceneResult()
 	GameManager::score[1] = 200;
 	GameManager::score[2] = 300;
 	GameManager::score[3] = 400;
-
+#endif // DEBUG
 	GHPos[0] = {600, 250};
 	StringPos[0] = {STRING_DEFAULT_POS, 245, 0};
-#endif // DEBUG
 
 	medalGH[0] = LoadGraph("Assets/Sprite/goldmedal.png");
 	medalGH[1] = LoadGraph("Assets/Sprite/silvermedal.png");

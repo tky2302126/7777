@@ -350,14 +350,19 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 		std::remove(handData[_index].begin(), handData[_index].end(), _card),
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
-
-
-	// あがり判定
-	if (handData[GameManager::playerId].size() <= 0)
-	{
-		GameManager::isClear = true;
-	}
 #endif // DEBUG
+	
+	static int rank[MAX_PLAYER];
+	static int rankNum = 0;
+
+	// 今回のカード配置で手札が0になったプレイヤーにボーナス
+	if (handData[_index].size() <= 0)
+	{
+		GameManager::score[_index] += RANK_BONUS - RANK_DECREMENT * rankNum;
+		rank[_index] = rankNum++;
+	}
+
+
 }
 
 void Board::SortHand(Area playerArea)

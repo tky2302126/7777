@@ -128,7 +128,7 @@ void SceneGame::Update()
 		{
 			DrawFormatString(
 				10, 100 + 30 * i, GetColor(0, 255, 0),
-				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), boardCp->score);
+				"Player%d = %d : score = %d", i, boardCp->handData[i].size(), GameManager::score[i]);
 		}
 	}
 	// カードの設置関係
@@ -174,7 +174,7 @@ void SceneGame::LateUpdate()
 			// 受信したら全clientに送信
 			SendData data =
 			{
-				boardCp->score,
+				GameManager::score[GameManager::playerId],
 				boardCp->cards
 			};
 			UDPConnection::SendClients(data, UDPSocketHandle);
