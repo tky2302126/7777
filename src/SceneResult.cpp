@@ -23,12 +23,6 @@ SceneResult::SceneResult()
 	GHPos[0] = {600, 250};
 	StringPos[0] = {STRING_DEFAULT_POS, 245, 0};
 
-	medalGH[0] = LoadGraph("Assets/Sprite/goldmedal.png");
-	medalGH[1] = LoadGraph("Assets/Sprite/silvermedal.png");
-	medalGH[2] = LoadGraph("Assets/Sprite/blonzemedal.png");
-	resultGH = LoadGraph("Assets/Sprite/result.png");
-	fontHandleWhite = CreateFontToHandle(NULL, FONT_SIZE, 3);
-	fontHandleBlack = CreateFontToHandle(NULL, FONT_SIZE + 2, 3);
 }
 
 SceneResult::~SceneResult()
@@ -37,6 +31,13 @@ SceneResult::~SceneResult()
 
 void SceneResult::LoadComplete()
 {
+	medalGH[0] = LoadGraph("Assets/Sprite/goldmedal.png");
+	medalGH[1] = LoadGraph("Assets/Sprite/silvermedal.png");
+	medalGH[2] = LoadGraph("Assets/Sprite/blonzemedal.png");
+	resultGH = LoadGraph("Assets/Sprite/result.png");
+	fontHandleWhite = CreateFontToHandle(NULL, FONT_SIZE, 3);
+	fontHandleBlack = CreateFontToHandle(NULL, FONT_SIZE + 2, 3);
+
 	ShowResult();
 }
 
@@ -109,8 +110,8 @@ void SceneResult::LateUpdate()
 		fontHandleWhite, resultText[3].c_str());
 
 
-	DrawFormatString(0, 50, GetColor(0, 0, 0),
-		"StringPos x : %f, y : %f", StringPos[0].x, StringPos[0].y);
+	//DrawFormatString(0, 50, GetColor(0, 0, 0),
+	//	"StringPos x : %f, y : %f", StringPos[0].x, StringPos[0].y);
 }
 
 void SceneResult::ShowResult()

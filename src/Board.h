@@ -5,6 +5,8 @@
 #include "UDPConnection.h"
 #include"AudioManager.h"
 #include <sstream>
+#include "SceneManager.h"
+
 struct CardInfo
 {
 	Suit suit;

@@ -1,7 +1,7 @@
 ﻿#include "Board.h"
 std::mt19937 Board::engine(std::random_device{}());
 
-//#define DEBUG
+// #define DEBUG
 
 Board::Board()
 {
@@ -81,11 +81,6 @@ void Board::Update()
 {
 	Draw();
 	
-	if (GameManager::isClear)
-	{
-		
-	}
-
 	for (auto& card : cards)
 	{
 		card->ManualUpdate();
@@ -342,27 +337,39 @@ void Board::CardOnBoard(std::shared_ptr<Card> _card, int _index)
 	SortHand(Area::Area_Player1);
 	if (handData[Area::Area_Player1 - 2].size() <= 0)
 	{
-		
+
 	}
-	
+
 #else
 	handData[_index].erase(
 		std::remove(handData[_index].begin(), handData[_index].end(), _card),
 		handData[_index].end());
 	SortHand((Area)(GameManager::playerId + 2));
 #endif // DEBUG
-	
+
 	static int rank[MAX_PLAYER];
 	static int rankNum = 0;
 
 	// 今回のカード配置で手札が0になったプレイヤーにボーナス
 	if (handData[_index].size() <= 0)
 	{
-		GameManager::score[_index] += RANK_BONUS - RANK_DECREMENT * rankNum;
+		score += RANK_BONUS - RANK_DECREMENT * rankNum;
 		rank[_index] = rankNum++;
+		if (_index == GameManager::playerId)
+		{
+			GameManager::isClear = true;
+		}
+
+		if (rank[_index] == MAX_PLAYER - 1)
+		{
+
+
+			HWDotween::DoDelay(120)->OnComplete([&]
+				{
+					SceneManager::Instance().SceneChangeSync(SceneTag::Result);
+				});
+		}
 	}
-
-
 }
 
 void Board::SortHand(Area playerArea)

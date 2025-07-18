@@ -1,6 +1,6 @@
 ﻿#include "SceneGame.h"
 
-//#define DEBUG
+// #define DEBUG
 
 /**
 * @author   Suzuki N
@@ -76,7 +76,7 @@ void SceneGame::LoadComplete()
 	boardCp->ManualLoad();
 	CountDouwnGH = LoadGraph("Assets/UI/CountDown.png");
 	gaugeHandle = LoadGraph("Assets/UI/TestCircle.png");
-
+	finishGH = LoadGraph("Assets/UI/Finish.png");
 
 	if (GameManager::role == Role::Server)
 	{
@@ -147,20 +147,15 @@ void SceneGame::Update()
 	if (isFade) { alpha -= fadeSpeed; }
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-#ifdef _DEBUG
-	/*if(CheckHitKey(KEY_INPUT_A))
-	{
-		boardCp->MoveArea(true, 1);
-	}
-	if(CheckHitKey(KEY_INPUT_D))
-	{
-		boardCp->MoveArea(false, 1);
-	}*/
-	auto edge = boardCp->cards[0]->leftEdgeNum;
-	DrawFormatString(0, 900, 65535, "leftEdgeNum : %d", edge);
+#ifdef _DEBUG	
+	// auto edge = boardCp->cards[0]->leftEdgeNum;
+	// DrawFormatString(0, 900, 65535, "leftEdgeNum : %d", edge);
 
 #endif // _DEBUG
-
+	if(GameManager::isClear)
+	{
+		DrawGraph(430, -40, finishGH, TRUE);
+	}
 }
 
 void SceneGame::LateUpdate()
@@ -187,6 +182,8 @@ void SceneGame::LateUpdate()
 
 	// カードの設置関係
 	CheckMouseInput();
+
+	
 
 	if (GetNowCount() - lastPlacedTime < (int)(boardCp->coolTime * 1000))
 	{
