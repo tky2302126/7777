@@ -147,8 +147,16 @@ void SceneResult::ShowResult()
 	for(int i = 0; i < 4; ++i)
 	{
 		std::stringstream ss;
-		ss << "Player" << (indices[i] + 1) << ": "
-		   << GameManager::score[indices[i]];
+		if(GameManager::playerId == i)
+		{
+			ss << "You" << ": "
+				<< GameManager::score[indices[i]];
+		}
+		else
+		{
+			ss << "Player" << (indices[i] + 1) << ": "
+			   << GameManager::score[indices[i]];
+		}
 		resultText[i] = ss.str();
 	}
 
